@@ -41,3 +41,7 @@ input {
     color: #A73030;
     font-weight: bold;  
 }
+
+.syumitter1 {
+    color: linear-gradient(-45deg, #6ddcff, #ff4ef8, #ff5d5d);
+}
