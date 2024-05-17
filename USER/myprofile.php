@@ -23,6 +23,14 @@
         </tr>
     <table>
     ユーザー名
+    名前
+    <div>
+        プロフィール
+    </div>
+    <form action="myprofile-edit.php" method="POST">
+    </form> 
+    <botton>□</button>
+    <button>♡</button>
     
 </body>
 </html>
