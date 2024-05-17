@@ -9,7 +9,28 @@
 </head>
 <body>
     <h1 class="syumitter1">Syumitter</h1>
-
-
+    maru
+    <table>
+        <tr>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>投稿数</td>
+            <td>フォロー数</td>
+            <td>フォロワー数</td>
+        </tr>
+    <table>
+    ユーザー名
+    名前
+    <div>
+        プロフィール
+    </div>
+    <form action="myprofile-edit.php" method="POST">
+    </form> 
+    <botton>□</button>
+    <button>♡</button>
+    
 </body>
 </html>
