@@ -19,7 +19,7 @@
             font-family: "Pacifico", cursive; /* カーソルなフォントを設定 */
             font-size: 36px; /* フォントサイズを設定 */
             margin-bottom: 20px; /* ヘッダーの下に余白を追加 */
-            background: linear-gradient(to right, #ff80ab, #a74baf); /* グラデーションの色を左からピンク、パープルの順番で設定 */
+            background: linear-gradient(to right, #ffb380, #ff80bf, #d884e4); /* ピンクの前に薄いオレンジを追加 */
             -webkit-background-clip: text;
             color: transparent; /* グラデーション効果を文字に適用 */
         }
@@ -81,12 +81,36 @@
         .search-container button i {
             margin: 0; /* アイコンに余白を設定しない */
         }
+        .footer-container {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-image: linear-gradient(to bottom right, #ffb380, #ff80bf, #d884e4, #add8e6); /* 左上から右下に向かってグラデーションを設定 */
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0; /* フッターの余白を設定 */
+        }
+        .footer-container a {
+            display: block;
+            color: #fff; /* テキスト色を白に設定 */
+            text-align: center;
+            text-decoration: none;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; /* デフォルトのフォントを設定 */
+            font-size: 24px; /* フォントサイズを設定 */
+            font-weight: bold; /* 文字を太字に設定 */
+            padding: 5px; /* 余白を追加 */
+        }
+        .footer-container a:hover {
+            background-color: #faa0d6; /* ホバー時の背景色を設定 */
+            color: #333; /* ホバー時のテキスト色を設定 */
+        }
     </style>
 </head>
 <body>
     <div class="header-container">
         <h1>Syumitter</h1>
     </div>
+
 
     <nav>
         <a href="user.php">ユーザー</a> <!-- ユーザー画面に遷移するリンク -->
@@ -101,6 +125,13 @@
                 <i class="fas fa-search"></i> <!-- Font Awesomeの虫眼鏡アイコン -->
             </button>
         </form>
+    </div>
+
+    <div class="footer-container">
+        <a href="post.php"><i class="fa fa-plus-square "></i> </a> <!-- 投稿画面に遷移するアイコン -->
+        <a href="search.php"><i class="fas fa-search"></i></a> <!-- 検索画面に遷移するアイコン -->
+        <a href="group_chat_list.php"><i class="fas fa-comments"></i></a> <!-- グループチャット一覧画面に遷移するアイコン -->
+        <a href="profile.php"><i class="fas fa-user"></i></a> <!-- マイプロフィール画面に遷移するアイコン -->
     </div>
 
     <script>
