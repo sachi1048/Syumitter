@@ -20,23 +20,23 @@
             </tr>
             <tr>
                 <td>名前</td>
-                <td></td>
+                <td><input class="textbox" type="textbox"></td>
             </tr>
             <tr>
                 <td>プロフィール</td>
-                <td></td>
+                <td><input class="textbox" type="textbox"></td>
             </tr>
             <tr>
                 <td>アドレス</td>
-                <td></td>
+                <td><input class="textbox" type="textbox"></td>
             </tr>
             <tr>
                 <td>パスワード</td>
-                <td></td>
+                <td><input class="textbox" type="textbox"></td>
             </tr>
             <tr>
                 <td>確認パスワード</td>
-                <td></td>
+                <td><input class="textbox" type="textbox"></td>
             </tr>
         </table>
 

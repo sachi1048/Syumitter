@@ -42,7 +42,7 @@ if (isset($_POST['user_name']) && isset($_POST['pass'])) {
         <form action="myprofile.php" method="POST">
             <input class="textbox" type="text" name="user"  placeholder="ユーザー名"><br>
             <input class="textbox" type="text" name="pass"  placeholder="パスワード"><br>
-            <button class="nextbotton" type="submit">ログイン</button>
+            <button class="nextbutton" type="submit">ログイン</button>
         </form>
     </div>
 
