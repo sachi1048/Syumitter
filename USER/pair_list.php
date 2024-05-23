@@ -6,13 +6,14 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// グループチャットの取得
+//ペアチャットの取得
 $sql = "
-    SELECT g.group_id, g.group_mei, g.aikon, COUNT(gm.member) as member_count
-    FROM `Group` g
-    LEFT JOIN Group_member gm ON g.group_id = gm.group_id
-    GROUP BY g.group_id, g.group_mei, g.aikon
+SELECT f1.applicant_name AS user1, f2.approver_name AS user2
+FROM Follow f1
+INNER JOIN Follow f2 ON f1.applicant_name = f2.approver_name AND f1.approver_name = f2.applicant_name
+WHERE f1.zyoukyou = 1
 ";
+//AND f2.zyoukyou = 1
 $result = $conn->query($sql);
 ?>
 <!DOCTYPE html>
@@ -24,7 +25,7 @@ $result = $conn->query($sql);
     <title>Syumitter</title>
     
     
-    <title>グループチャット一覧画面</title>
+    <title>ペアチャット一覧画面</title>
 </head>
 <body>
 <div class="container">
@@ -32,11 +33,11 @@ $result = $conn->query($sql);
         <ul class="chat-list">
             <?php while($row = $result->fetch_assoc()): ?>
             <li class="chat-item">
-                <img src="<?php echo htmlspecialchars($row['aikon']); ?>" alt="Group Icon">
-                <div class="info">
-                    <div><?php echo htmlspecialchars($row['group_mei']); ?></div>
-                    <div>メンバー: <?php echo $row['member_count']; ?></div>
-                </div>
+            <li class="chat-item">
+            <div class="info">
+                <div><?php echo htmlspecialchars($row['user1']); ?> & <?php echo htmlspecialchars($row['user2']); ?></div>
+                <div>ペアチャット</div>
+            </div>
             </li>
             <?php endwhile; ?>
         </ul>
