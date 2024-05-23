@@ -39,7 +39,7 @@ if (isset($_POST['user_name']) && isset($_POST['pass'])) {
     <h1>Syumitter</h1>
     <div class="frame">
         <p style="font-weight: bold;">login</p>
-        <form action="#" method="POST">
+        <form action="myprofile.php" method="POST">
             <input class="textbox" type="text" name="user"  placeholder="ユーザー名"><br>
             <input class="textbox" type="text" name="pass"  placeholder="パスワード"><br>
             <button class="nextbotton" type="submit">ログイン</button>
