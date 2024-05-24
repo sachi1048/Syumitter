@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Cropper</title>
+    <link rel="stylesheet" href="cropperjs/cropper.min.css" />
+    <link rel="stylesheet" href="../USER/CSS/main.css" />
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .img-container {
+            width: 200px;
+            height: 200px;
+            position: relative;
+        }
+        img {
+            max-width: 100%;
+        }
+        .result {
+            margin-top: 20px;
+            width: 200px;
+            height: 200px;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div class="frame">
+        <div class="container">
+            <div class="img-container">
+                <img id="image" src="icon.jpg" alt="Image">
+            </div>
+            <p>ズーム、移動が可能です。</p>
+            <button id="cropButton">プレビュー表示</button>
+            <img id="result-img" class="result">
+            <p>プレビュー↑</p>
+        </div>
+    </div>
+
+    <script src="cropperjs/cropper.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var image = document.getElementById('image');
+            var cropper = new Cropper(image, {
+                //トリミング部の初期設定
+                viewMode: 3,
+                dragMode: 'move',
+                aspectRatio: 1,
+                autoCropArea: 1,
+                responsive: true,
+                cropBoxResizable: false,
+            });
+
+            document.getElementById('cropButton').addEventListener('click', function () {
+                var resultImgUrl = cropper.getCroppedCanvas().toDataURL();
+                var result = document.getElementById('result-img');
+                result.src = resultImgUrl;
+            });
+        });
+    </script>
+</body>
+</html>
