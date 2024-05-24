@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Syumitter</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- レスポンシブ対応のためのviewport設定 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome CDNリンク -->
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> 
     <style>
-        /* スタイルを追加 */
+        
         body {
             font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
             background-color: #fafafa; /* 背景色を設定 */
@@ -19,16 +19,16 @@
             font-family: "Pacifico", cursive; /* カーソルなフォントを設定 */
             font-size: 36px; /* フォントサイズを設定 */
             margin-bottom: 20px; /* ヘッダーの下に余白を追加 */
-            background: linear-gradient(to right, #ffb380, #ff80bf, #d884e4); /* ピンクの前に薄いオレンジを追加 */
+            background: linear-gradient(to right, #ffb380, #ff80bf, #d884e4); 
             -webkit-background-clip: text;
-            color: transparent; /* グラデーション効果を文字に適用 */
+            color: transparent; 
         }
         nav {
-            background-color: #b0b0b0; /* 灰色の背景色を設定 */
+            background-color: #b0b0b0; 
             overflow: hidden;
             display: flex;
             justify-content: center;
-            padding: 10px 0; /* ナビゲーションの余白を設定 */
+            padding: 10px 0; 
         }
         nav a {
             display: block;
@@ -126,7 +126,12 @@
             </button>
         </form>
     </div>
-
+    <div class="trending-tags">
+        <a href="search_hobby.php?hobby=#占い" class="tag">#占い</a>
+        <a href="search_hobby.php?hobby=#釣り" class="tag">#釣り</a>
+        <a href="search_hobby.php?hobby=#J-POP" class="tag">#J-POP</a>
+        <a href="search_hobby.php?hobby=#カフェ巡り" class="tag">#カフェ巡り</a>
+    </div>
     <div class="footer-container">
         <a href="post.php"><i class="fa fa-plus-square "></i> </a> <!-- 投稿画面に遷移するアイコン -->
         <a href="search.php"><i class="fas fa-search"></i></a> <!-- 検索画面に遷移するアイコン -->
