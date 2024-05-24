@@ -16,3 +16,11 @@ input[type="checkbox"]:checked + label {
     border-color: blue; /* チェックされたときのラベルの枠線の色を青に変更 */
     background-color: lightblue; /* チェックされたときのラベルの背景色をライトブルーに変更 */
 }
+.aokusitai{
+    color:rgb(45, 77, 255);
+}
+.backbutton{
+    border-color:rgb(45,77,255);
+    margin-right:95%;
+    background-color:#ffffff;
+}
