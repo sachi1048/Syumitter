@@ -4,7 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="CSS/main.css">
-
+    <script>
+        $(function() {
+            $('.file__label input[type=file]').on('change', function () {
+                var file = $(this).prop('files')[0];
+                $('.file__none').text(file.name);
+            });
+        });
+    </script>
     <title>マイプロフィール編集画面</title>
 </head>
 <body>
@@ -15,7 +22,8 @@
         <form action="mypofile" method="POST">
         <div class="aikon">
             <lable label="file_label">
-                <img >
+                <!-- <p class="maru" style="background-image: url('img/top18.jpg');"></p> -->
+                <img src="img/top18.jpg" class="maru">
                 <input type="file" name="aikon">
             </lable>
             <p class="file_none">変更なし</p>
@@ -50,6 +58,7 @@
         <button class="nextbutton" type="submit">編集</button>
         </form>
     </div>
+    <br>
     <button>戻る</button>
 </body>
 </html>

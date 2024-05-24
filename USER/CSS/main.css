@@ -18,6 +18,10 @@ input {
     border: 2px solid #aaa;
 }
 
+input[type="file"]{
+    /* display: none; */
+}
+
 
 /* divでまとめた虹の四角部分 */
 .frame {
@@ -46,6 +50,16 @@ input {
     color: linear-gradient(-45deg, #6ddcff, #ff4ef8, #ff5d5d);
 }
 
-input[type="file"]{
-    display: none;
+/* aikon用のCSS */
+.maru{
+    border-radius: 50%;
+    height: 150px;
+    width: 150px;
+    object-fit: cover;
+
 }
+/* .file_label {
+    text-align: center;
+    width: min(100%, 350px);
+    cursor: pointer;
+} */
