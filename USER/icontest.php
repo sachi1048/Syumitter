@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Cropper</title>
-    <link rel="stylesheet" href="cropperjs/cropper.min.css" />
+    <link rel="stylesheet" href="js/cropper.min.css" />
     <link rel="stylesheet" href="../USER/CSS/main.css" />
     <style>
         .container {
@@ -43,7 +43,7 @@
         </div>
     </div>
 
-    <script src="cropperjs/cropper.min.js"></script>
+    <script src="js/cropper.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var image = document.getElementById('image');
