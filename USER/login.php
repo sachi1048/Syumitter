@@ -5,7 +5,7 @@ require 'db-connect.php';
 if (isset($_POST['user_name']) && isset($_POST['pass'])) {
     $pdo = new PDO($connect, USER, PASS);
 
-    $sql = $pdo->prepare('SELECT * FROM account WHERE user_name = ?');
+    $sql = $pdo->prepare('SELECT * FROM Account WHERE user_name = ?');
     $sql->execute([$_POST['user_name']]);
     
     $row = $sql->fetch();
@@ -40,7 +40,7 @@ if (isset($_POST['user_name']) && isset($_POST['pass'])) {
     <div class="frame">
         <p style="font-weight: bold;">login</p>
         <form action="myprofile.php" method="POST">
-            <input class="textbox" type="text" name="user"  placeholder="ユーザー名"><br>
+            <input class="textbox" type="text" name="user_name"  placeholder="ユーザー名"><br>
             <input class="textbox" type="text" name="pass"  placeholder="パスワード"><br>
             <button class="nextbutton" type="submit">ログイン</button>
         </form>

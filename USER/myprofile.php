@@ -5,8 +5,8 @@
         $_SESSION['user']=['user_name'=>$_POST['user_name'],'pass'=>$_POST['pass']];
     }
     $pdo=new PDO($connect,USER,PASS);
-    $sql=$pdo->prepare('select * from user where user_name=? and pass=?');
-    $sql->execute([$_SESSION['user']['user_name'],$_SESSION['user']['pass']]);
+    $sql=$pdo->prepare('select * from Account where user_name=? and pass=?');
+    $sql->execute($_SESSION['user']['user_name'],$_SESSION['user']['pass']);
     $count = $sql -> rowCount();
     if($count == 0 && !isset($_SESSION['user']['user_name'])){
         unset($_SESSION['user']);
