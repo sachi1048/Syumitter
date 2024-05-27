@@ -1,4 +1,14 @@
-<?php require 'db-connect.php'; ?>
+<?php
+const SERVER = 'mysql301.phy.lolipop.lan';
+const DBNAME = 'LAA1517472-syumitta';
+const USER = 'LAA1517472';
+const PASS = 'kitagawa';
+
+// MySQLデータベースに接続
+$connect = new PDO('mysql:host='.SERVER.';dbname='.DBNAME.';charset=utf8', USER, PASS);
+
+
+?>
 <?php
     try {
         $conn = new PDO($connect, USER, PASS);
@@ -6,10 +16,12 @@
     
         // グループチャットの取得
         $sql = "
-            SELECT g.group_id, g.group_mei, g.aikon, COUNT(gm.member) as member_count
-            FROM `Group` g
-            LEFT JOIN Group_member gm ON g.group_id = gm.group_id
-            GROUP BY g.group_id, g.group_mei, g.aikon
+        SELECT g.group_id, g.group_mei, g.aikon, COUNT(gm.member) AS member_count
+        FROM `Group` g
+        LEFT JOIN Group_member gm ON g.group_id = gm.group_id
+        LEFT JOIN Follow f ON g.group_id = f.follow_id
+        WHERE f.zyoukyou = 1
+        GROUP BY g.group_id, g.group_mei, g.aikon;
         ";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
