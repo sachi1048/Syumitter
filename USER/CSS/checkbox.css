@@ -1,0 +1,26 @@
+.selectable {
+    display: inline-block; /* ラベルをインラインブロックにする */
+    height:15px;
+    padding: 10px 5px 20px 5px; /* ラベルの内側の余白を設定 */
+    margin: 5px; /* ラベルの外側の余白を設定 */
+    border: 1px solid transparent; /* ラベルの枠線を透明に設定 */
+    cursor: pointer; /* ポインタカーソルを表示 */
+    border-radius:17px;
+}
+
+input[type="checkbox"] {
+    display: none; /* チェックボックスを非表示にする */
+}
+
+input[type="checkbox"]:checked + label {
+    border-color: blue; /* チェックされたときのラベルの枠線の色を青に変更 */
+    background-color: lightblue; /* チェックされたときのラベルの背景色をライトブルーに変更 */
+}
+.aokusitai{
+    color:rgb(45, 77, 255);
+}
+.backbutton{
+    border-color:rgb(45,77,255);
+    margin-right:95%;
+    background-color:#ffffff;
+}

@@ -18,12 +18,16 @@ input {
     border: 2px solid #aaa;
 }
 
+input[type="file"]{
+    /* display: none; */
+}
+
 
 /* divでまとめた虹の四角部分 */
 .frame {
     margin: auto;
     padding: 10px;
-    width: 50%;
+    width: 80%;
     border: none;
     border-radius: 5px;
     background: linear-gradient(-45deg, #6ddcff, #ff4ef8, #ff5d5d);
@@ -31,10 +35,10 @@ input {
     color: #ffffff;
 }
 
-.nextbotton {
+.nextbutton {
     margin-top: 10px;
     margin-bottom: 10px;
-    padding: 5px;
+    padding: 5px 20px;
     border-radius: 5px;
     border-color: #8f8f8f;
     background-color: #fff500;
@@ -45,3 +49,17 @@ input {
 .syumitter1 {
     color: linear-gradient(-45deg, #6ddcff, #ff4ef8, #ff5d5d);
 }
+
+/* aikon用のCSS */
+.maru{
+    border-radius: 50%;
+    height: 150px;
+    width: 150px;
+    object-fit: cover;
+
+}
+/* .file_label {
+    text-align: center;
+    width: min(100%, 350px);
+    cursor: pointer;
+} */
