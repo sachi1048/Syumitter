@@ -18,21 +18,21 @@
     $aikon = $_SESSION['user']['aikon'];
     $profile = $_SESSION['user']['profile'];
 
+    echo '<div class="profile1">';
     echo '<img src="', $aikon, '" alt="マイアイコン">';
-    
     $sql=$pdo->prepare('select * from Toukou where toukou_mei=?');
     $sql->execute([$user_name]);
     $toukou = 0; //投稿数
     foreach($sql as $row){
         $toukou++;
     }
-    $sql2=$pdo->prepare('select * form Follow where applicant_name=?');
+    $sql2=$pdo->prepare('select * from Follow where applicant_name=?');
     $sql2->execute([$user_name]);
     $follow = 0;
     foreach($sql2 as $row2){
         $follow++;
     }
-    $sql3=$pdo->prepare('select * form Follow where approver_name=?');
+    $sql3=$pdo->prepare('select * from Follow where approver_name=?');
     $sql3->execute([$user_name]);
     $follower = 0;
     foreach($sql3 as $row3){
@@ -59,7 +59,7 @@
                 <td>フォロワー数</td>
             </tr>
         <table>';
-
+    echo '</div>';
     echo '<h2>', $user_name, '<h2>';
     echo '<h4>', $display_name, '</h4>';
     echo '<div>', $profile, '<div>';
