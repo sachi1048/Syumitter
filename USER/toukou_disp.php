@@ -16,9 +16,10 @@ try {
         
         // 投稿情報を取得するクエリを準備
         $stmt = $pdo->prepare("
-            SELECT t.*, a.aikon as user_aikon, a.display_name 
+            SELECT t.*, a.aikon as user_aikon, a.display_name, COUNT(c.comment_type) as like_count, COUNT(c.comment_id) as comments
             FROM Toukou t
             JOIN Account a ON t.toukou_mei = a.user_name
+            LEFT JOIN Comment c ON t.toukou_id = c.toukou_id AND c.comment_type = 1
             WHERE t.toukou_id = :toukou_id
         ");
         $stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
@@ -40,17 +41,30 @@ try {
             $follow_status = $follow_stmt->fetch(PDO::FETCH_ASSOC);
             $is_following = $follow_status['is_following'] > 0;
             
-            // コメントを取得するクエリ
-            $comment_stmt = $pdo->prepare("
-                SELECT c.*, a.aikon 
-                FROM Comment c
-                JOIN Account a ON c.account_mei = a.user_name
-                WHERE c.toukou_id = :toukou_id
-                ORDER BY c.comment_id
-            ");
-            $comment_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
-            $comment_stmt->execute();
-            $comments = $comment_stmt->fetchAll(PDO::FETCH_ASSOC);
+            // フォローするボタンが押下された場合
+            if (isset($_POST['follow'])) {
+                // フォロー情報を追加
+                $insert_follow_stmt = $pdo->prepare("
+                    INSERT INTO Follow (applicant_name, approver_name, zyoukyou)
+                    VALUES (:applicant_name, :approver_name, 1)
+                ");
+                $insert_follow_stmt->bindParam(':applicant_name', $current_user_name, PDO::PARAM_STR);
+                $insert_follow_stmt->bindParam(':approver_name', $post['user_name'], PDO::PARAM_STR);
+                $insert_follow_stmt->execute();
+                
+                // 投稿主のフォロワー数を1増やす
+                $update_follower_count_stmt = $pdo->prepare("
+                    UPDATE Account
+                    SET follower_count = follower_count + 1
+                    WHERE user_name = :user_name
+                ");
+                $update_follower_count_stmt->bindParam(':user_name', $post['user_name'], PDO::PARAM_STR);
+                $update_follower_count_stmt->execute();
+                
+                // ページをリロードする
+                header("Location: {$_SERVER['REQUEST_URI']}");
+                exit();
+            }
 ?>
 
 <!DOCTYPE html>
@@ -59,6 +73,7 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="CSS/main.css">
+    <link rel="stylesheet" href="CSS/toukou_disp.css">
     <title>投稿表示画面</title>
 </head>
 <body>
@@ -69,11 +84,10 @@ try {
             <img src="<?php echo htmlspecialchars($post['user_aikon']); ?>" alt="ユーザーアイコン">
             <span><?php echo htmlspecialchars($post['display_name']); ?></span>
             <?php if ($is_following): ?>
-                <button>フォロー中</button>
+                <button disabled>フォロー中</button>
             <?php else: ?>
-                <form action="follow.php" method="post">
-                    <input type="hidden" name="approver_name" value="<?php echo htmlspecialchars($post['user_name']); ?>">
-                    <button type="submit">フォローする</button>
+                <form action="" method="post">
+                    <button type="submit" name="follow">フォローする</button>
                 </form>
             <?php endif; ?>
         </div>
@@ -90,7 +104,7 @@ try {
             </div>
         <?php endif; ?>
         <div class="interaction-buttons">
-            <button>いいね <?php echo htmlspecialchars($post['likes']); ?></button>
+            <button>いいね <?php echo htmlspecialchars($post['like_count']); ?></button>
             <button>コメント <?php echo htmlspecialchars($post['comments']); ?></button>
         </div>
         <div class="post-date">
@@ -100,6 +114,9 @@ try {
             echo date('Y年m月d日', $timestamp) . ' ' . date('l', $timestamp);
             ?>
         </div>
+        <div class="explain">
+    <?php echo htmlspecialchars($post['explain']); ?>
+</div>
         <div class="hashtags">
             <?php
             // ハッシュタグの表示
@@ -128,7 +145,9 @@ try {
                 <div class="comment">
                     <div class="comment-user-info">
                         <img src="<?php echo htmlspecialchars($comment['aikon']); ?>" alt="アイコン">
-                        <span><?php echo htmlspecialchars($comment['account_mei']); ?></span>
+                        <span><?php
+
+echo htmlspecialchars($comment['account_mei']); ?></span>
                     </div>
                     <div class="comment-content">
                         <?php echo htmlspecialchars($comment['naiyou']); ?>
