@@ -15,7 +15,7 @@
     <title>マイプロフィール編集画面</title>
 </head>
 <body>
-    <h1>Syumitter</h1>
+    <h1 class="h1-1">Syumitter</h1>
 
     <div class="frame">
         <h2>プロフィール編集</h2>
