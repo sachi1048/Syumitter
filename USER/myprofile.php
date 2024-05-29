@@ -18,8 +18,7 @@
     $aikon = $_SESSION['user']['aikon'];
     $profile = $_SESSION['user']['profile'];
 
-    echo '<div class="profile1">';
-    echo '<img src="', $aikon, '" alt="マイアイコン">';
+    echo '<div class="profile1"><img src="', $aikon, '" alt="マイアイコン"></div>';
     $sql=$pdo->prepare('select * from Toukou where toukou_mei=?');
     $sql->execute([$user_name]);
     $toukou = 0; //投稿数
@@ -38,7 +37,7 @@
     foreach($sql3 as $row3){
         $follower++;
     }
-    echo '<table>
+    echo '<div class="profile2"><table>
             <tr>
                 <td>', 
                 //投稿数
@@ -58,8 +57,7 @@
                 <td>フォロー数</td>
                 <td>フォロワー数</td>
             </tr>
-        <table>';
-    echo '</div>';
+        <table></div>';
     echo '<h2>', $user_name, '<h2>';
     echo '<h4>', $display_name, '</h4>';
     echo '<div>', $profile, '<div>';

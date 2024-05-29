@@ -66,6 +66,8 @@ input[type="file"]{
 
 /* myprofileとprofileのアイコンと「投稿数・フォロー・フォロワー」を横に並べるCSS */
 .profile1{
-    display: flex;
-    width: 100%;
+    float: left;    
+}
+.profile2{
+    float: right;
 }
