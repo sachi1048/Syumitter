@@ -4,7 +4,7 @@ body {
 }
 
 /*「Syumitter」用のCSS*/
-h1 {
+.h1-1 {
     /* letter-spacing: 0.001px; */
     font-style: oblique;
     font-family: "arial black";
@@ -63,3 +63,9 @@ input[type="file"]{
     width: min(100%, 350px);
     cursor: pointer;
 } */
+
+/* myprofileとprofileのアイコンと「投稿数・フォロー・フォロワー」を横に並べるCSS */
+.profile1{
+    display: flex;
+    width: 100%;
+}
