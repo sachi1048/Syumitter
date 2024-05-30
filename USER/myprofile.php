@@ -66,16 +66,22 @@
             </tr>
         </table></td></table>';
     echo '<div class="left1">'; //後で変更
-    echo '<h2>', $user_name, '<h2>';
+    echo '<h2>', $user_name, '</h2>';
     echo '<h4>', $display_name, '</h4>';
     echo '</div>';
-    echo '<div>', $profile, '</div>';
+    echo '<br><br><br><br>';
+    echo '<div class="profile">';
+    echo '<p>', $profile, '</p>';
+    echo '</div>';
 
 ?>
     <form action="myprofile-edit.php" method="POST">
     </form> 
-    <botton>□</button>
-    <button>♡</button>
+    <div style="width: 100%;">
+        <img class="icon1" src="img/imagebox.png">
+        <img class="icon1" src="img/heart.png">
+    </div>
+    <hr>
 
  
 </body>

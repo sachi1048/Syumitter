@@ -68,6 +68,20 @@ input[type="file"]{
 /* myprofileのユーザー名と名前をちょい左にする */
 .left1{
     position: absolute;
-    left: 10px;
+    left: 50%;
+    width: 500px;
+    margin-left: -350px;
+}
+
+/* プロフィール文用のCSS */
+.profile{
+    width: 80%;
     margin: auto;
+}
+
+/* プロフィールの投稿とハートのアイコン用 */
+.icon1{
+    width: 40px;
+    height: 40px;
+    padding: 0 15% 0 15%;
 }
