@@ -24,3 +24,13 @@ input[type="checkbox"]:checked + label {
     margin-right:95%;
     background-color:#ffffff;
 }
+.tag_ln{
+    margin-top:10px;
+    margin-bottom:2px;
+}
+.koumoku{
+    margin-top:10px;
+    margin-bottom:2px;
+    text-align:left;
+    margin-left:25%;
+}
