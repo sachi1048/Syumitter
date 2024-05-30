@@ -53,8 +53,8 @@ input[type="file"]{
 /* aikon用のCSS */
 .maru{
     border-radius: 50%;
-    height: 150px;
-    width: 150px;
+    height: 100px;
+    width: 100px;
     object-fit: cover;
 
 }
@@ -64,8 +64,25 @@ input[type="file"]{
     cursor: pointer;
 } */
 
-/* myprofileとprofileのアイコンと「投稿数・フォロー・フォロワー」を横に並べるCSS */
-.profile1{
-    display: flex;
-    width: 100%;
+
+/* myprofileのユーザー名と名前をちょい左にする */
+.left1{
+    position: absolute;
+    left: 50%;
+    width: 500px;
+    margin-left: -350px;
 }
+
+/* プロフィール文用のCSS */
+.profile{
+    width: 80%;
+    margin: auto;
+}
+
+/* プロフィールの投稿とハートのアイコン用 */
+.icon1{
+    width: 40px;
+    height: 40px;
+    padding: 0 15% 0 15%;
+}
+
