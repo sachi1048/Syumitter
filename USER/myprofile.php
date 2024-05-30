@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="CSS/main.css">
+    <link rel="stylesheet" href="CSS/menu.css">
     <title>マイプロフィール画面</title>
 </head>
 <body>
@@ -83,6 +84,6 @@
     </div>
     <hr>
 
- 
+    <footer><?php require 'menu.php';?></footer>
 </body>
 </html>
