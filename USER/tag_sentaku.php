@@ -16,7 +16,7 @@
             exit;
         }
     }
-    
+
     $message = '';
     if (isset($_SESSION['message'])) {
         $message = $_SESSION['message'];
@@ -51,6 +51,34 @@
             opacity: 0;
         }
     </style>
+    <script>
+        // JavaScript function to limit checkbox selection to 3
+        function limitCheckboxSelection() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const limit = 3;
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', () => {
+                    const checkedCount = document.querySelectorAll('input[type="checkbox"]:checked').length;
+                    if (checkedCount > limit) {
+                        checkbox.checked = false;
+                    }
+                });
+            });
+        }
+        window.onload = function() {
+            limitCheckboxSelection();
+            var notification = document.getElementById('notification');
+            if (notification.innerText !== '') {
+                notification.style.display = 'block';
+                setTimeout(function() {
+                    notification.classList.add('hide');
+                }, 1500);
+                setTimeout(function() {
+                    notification.style.display = 'none';
+                }, 2000);
+            }
+        };
+    </script>
     <!-- ここまではチャットGPTにしかわかりません -->
 </head>
 <body>
@@ -59,7 +87,7 @@
     <div id="notification"><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div>
     <!-- 趣味タグの追加 -->
     <form action="" method="post">
-        <input type="text" name="tagmei" placeholder="新規タグ追加">
+        <input type="text" name="tagmei" placeholder="新規タグ追加" required>
         <button type="submit">追加</button>
     </form>
     <!-- 趣味タグ一覧を表示 -->
@@ -81,7 +109,7 @@
         <button class="nextbutton" type="submit">決定</button>
     </form>
     <button class="backbutton" onclick="history.back()"><span class="aokusitai">◀</span> 戻る</button>
-    <!-- ここから先はちゃっとGPTに仕様を聞いてください -->
+    <!-- ここから先はチャットGPTに仕様を聞いてください -->
     <?php if ($message): ?>
         <script>
             window.onload = function() {
