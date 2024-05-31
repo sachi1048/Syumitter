@@ -60,8 +60,8 @@
             </tr>
             <tr>
                 <td>投稿数</td>
-                <td>フォロー</td>
-                <td>フォロワー</td>
+                <td><a href="follow-list.php" class="link">フォロー</a></td>
+                <td><a href="follower-list.php" class="link">フォロワー</td>
             </tr>
         </table></td></table>';
     echo '<div class="left1">'; //後で変更

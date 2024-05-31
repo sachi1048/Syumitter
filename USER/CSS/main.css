@@ -10,6 +10,11 @@ body {
     font-family: "arial black";
 }
 
+.h1-2{
+    font-style: oblique;
+    color: linear-gradient(-45deg, #6ddcff, #ff4ef8, #ff5d5d);
+}
+
 input {
     box-sizing: border-box;
     margin: 5px;
@@ -71,6 +76,11 @@ input[type="file"]{
 
 .table1 td{
     width: 80px;
+}
+
+.link{
+    text-decoration: none;
+    color: #000000;
 }
 
 /* プロフィール文用のCSS */
