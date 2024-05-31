@@ -2,7 +2,7 @@
 require 'db-connect.php';
 
 session_start();
-$current_user_name = $_SESSION['user_name']; // ログインしているユーザーの名前をセッションから取得
+$current_user_name = $_SESSION['user']['user_name']; // ログインしているユーザーの名前をセッションから取得
 
 try {
     // データベースに接続
