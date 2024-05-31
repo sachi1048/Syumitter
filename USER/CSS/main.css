@@ -23,7 +23,7 @@ input {
 .frame {
     margin: auto;
     padding: 10px;
-    width: 50%;
+    width: 75%;
     border: none;
     border-radius: 5px;
     background: linear-gradient(-45deg, #6ddcff, #ff4ef8, #ff5d5d);
