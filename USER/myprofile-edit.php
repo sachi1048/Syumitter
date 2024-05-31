@@ -59,6 +59,9 @@
         </form>
     </div>
     <br>
-    <button>戻る</button>
+    <a href="myprofile.php" class="btn-mdr">
+        <span class="dli-caret-left"></span>
+            戻る
+    </a>
 </body>
 </html>
