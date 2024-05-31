@@ -24,3 +24,29 @@ input[type="checkbox"]:checked + label {
     margin-right:95%;
     background-color:#ffffff;
 }
+.tag_ln{
+    margin-top:10px;
+    margin-bottom:2px;
+}
+.koumoku{
+    margin-top:10px;
+    margin-bottom:2px;
+    text-align:left;
+    margin-left:25%;
+}
+.tagbutton {
+    background-color: #ffffff; /* ボタンの背景色 */
+    padding: 10px 24px; /* ボタンのパディング */
+    background: linear-gradient(to right, #6ddcff, #ff4ef8, #ff5d5d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+    text-align: center; /* ボタンのテキストを中央揃え */
+    text-decoration: none; /* ボタンの下線をなしに */
+    font-size: 14px; /* ボタンのフォントサイズ */
+    cursor: pointer; /* マウスカーソルをポインターに */
+    border-radius: 5px; /* ボタンの角丸 */
+    border: 1px solid;
+    /* ボーダーカラーをグラデーションに */
+    border-image: linear-gradient(to right, #6ddcff, #ff4ef8, #ff5d5d);
+    border-image-slice: 1; /* グラデーションを全体に適用 */
+}
