@@ -58,11 +58,7 @@ input[type="file"]{
     object-fit: cover;
 
 }
-/* .file_label {
-    text-align: center;
-    width: min(100%, 350px);
-    cursor: pointer;
-} */
+
 
 
 /* myprofileのユーザー名と名前をちょい左にする */
@@ -71,6 +67,10 @@ input[type="file"]{
     left: 50%;
     width: 500px;
     margin-left: -350px;
+}
+
+.table1 td{
+    width: 80px;
 }
 
 /* プロフィール文用のCSS */

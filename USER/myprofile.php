@@ -21,9 +21,7 @@
 
     echo '<table style="margin: auto;"><tr><td>';
     echo '<div class="aikon">
-            <lable label="file_label">
-                <img src="img/aikon/', $aikon, '" alt="マイアイコン" class="maru">
-            </lable>
+            <img src="img/aikon/', $aikon, '" alt="マイアイコン" class="maru">
           </div></td>';
 
 
@@ -45,7 +43,7 @@
     foreach($sql3 as $row3){
         $follower++;
     }
-    echo '<td><table>
+    echo '<td><table class="table1">
             <tr>
                 <td>', 
                 //投稿数
@@ -62,8 +60,8 @@
             </tr>
             <tr>
                 <td>投稿数</td>
-                <td>フォロー数</td>
-                <td>フォロワー数</td>
+                <td>フォロー</td>
+                <td>フォロワー</td>
             </tr>
         </table></td></table>';
     echo '<div class="left1">'; //後で変更
