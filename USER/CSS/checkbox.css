@@ -1,0 +1,171 @@
+.selectable {
+    display: inline-block; /* ラベルをインラインブロックにする */
+    height:15px;
+    padding: 10px 5px 20px 5px; /* ラベルの内側の余白を設定 */
+    margin: 5px; /* ラベルの外側の余白を設定 */
+    border: 1px solid #18EBF9; /* ラベルの枠線を透明に設定 */
+    cursor: pointer; /* ポインタカーソルを表示 */
+    border-radius:17px;
+    font-size:20px;
+    color:#18EBF9;
+    background-color:#ffffff;
+}
+label.selectable:hover{
+    background-color:#18EBF9;
+    color:#ffffff;
+    border:none;
+}
+input[type="checkbox"] {
+    display: none; /* チェックボックスを非表示にする */
+}
+input[type="checkbox"]:checked + label {
+    border-color: blue; /* チェックされたときのラベルの枠線の色を青に変更 */
+    background-color: lightblue; /* チェックされたときのラベルの背景色をライトブルーに変更 */
+}
+.aokusitai{
+    color:rgb(45, 77, 255);
+}
+.backbutton{
+    width: 19%;
+    height: 30px;
+    border-color: rgb(45, 77, 255);
+    margin-bottom: 200px;
+    margin-right: 85%;
+    background-color: #ffffff;
+    text-align: left;
+    border-radius: 8px;
+}
+.tag_ln{
+    margin-top:10px;
+    margin-bottom:2px;
+    border: 2px solid;
+    border-color: lightskyblue;
+    padding: 2px 5px;
+    border-radius:8px;
+}
+.koumoku{
+    margin-top:20px;
+    margin-bottom:2px;
+    text-align:left;
+    margin-left:15%;
+}
+.tagbutton {
+    margin-top:10px;
+    background-color: #ffffff; /* ボタンの背景色 */
+    padding: 10px 24px; /* ボタンのパディング */
+    background: linear-gradient(to right, #6ddcff, #ff4ef8, #ff5d5d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+    text-align: center; /* ボタンのテキストを中央揃え */
+    text-decoration: none; /* ボタンの下線をなしに */
+    font-size: 14px; /* ボタンのフォントサイズ */
+    cursor: pointer; /* マウスカーソルをポインターに */
+    border-radius: 5px; /* ボタンの角丸 */
+    border: 1px solid;
+    /* ボーダーカラーをグラデーションに */
+    border-image: linear-gradient(to right, #6ddcff, #ff4ef8, #ff5d5d);
+    border-image-slice: 1; /* グラデーションを全体に適用 */
+}
+.syumitter1 {
+    font-weight: bold;
+    background: linear-gradient(-45deg, #6ddcff, #ff4ef8, #ff5d5d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+    font-style: oblique;
+}
+.inp{
+    width:70%;
+    box-sizing: border-box;
+    margin: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 2px solid #aaa;
+}
+.nextbutton {
+    margin-top: 10px;
+    margin-bottom: 200px;
+    padding: 5px 20px;
+    border-radius: 5px;
+    border-color: #8f8f8f;
+    background-color: #fff500;
+    color: #A73030;
+    font-weight: bold;  
+}
+body {
+    text-align: center;
+}
+.setumeinp{
+    width:70%;
+    height:120px;
+    box-sizing: border-box;
+    margin: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 2px solid #aaa;
+    font-size:17px;
+}
+.toukougazou {
+    position: relative;
+    width: 70%;
+    height: 240px;
+    background-size: cover;
+    background-position: center;
+    margin: 10px auto;
+    object-fit: cover;
+    border-radius: 8px;
+    background-color: lightgray;
+    border: 1.2px solid;
+}
+.center-button {
+    position: absolute;
+    top: 50%;
+    width: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px 20px;
+    background-color: rgba(255, 255, 255, 0.7);
+    font-weight: bold;
+    /* border: none; */
+    cursor: pointer;
+    border: 1.2px solid #ff9929;
+    border-radius:8px;
+}
+#fileName {
+    text-align: center;
+    margin-top: 10px;
+}
+.h1-1 {
+    font-weight: bold;
+    font-style: oblique;
+    font-family: "arial black";
+}
+.tag_inp{
+    width:50%;
+    height:35px;
+    border:1.2px solid #000000;
+    border-radius:8px;
+}
+.nizibutton{
+    width: 15%;
+    height: 35px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    background: linear-gradient(-45deg, #6ddcff, #ff4ef8, #ff5d5d);
+    color: #ffffff;
+}
+.tag_syumi{
+    background: linear-gradient(-45deg, #6ddcff, #ff4ef8, #ff5d5d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size:30px;
+}
+.lastbutton{
+    margin-top: 10px;
+    padding: 5px 20px;
+    border-radius: 5px;
+    border-color: #8f8f8f;
+    background-color: #fff500;
+    color: #A73030;
+    font-weight: bold;
+}
