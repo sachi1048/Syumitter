@@ -1,0 +1,33 @@
+.container {
+    margin: 20px;
+}
+
+.header {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.chat-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.chat-item {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #f1f1f1;
+}
+
+.chat-item img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.info {
+    text-align: left;
+}

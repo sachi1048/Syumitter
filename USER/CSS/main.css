@@ -4,7 +4,7 @@ body {
 }
 
 /*「Syumitter」用のCSS*/
-h1 {
+.h1-1 {
     /* letter-spacing: 0.001px; */
     font-style: oblique;
     font-family: "arial black";
@@ -18,12 +18,16 @@ input {
     border: 2px solid #aaa;
 }
 
+input[type="file"]{
+    /* display: none; */
+}
+
 
 /* divでまとめた虹の四角部分 */
 .frame {
     margin: auto;
     padding: 10px;
-    width: 50%;
+    width: 80%;
     border: none;
     border-radius: 5px;
     background: linear-gradient(-45deg, #6ddcff, #ff4ef8, #ff5d5d);
@@ -31,13 +35,92 @@ input {
     color: #ffffff;
 }
 
-.nextbotton {
+.nextbutton {
     margin-top: 10px;
     margin-bottom: 10px;
-    padding: 5px;
+    padding: 5px 20px;
     border-radius: 5px;
     border-color: #8f8f8f;
     background-color: #fff500;
     color: #A73030;
     font-weight: bold;  
 }
+
+.syumitter1 {
+    color: linear-gradient(-45deg, #6ddcff, #ff4ef8, #ff5d5d);
+}
+
+/* aikon用のCSS */
+.maru{
+    border-radius: 50%;
+    height: 100px;
+    width: 100px;
+    object-fit: cover;
+
+}
+/* .file_label {
+    text-align: center;
+    width: min(100%, 350px);
+    cursor: pointer;
+} */
+
+
+/* myprofileのユーザー名と名前をちょい左にする */
+.left1{
+    position: absolute;
+    left: 50%;
+    width: 500px;
+    margin-left: -350px;
+}
+
+/* プロフィール文用のCSS */
+.profile{
+    width: 80%;
+    margin: auto;
+}
+
+/* プロフィールの投稿とハートのアイコン用 */
+.icon1{
+    width: 40px;
+    height: 40px;
+    padding: 0 15% 0 15%;
+}
+
+/* 「プロフィール編集」ボタン */
+.btn-profile{
+    display: inline-block;
+    padding: 4px 10px;
+    text-decoration: none;
+    background-color: #d9d9d9;
+    color: #000000;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+
+/* 「◀戻る」ボタン */
+.btn-mdr{
+    display: inline-block;
+    padding: 5px 10px;
+    text-decoration: none;
+    /* background-color: none; */
+    border: solid 2px #0047FF;
+    border-radius: 5px;
+    float: left;
+    margin-left: 10%;
+}
+/* 「◀」の部分 */
+.dli-caret-left {
+    display: inline-block;
+    vertical-align: middle;
+    color: #0047FF;
+    line-height: 1;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-color: transparent;
+    border-width: 0.375em 0.64952em;
+    border-right-color: currentColor;
+    border-left: 0;
+  }
