@@ -50,20 +50,20 @@
                 $toukou, 
                 '</td>
                 <td>', 
-                //フォロー数
-                $follow,
-                '</td>
-                <td>',
                 //フォロワー数
                 $follower,
+                '</td>
+                <td>',
+                //フォロー数
+                $follow,
                 '</td>
             </tr>
             <tr>
                 <td>投稿数</td>
-                <td><a href="follow-list.php" class="link">フォロー</a></td>
-                <td><a href="follower-list.php" class="link">フォロワー</td>
+                <td><a href="follower-list.php" class="link">フォロワー</a></td>
+                <td><a href="follow-list.php" class="link">フォロー</td>
             </tr>
-        </table></td></table>';
+        </table></td><tr></table>';
     echo '<div class="left1">'; //後で変更
     echo '<h2>', $user_name, '</h2>';
     echo '<h4>', $display_name, '</h4>';
