@@ -21,8 +21,19 @@ body {
 .user-info {
     display: flex;
     align-items: center;
+    justify-content: space-between; /* 追加 */
     margin-bottom: 20px;
 }
+
+.post-date {
+    font-size: 14px;
+    color: #888;
+    text-align: right; /* 追加 */
+    position: absolute; /* 追加 */
+    bottom: 10px; /* 追加 */
+    right: 20px; /* 追加 */
+}
+
 
 .user-icon {
     border-radius: 50%;
@@ -32,7 +43,6 @@ body {
 }
 
 .follow-button {
-    margin-left: auto;
     padding: 5px 10px;
     border: 1px solid #ff69b4;
     border-radius: 4px;
@@ -80,8 +90,10 @@ body {
 .post-date {
     font-size: 14px;
     color: #888;
-    margin-bottom: 20px;
+    text-align: right; /* 右寄せ */
+    margin-top: auto; /* 上側の余白を自動調整 */
 }
+
 
 .tags {
     display: flex;
