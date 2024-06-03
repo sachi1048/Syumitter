@@ -122,7 +122,7 @@ input[type="file"]{
     float: left;
     margin-left: 10%;
 }
-/* 「◀」の部分 */
+/* 「◀戻る」の「◀」の部分 */
 .dli-caret-left {
     display: inline-block;
     vertical-align: middle;
@@ -135,4 +135,45 @@ input[type="file"]{
     border-width: 0.375em 0.64952em;
     border-right-color: currentColor;
     border-left: 0;
+  }
+
+  /* 画面左上の「◀」 */
+  .btn-mdr2 {
+    display: inline-block;
+    position: fixed;
+    top: 30px;
+    left: 30px;
+    vertical-align: middle;
+    color: #0047FF;
+    line-height: 1;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-color: transparent;
+    border-width: 15px 20px;
+    border-right-color: currentColor;
+    border-left: 0;
+  }
+
+  /* 「フォロワー/フォロー」「グループチャット/ペアチャット」の切り替え用 */
+  .switch{
+    display: inline-block;
+    padding: 4px;
+    background-color: #d9d9d9;
+    border-radius: 5px;
+  }
+  .switch a{
+    font-weight: bold;
+  }
+  .switch2{
+    display: inline-block;
+    padding: 5px 23px;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+  }
+  .switch-left{
+    margin: 0 40px 0 30px;
+  }
+  .switch-right{
+    margin: 0 30px 0 40px;
   }

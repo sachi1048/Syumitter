@@ -11,6 +11,9 @@
 </head>
 <body>
     <h1 class="h1-2">Syumitter</h1>
+    <a href="myprofile.php">
+        <span class="btn-mdr2"></span>
+    </a>
     <?php
     $pdo = new PDO($connect, USER, PASS);
     $user_name = $_SESSION['user']['user_name'];
@@ -36,11 +39,39 @@
           </table>';
     echo '</td><tr></table>';
     ?>
-
-    <div>
-        <a href="follow-list.php">フォロワー</a>
-        <a href="follower-list.php">フォロー</a>
+    <br>
+    <div class="switch">
+        <a class="link switch2" href="follower-list.php">フォロワー</a>
+        <a class="link switch-right" href="follow-list.php">フォロー</a>
     </div>
+
+
+    <?php
+    $sql=$pdo->query('select * from Follow where approver_name='.$user_name.' order by zyoukyou DESC');
+    echo '<table>';
+    foreach($sql as $row){
+        $sql2=$pdo->query('select * from Account where user_name='.$row['approver_name']);
+        foreach($sql2 as $row2){
+            echo '<tr><td>';
+            echo '<div class="aikon">
+                    <img src="img/aikon/', $row2['aikon'], '" alt="マイアイコン" class="maru">
+                  </div></td>';
+            echo '<td>
+                    <h2>', $row2['user_name'], '</h2>
+                  </td>
+                  <td>
+                    <div>
+                    </div>
+                  </td><tr><table>';
+
+
+        }
+
+    }
+    echo '</table>';
+    ?>
+
+
 
 </body>
 </html>
