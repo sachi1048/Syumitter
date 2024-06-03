@@ -87,7 +87,7 @@
     <div id="notification"><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div>
     <!-- 趣味タグの追加 -->
     <form action="" method="post">
-        <input type="text" name="tagmei" placeholder="新規タグ追加">
+        <input type="text" name="tagmei" placeholder="新規タグ追加" required>
         <button type="submit">追加</button>
     </form>
     <!-- 趣味タグ一覧を表示 -->

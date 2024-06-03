@@ -74,6 +74,7 @@
     echo '<div class="profile">';
     echo '<p>', $profile, '</p>';
     echo '</div>';
+    echo '<a href="myprofile-edit" class="btn-profile">プロフィール編集</a>';
 
 ?>
     <form action="myprofile-edit.php" method="POST">
