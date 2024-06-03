@@ -28,7 +28,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="CSS/main.css">
     <link rel="stylesheet" href="CSS/checkbox.css">
     <title>趣味タグ選択画面</title>
     <!-- ここから↓ -->
@@ -82,14 +81,15 @@
     <!-- ここまではチャットGPTにしかわかりません -->
 </head>
 <body>
-    <h1 class="syumitter1">Syumitter</h1>
-    <p>＃趣味の追加・削除</p>
+    <h1 class="h1-1">Syumitter</h1>
+    <p><span class="tag_syumi">＃趣味</span>の追加・削除</p>
     <div id="notification"><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div>
     <!-- 趣味タグの追加 -->
     <form action="" method="post">
-        <input type="text" name="tagmei" placeholder="新規タグ追加" required>
-        <button type="submit">追加</button>
-    </form>
+        <input class="tag_inp" type="text" name="tagmei" placeholder="　新規タグ追加" required>　
+        <button class="nizibutton" type="submit">追加</button>
+        <p>３つまで選択可能</p>
+    </form><br>
     <!-- 趣味タグ一覧を表示 -->
     <form action="toukou.php" method="POST">
         <div>
@@ -106,7 +106,7 @@
                 }
             ?>
         </div>
-        <button class="nextbutton" type="submit">決定</button>
+        <button class="lastbutton" type="submit">決定</button>
     </form>
     <button class="backbutton" onclick="history.back()"><span class="aokusitai">◀</span> 戻る</button>
     <!-- ここから先はチャットGPTに仕様を聞いてください -->
