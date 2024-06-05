@@ -68,6 +68,51 @@ try {
                 exit();
             }
 
+            // アンフォローボタンが押下された場合
+            if (isset($_POST['unfollow'])) {
+                // フォロー情報を削除
+                $delete_follow_stmt = $pdo->prepare("
+                    DELETE FROM Follow
+                    WHERE applicant_name = :applicant_name AND approver_name = :approver_name
+                ");
+                $delete_follow_stmt->bindParam(':applicant_name', $current_user_name, PDO::PARAM_STR);
+                $delete_follow_stmt->bindParam(':approver_name', $post['toukou_mei'], PDO::PARAM_STR);
+                $delete_follow_stmt->execute();
+
+                // 投稿主のフォロワー数を1減らす
+                $update_follower_count_stmt = $pdo->prepare("
+                    UPDATE Account
+                    SET follower_count = follower_count - 1
+                    WHERE user_name = :user_name
+                ");
+                $update_follower_count_stmt->bindParam(':user_name', $post['toukou_mei'], PDO::PARAM_STR);
+                $update_follower_count_stmt->execute();
+
+                // ページをリロードする
+                header("Location: {$_SERVER['REQUEST_URI']}");
+                exit();
+            }
+
+            // 投稿の削除
+            if (isset($_POST['delete_post'])) {
+                // 投稿と関連するコメントを削除
+                $delete_comments_stmt = $pdo->prepare("
+                    DELETE FROM Comment WHERE toukou_id = :toukou_id
+                ");
+                $delete_comments_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
+                $delete_comments_stmt->execute();
+
+                $delete_post_stmt = $pdo->prepare("
+                    DELETE FROM Toukou WHERE toukou_id = :toukou_id
+                ");
+                $delete_post_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
+                $delete_post_stmt->execute();
+
+                // リダイレクト
+                header("Location: user_posts.php"); // ユーザーの投稿一覧にリダイレクト
+                exit();
+            }
+
             // タグ名の取得クエリ
             function getTagName($pdo, $tag_id) {
                 if ($tag_id) {
@@ -101,17 +146,23 @@ try {
     <h1 class="syumitter1">Syumitter</h1>
 
     <div class="post-container">
-    <div class="user-info">
-    <div class="aikon"><img src="<?php echo 'img/aikon/' . htmlspecialchars($aikon); ?>" alt="アイコン" class="user-icon"></div>
-    <span><?php echo htmlspecialchars($post['display_name']); ?></span>
-    <?php if ($is_following): ?>
-        <button class="follow-button" disabled>フォロー中</button>
-    <?php else: ?>
-        <form action="" method="post">
-            <button type="submit" name="follow" class="follow-button">フォローする</button>
-        </form>
-    <?php endif; ?>
-</div>
+        <div class="user-info">
+            <div class="aikon">
+                <img src="<?php echo 'img/aikon/' . htmlspecialchars($post['user_aikon']); ?>" alt="アイコン" class="user-icon">
+            </div>
+            <span><?php echo htmlspecialchars($post['display_name']); ?></span>
+            <?php if ($current_user_name === $post['toukou_mei']): ?>
+                <form action="" method="post" class="user-action-form">
+                    <button type="submit" name="delete_post" class="delete-button">×削除する</button>
+                </form>
+            <?php else: ?>
+                <form action="" method="post" class="user-action-form">
+                    <button type="submit" name="follow" class="follow-button">
+                        <?php echo $is_following ? 'フォロー中' : 'フォローする'; ?>
+                    </button>
+                </form>
+            <?php endif; ?>
+        </div>
 
         <?php if (!empty($post['contents'])): ?>
             <div class="post-content">
@@ -124,10 +175,11 @@ try {
                 }
                 ?>
                 <div class="interaction-buttons">
-                    <button class="like-button">
-                        <i class="fas fa-heart"></i>
-                        <div class="like-count"><?php echo htmlspecialchars($post['like_count']); ?></div>
-                    </button>
+                <button class="like-button">
+    <span class="heart-icon">♡</span>
+    <div class="like-count"><?php echo htmlspecialchars($post['like_count']); ?></div>
+</button>
+
                     <button class="comment-button">
                         <i class="fas fa-comment"></i>
                         <div class="comment-count"><?php echo htmlspecialchars($post['comments']); ?></div>
@@ -137,7 +189,7 @@ try {
         <?php endif; ?>
         <div class="post-details">
             <div class="post-title">
-                <h2><?php echo htmlspecialchars($post['title']); ?></h2>
+            <h2><?php echo htmlspecialchars($post['title']); ?></h2>
             </div>
             <div class="post-tags">
                 <?php foreach ($tags as $tag): ?>
@@ -148,14 +200,14 @@ try {
             </div>
         </div>
         <div class="post-date-right">
-    <?php
-    // 日本語の曜日を表示するための配列
-    $weekdays = ["日", "月", "火", "水", "木", "金", "土"];
-    $timestamp = strtotime($post['toukou_datetime']);
-    $dayOfWeek = $weekdays[date('w', $timestamp)];
-    echo date('Y年m月d日', $timestamp) . ' (' . $dayOfWeek . ')';
-    ?>
-</div>
+            <?php
+            // 日本語の曜日を表示するための配列
+            $weekdays = ["日", "月", "火", "水", "木", "金", "土"];
+            $timestamp = strtotime($post['toukou_datetime']);
+            $dayOfWeek = $weekdays[date('w', $timestamp)];
+            echo date('Y年m月d日', $timestamp) . ' (' . $dayOfWeek . ')';
+            ?>
+        </div>
         <div class="explain">
             <?php echo htmlspecialchars($post['explain']); ?>
         </div>
@@ -169,14 +221,13 @@ try {
                 JOIN Account a ON c.account_mei = a.user_name
                 WHERE c.toukou_id = :toukou_id
             ");
-
             $comment_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
             $comment_stmt->execute();
             $comments = $comment_stmt->fetchAll(PDO::FETCH_ASSOC);
             foreach ($comments as $comment): ?>
                 <div class="comment">
                     <div class="comment-user-info">
-                    <img src="<?php echo 'img/aikon/' . htmlspecialchars($aikon); ?>" alt="アイコン" class="user-icon">
+                        <img src="<?php echo 'img/aikon/' . htmlspecialchars($comment['aikon']); ?>" alt="アイコン" class="user-icon">
                         <span><?php echo htmlspecialchars($comment['account_mei']); ?></span>
                     </div>
                     <div class="comment-content">
@@ -189,13 +240,12 @@ try {
 </body>
 </html>
 
-
 <?php
         } else {
             echo "投稿が見つかりませんでした";
         }
     } else {
-        echo"投稿IDが指定されていません";
+        echo "投稿IDが指定されていません";
     }
 } catch (PDOException $e) {
     die("エラー: " . $e->getMessage());
