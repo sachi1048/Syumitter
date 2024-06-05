@@ -1,31 +1,44 @@
 <?php
 require 'db-connect.php';
 session_start();
-$pdo = new PDO($connect,USER,PASS);
+$pdo = new PDO($connect, USER, PASS);
 
 // 投稿処理
-if($_SERVER['REQUEST_METHOD'] === 'POST'){
-    if(isset($_POST['toukousuru'])){
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['toukousuru'])) {
         // 現在の日付と時間を年/月/日 時：分：秒の形で変数に保存
         $currentDateTime = date('Y-m-d H:i:s');
+        // ファイルがアップロードされたか確認
+        if (isset($_FILES['fileInput']) && $_FILES['fileInput']['error'] === UPLOAD_ERR_OK) {
+            $uploadDir = 'img/toukou/';
+            $uploadFile = $uploadDir . basename($_FILES['fileInput']['name']);
+
+            // ファイルを指定のフォルダに移動
+            if (move_uploaded_file($_FILES['fileInput']['tmp_name'], $uploadFile)) {
+                $fileName = basename($_FILES['fileInput']['name']);
+            } else {
+                echo '<h2>ファイルのアップロードに失敗しました</h2>';
+                exit;
+            }
+        }
         // タグ１とタグ2、タグ３すべてにデータがある場合の追加処理
-        if(isset($_POST['tag1'],$_POST['tag2'],$_POST['tag3'])){
-            $ads=$pdo->prepare('insert into Toukou values(null,?,?,?,?,?,?,?,?)');
-            $ads->execute([$_POST['title'],$currentDateTime,$_POST['naiyou'],$_POST['setumei'],$_POST['tag1'],$_POST['tag2'],$_POST['tag3'],$_SESSION['user']['user_name']]);
+        if (isset($_POST['tag1'], $_POST['tag2'], $_POST['tag3'])) {
+            $ads = $pdo->prepare('insert into Toukou values(null,?,?,?,?,?,?,?,?)');
+            $ads->execute([$_POST['title'], $currentDateTime, $_POST['naiyou'], $_POST['setumei'], $_POST['tag1'], $_POST['tag2'], $_POST['tag3'], $_SESSION['user']['user_name']]);
             header("Location: myprofile.php");
             exit;
-        }else if(isset($_POST['tag1'],$_POST['tag2'])){
+        } else if (isset($_POST['tag1'], $_POST['tag2'])) {
             // タグ１とタグ２が
-            $ads=$pdo->prepare('insert into Toukou values(null,?,?,?,?,?,?,null,?)');
-            $ads->execute([$_POST['title'],$currentDateTime,$_POST['naiyou'],$_POST['setumei'],$_POST['tag1'],$_POST['tag2'],$_SESSION['user']['user_name']]);
+            $ads = $pdo->prepare('insert into Toukou values(null,?,?,?,?,?,?,null,?)');
+            $ads->execute([$_POST['title'], $currentDateTime, $_POST['naiyou'], $_POST['setumei'], $_POST['tag1'], $_POST['tag2'], $_SESSION['user']['user_name']]);
             header("Location: myprofile.php");
             exit;
-        }else if(isset($_POST['tag1'])){
-            $ads=$pdo->prepare('insert into Toukou values(null,?,?,?,?,?,null,null,?)');
-            $ads->execute([$_POST['title'],$currentDateTime,$_POST['naiyou'],$_POST['setumei'],$_POST['tag1'],$_SESSION['user']['user_name']]);
+        } else if (isset($_POST['tag1'])) {
+            $ads = $pdo->prepare('insert into Toukou values(null,?,?,?,?,?,null,null,?)');
+            $ads->execute([$_POST['title'], $currentDateTime, $_POST['naiyou'], $_POST['setumei'], $_POST['tag1'], $_SESSION['user']['user_name']]);
             header("Location: myprofile.php");
             exit;
-        }else{
+        } else {
             echo '<h2>趣味タグを選択してください</h2>';
         }
     }
@@ -44,9 +57,9 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     <h1 class="syumitter1">Syumitter</h1> <!-- 上記のロゴ（？） -->
     <form action="toukou.php" method="post" enctype="multipart/form-data"> <!-- enctype属性を追加 -->
         <div class="toukougazou" id="toukougazou">
-            <input type="file" id="fileInput" accept="image/*" style="display: none;">
+            <input type="file" id="fileInput" name="fileInput" accept="image/*" style="display: none;">
             <button type="button" class="center-button" onclick="document.getElementById('fileInput').click();">写真・動画を選択</button>
-            <p id="fileName"></p>
+            <!-- ファイル名の表示部分を削除 -->
         </div>
         <input type="hidden" name="naiyou" id="naiyou"><!-- 画像ファイル名を保存するhiddenフィールド -->
         
@@ -77,7 +90,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         ?>
         <button class="tagbutton" type="button" onclick="location.href='tag_sentaku.php'">＃趣味タグ追加</button><!-- これから作成予定　この後から画面遷移した後に選択したものをSESSIONに入れる-->
         <p class="koumoku">キャプション</p>
-        <input class="setumeinp" type="text" name="setumei" required><!-- 投稿の説明？-->
+        <textarea class="setumeinp" type="text" name="setumei" required></textarea><!-- 投稿の説明？-->
         <br>
         <button class="nextbutton" type="submit" name="toukousuru">投稿</button>
     </form>
@@ -92,7 +105,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 document.getElementById('toukougazou').style.backgroundImage = 'url(' + e.target.result + ')';
             }
             reader.readAsDataURL(file);
-            document.getElementById('fileName').textContent = file.name;
+            // document.getElementById('fileName').textContent = file.name; // ファイル名の表示部分を削除
             document.getElementById('naiyou').value = file.name;
         }
     });
