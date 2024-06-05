@@ -9,6 +9,11 @@
     <link rel="stylesheet" href="CSS/menu.css">
     <title>フォロワー画面</title>
 </head>
+<script>
+    const follow{
+
+    }
+<script>
 <body>
     <h1 class="h1-2">Syumitter</h1>
     <a href="myprofile.php">
@@ -47,22 +52,28 @@
 
 
     <?php
-    $sql=$pdo->query('select * from Follow where approver_name='.$user_name.' order by zyoukyou DESC');
+    $sql=$pdo->prepare('select * from Follow where approver_name=? order by zyoukyou DESC');
+    $sql->execute([$user_name]);
     echo '<table>';
     foreach($sql as $row){
-        $sql2=$pdo->query('select * from Account where user_name='.$row['approver_name']);
+        $sql2=$pdo->query('select * from Account where user_name="'.$row['applicant_name'].'"');
         foreach($sql2 as $row2){
             echo '<tr><td>';
             echo '<div class="aikon">
-                    <img src="img/aikon/', $row2['aikon'], '" alt="マイアイコン" class="maru">
+                    <img src="img/aikon/', $row2['aikon'], '" alt="マイアイコン" class="maru2">
                   </div></td>';
             echo '<td>
                     <h2>', $row2['user_name'], '</h2>
                   </td>
                   <td>
-                    <div>
-                    </div>
-                  </td><tr><table>';
+                    <div>',
+                        if($row['zyoukyou'] == 1){
+                            ,'<input type="button" value="フォロー中" onclick="follow1">',
+                        }else{
+                            ,'<input type="button" value="フォローする" onclick="follow2">',
+                        },   
+                    '</div>
+                  </td></tr>';
 
 
         }

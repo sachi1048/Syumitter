@@ -82,7 +82,32 @@
         <img class="icon1" src="img/heart.png">
     </div>
     <hr>
+    <table>
+        <?php 
+         $sql4=$pdo->prepare('select * from Toukou where toukou_mei=');
+         $sql4->execute([$user_name]);
+         $count = 1;
+         echo '<tr>';
+         foreach($sql4 as $row4){
+            if($count % 3 == 0){
+                echo '<tr>';
+            }
+            echo '<td><div>',
+                    // $row4['contents'],
+                    //試しの画像
+                    '<img src="img/aikon/top18.jpg">'
+            echo '</div></td>';
+            $count++;
+            if($count % 3 == 0){
+                echo '</tr>';
+            }
+         }
+         if($count % 3 =! 0){
+            echo '</tr>';
+         }
 
+        ?>
+    </table>
     <footer><?php require 'menu.php';?></footer>
 </body>
 </html>

@@ -63,7 +63,13 @@ input[type="file"]{
     height: 100px;
     width: 100px;
     object-fit: cover;
+}
 
+.maru{
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    object-fit: cover;
 }
 
 
