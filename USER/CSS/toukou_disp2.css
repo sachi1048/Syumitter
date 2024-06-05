@@ -1,3 +1,5 @@
+/* main.css */
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -21,19 +23,14 @@ body {
 .user-info {
     display: flex;
     align-items: center;
-    justify-content: space-between; /* 追加 */
+    justify-content: space-between;
     margin-bottom: 20px;
 }
 
-.post-date {
-    font-size: 14px;
-    color: #888;
-    text-align: right; /* 追加 */
-    position: absolute; /* 追加 */
-    bottom: 10px; /* 追加 */
-    right: 20px; /* 追加 */
+.user-info .aikon {
+    display: flex;
+    align-items: center;
 }
-
 
 .user-icon {
     border-radius: 50%;
@@ -56,7 +53,8 @@ body {
     color: #fff;
 }
 
-.post-content img {
+.post-content img,
+.post-content video {
     width: 100%;
     border-radius: 8px;
     margin-bottom: 20px;
@@ -64,38 +62,38 @@ body {
 
 .interaction-buttons {
     display: flex;
-    gap: 10px;
     margin-bottom: 20px;
 }
 
-.like-button, .comment-button {
+.interaction-buttons button {
     background: none;
-    border: none;
-    color: #000;
+    color: white;
     font-size: 16px;
     display: flex;
     align-items: center;
     cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin-right: 10px; /* ボタン間の間隔を設定 */
 }
 
-.like-button i, .comment-button i {
+.interaction-buttons button i {
     font-size: 20px;
     margin-right: 5px;
 }
 
-.like-button .like-count, .comment-button .comment-count {
+.interaction-buttons button .count {
     margin-left: 5px;
 }
 
-.post-date {
+.post-date-right {
     font-size: 14px;
     color: #888;
-    text-align: right; /* 右寄せ */
-    margin-top: auto; /* 上側の余白を自動調整 */
+    text-align: right;
+    margin-top: auto;
 }
 
-
-.tags {
+.post-tags {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
@@ -109,9 +107,33 @@ body {
     font-size: 14px;
 }
 
-.caption {
+.explain {
     font-size: 16px;
     margin-bottom: 20px;
+}
+
+.comment {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.comment-user-info {
+    display: flex;
+    align-items: center;
+}
+
+.comment-user-info .user-icon {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.comment-content {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 8px;
+    width: 100%;
 }
 
 .bottom-nav {
@@ -130,4 +152,21 @@ body {
     color: #fff;
     font-size: 24px;
     cursor: pointer;
+}
+
+.like-button, .comment-button {
+    background: none;
+    color: white;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin-right: 10px; /* ボタン間の間隔を設定 */
+    border: none; /* 外枠を削除 */
+}
+
+.like-button:hover, .comment-button:hover {
+    opacity: 0.8; /* ホバー時の透明度を下げて、ボタンが押されたような効果を与える */
 }
