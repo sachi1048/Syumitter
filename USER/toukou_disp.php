@@ -1,19 +1,20 @@
 <?php
+session_start();
 require 'db-connect.php';
 
-session_start();
 $current_user_name = $_SESSION['user']['user_name']; // ログインしているユーザーの名前をセッションから取得
+$aikon = $_SESSION['user']['aikon'];
 
 try {
     // データベースに接続
     $pdo = new PDO($connect, USER, PASS);
     // エラーモードを例外モードに設定
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
+
     // URLパラメータから投稿IDを取得
     if (isset($_GET['toukou_id'])) {
         $toukou_id = $_GET['toukou_id'];
-        
+
         // 投稿情報を取得するクエリを準備
         $stmt = $pdo->prepare("
             SELECT t.*, a.aikon as user_aikon, a.display_name, 
@@ -25,10 +26,10 @@ try {
         ");
         $stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
         $stmt->execute();
-        
+
         // 結果を取得
         $post = $stmt->fetch(PDO::FETCH_ASSOC);
-        
+
         if ($post) {
             // フォロー状態を確認するクエリ
             $follow_stmt = $pdo->prepare("
@@ -41,7 +42,7 @@ try {
             $follow_stmt->execute();
             $follow_status = $follow_stmt->fetch(PDO::FETCH_ASSOC);
             $is_following = $follow_status['is_following'] > 0;
-            
+
             // フォローするボタンが押下された場合
             if (isset($_POST['follow'])) {
                 // フォロー情報を追加
@@ -52,7 +53,7 @@ try {
                 $insert_follow_stmt->bindParam(':applicant_name', $current_user_name, PDO::PARAM_STR);
                 $insert_follow_stmt->bindParam(':approver_name', $post['toukou_mei'], PDO::PARAM_STR);
                 $insert_follow_stmt->execute();
-                
+
                 // 投稿主のフォロワー数を1増やす
                 $update_follower_count_stmt = $pdo->prepare("
                     UPDATE Account
@@ -61,9 +62,54 @@ try {
                 ");
                 $update_follower_count_stmt->bindParam(':user_name', $post['toukou_mei'], PDO::PARAM_STR);
                 $update_follower_count_stmt->execute();
-                
+
                 // ページをリロードする
                 header("Location: {$_SERVER['REQUEST_URI']}");
+                exit();
+            }
+
+            // アンフォローボタンが押下された場合
+            if (isset($_POST['unfollow'])) {
+                // フォロー情報を削除
+                $delete_follow_stmt = $pdo->prepare("
+                    DELETE FROM Follow
+                    WHERE applicant_name = :applicant_name AND approver_name = :approver_name
+                ");
+                $delete_follow_stmt->bindParam(':applicant_name', $current_user_name, PDO::PARAM_STR);
+                $delete_follow_stmt->bindParam(':approver_name', $post['toukou_mei'], PDO::PARAM_STR);
+                $delete_follow_stmt->execute();
+
+                // 投稿主のフォロワー数を1減らす
+                $update_follower_count_stmt = $pdo->prepare("
+                    UPDATE Account
+                    SET follower_count = follower_count - 1
+                    WHERE user_name = :user_name
+                ");
+                $update_follower_count_stmt->bindParam(':user_name', $post['toukou_mei'], PDO::PARAM_STR);
+                $update_follower_count_stmt->execute();
+
+                // ページをリロードする
+                header("Location: {$_SERVER['REQUEST_URI']}");
+                exit();
+            }
+
+            // 投稿の削除
+            if (isset($_POST['delete_post'])) {
+                // 投稿と関連するコメントを削除
+                $delete_comments_stmt = $pdo->prepare("
+                    DELETE FROM Comment WHERE toukou_id = :toukou_id
+                ");
+                $delete_comments_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
+                $delete_comments_stmt->execute();
+
+                $delete_post_stmt = $pdo->prepare("
+                    DELETE FROM Toukou WHERE toukou_id = :toukou_id
+                ");
+                $delete_post_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
+                $delete_post_stmt->execute();
+
+                // リダイレクト
+                header("Location: user_posts.php"); // ユーザーの投稿一覧にリダイレクト
                 exit();
             }
 
@@ -92,7 +138,7 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="CSS/main.css">
-    <link rel="stylesheet" href="CSS/toukou_disp.css">
+    <link rel="stylesheet" href="CSS/toukou_disp2.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>投稿表示画面</title>
 </head>
@@ -101,31 +147,39 @@ try {
 
     <div class="post-container">
         <div class="user-info">
-            <img src="<?php echo htmlspecialchars($post['user_aikon']); ?>" alt="ユーザーアイコン" class="user-icon">
+            <div class="aikon">
+                <img src="<?php echo 'img/aikon/' . htmlspecialchars($post['user_aikon']); ?>" alt="アイコン" class="user-icon">
+            </div>
             <span><?php echo htmlspecialchars($post['display_name']); ?></span>
-            <?php if ($is_following): ?>
-                <button class="follow-button" disabled>フォロー中</button>
+            <?php if ($current_user_name === $post['toukou_mei']): ?>
+                <form action="" method="post" class="user-action-form">
+                    <button type="submit" name="delete_post" class="delete-button">×削除する</button>
+                </form>
             <?php else: ?>
-                <form action="" method="post">
-                    <button type="submit" name="follow" class="follow-button">フォローする</button>
+                <form action="" method="post" class="user-action-form">
+                    <button type="submit" name="follow" class="follow-button">
+                        <?php echo $is_following ? 'フォロー中' : 'フォローする'; ?>
+                    </button>
                 </form>
             <?php endif; ?>
         </div>
+
         <?php if (!empty($post['contents'])): ?>
             <div class="post-content">
                 <?php
                 // 動画または画像の表示
                 if (strpos($post['contents'], '.mp4') !== false) {
-                    echo '<video controls><source src="' . htmlspecialchars($post['contents']) . '" type="video/mp4"></video>';
+                    echo '<video controls><source src="img/toukou/' . htmlspecialchars($post['contents']) . '" type="video/mp4"></video>';
                 } else {
-                    echo '<img src="' . htmlspecialchars($post['contents']) . '" alt="投稿画像">';
+                    echo '<img src="img/toukou/' . htmlspecialchars($post['contents']) . '" alt="投稿画像">';
                 }
                 ?>
                 <div class="interaction-buttons">
-                    <button class="like-button">
-                        <i class="fas fa-heart"></i>
-                        <div class="like-count"><?php echo htmlspecialchars($post['like_count']); ?></div>
-                    </button>
+                <button class="like-button">
+    <span class="heart-icon">♡</span>
+    <div class="like-count"><?php echo htmlspecialchars($post['like_count']); ?></div>
+</button>
+
                     <button class="comment-button">
                         <i class="fas fa-comment"></i>
                         <div class="comment-count"><?php echo htmlspecialchars($post['comments']); ?></div>
@@ -135,7 +189,7 @@ try {
         <?php endif; ?>
         <div class="post-details">
             <div class="post-title">
-                <h2><?php echo htmlspecialchars($post['title']); ?></h2>
+            <h2><?php echo htmlspecialchars($post['title']); ?></h2>
             </div>
             <div class="post-tags">
                 <?php foreach ($tags as $tag): ?>
@@ -145,7 +199,7 @@ try {
                 <?php endforeach; ?>
             </div>
         </div>
-        <div class="post-date">
+        <div class="post-date-right">
             <?php
             // 日本語の曜日を表示するための配列
             $weekdays = ["日", "月", "火", "水", "木", "金", "土"];
@@ -162,19 +216,18 @@ try {
             <?php
             // コメントの表示クエリ
             $comment_stmt = $pdo->prepare("
-    SELECT c.*, a.aikon, a.display_name as account_mei
-    FROM Comment c
-    JOIN Account a ON c.account_mei = a.user_name
-    WHERE c.toukou_id = :toukou_id
-");
-
+                SELECT c.*, a.aikon, a.display_name as account_mei
+                FROM Comment c
+                JOIN Account a ON c.account_mei = a.user_name
+                WHERE c.toukou_id = :toukou_id
+            ");
             $comment_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
             $comment_stmt->execute();
             $comments = $comment_stmt->fetchAll(PDO::FETCH_ASSOC);
             foreach ($comments as $comment): ?>
                 <div class="comment">
                     <div class="comment-user-info">
-                        <img src="<?php echo htmlspecialchars($comment['aikon']); ?>" alt="アイコン" class="comment-icon">
+                        <img src="<?php echo 'img/aikon/' . htmlspecialchars($comment['aikon']); ?>" alt="アイコン" class="user-icon">
                         <span><?php echo htmlspecialchars($comment['account_mei']); ?></span>
                     </div>
                     <div class="comment-content">
@@ -184,8 +237,6 @@ try {
             <?php endforeach; ?>
         </div>
     </div>
-
-    
 </body>
 </html>
 
@@ -194,7 +245,7 @@ try {
             echo "投稿が見つかりませんでした";
         }
     } else {
-        echo"投稿IDが指定されていません";
+        echo "投稿IDが指定されていません";
     }
 } catch (PDOException $e) {
     die("エラー: " . $e->getMessage());
