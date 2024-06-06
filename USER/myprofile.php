@@ -20,9 +20,8 @@
     $profile = $_SESSION['user']['profile'];
 
     echo '<table style="margin: auto;"><tr><td>';
-    echo '<div class="aikon">
-            <img src="img/aikon/', $aikon, '" alt="マイアイコン" class="maru">
-          </div></td>';
+    echo '<img src="img/aikon/', $aikon, '" alt="マイアイコン" class="maru">
+          </td>';
 
 
     $sql=$pdo->prepare('select * from Toukou where toukou_mei=?');
@@ -90,17 +89,16 @@
         <?php 
          $sql4=$pdo->prepare('select * from Toukou where toukou_mei=?');
          $sql4->execute([$user_name]);
-         $count = 1;
+         $count = 0;
          echo '<tr>';
          foreach($sql4 as $row4){
-            if($count % 3 == 0){
+            if($count == 0){
+            }else if($count % 3 == 0){
                 echo '<tr>';
             }
-            echo '<td><div>',
-                    // $row4['contents'],
-                    //試しの画像
-                    '<img src="img/aikon/top18.jpg">';
-            echo '</div></td>';
+            echo '<td>',
+                    '<a href="toukou_disp.php?user_name="', $user_name, '"toukou_id=', $row4['toukou_id'], '"><img src="img/toukou/', $row4['contents'], '" class="size">';
+            echo '</td>';
             $count++;
             if($count % 3 == 0){
                 echo '</tr>';

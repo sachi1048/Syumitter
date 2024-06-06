@@ -65,7 +65,7 @@ input[type="file"]{
     object-fit: cover;
 }
 
-.maru{
+.maru2{
     border-radius: 50%;
     height: 50px;
     width: 50px;
@@ -121,6 +121,13 @@ input[type="file"]{
     border-radius: 8px;
     margin-bottom: 20px;
     font-weight: bold;
+}
+
+/* myprofileの投稿画像のサイズ */
+.size{
+    height: 135px;
+    width: 135px;
+    object-fit: cover;
 }
 
 
