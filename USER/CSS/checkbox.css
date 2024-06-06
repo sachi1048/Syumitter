@@ -1,6 +1,6 @@
 .selectable {
     width:27%;
-    overflow:scroll;
+    overflow:hidden;
     display: inline-block; /* ラベルをインラインブロックにする */
     height:15px;
     padding: 10px 5px 20px 5px; /* ラベルの内側の余白を設定 */
