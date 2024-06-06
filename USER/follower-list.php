@@ -13,7 +13,7 @@
     const follow{
 
     }
-<script>
+</script>
 <body>
     <h1 class="h1-2">Syumitter</h1>
     <a href="myprofile.php">
@@ -66,13 +66,13 @@
                     <h2>', $row2['user_name'], '</h2>
                   </td>
                   <td>
-                    <div>',
+                    <div>';
                         if($row['zyoukyou'] == 1){
-                            ,'<input type="button" value="フォロー中" onclick="follow1">',
+                            echo '<input type="button" value="フォロー中" onclick="follow1">';
                         }else{
-                            ,'<input type="button" value="フォローする" onclick="follow2">',
-                        },   
-                    '</div>
+                            echo '<input type="button" value="フォローする" onclick="follow2">';
+                        }
+                echo '</div>
                   </td></tr>';
 
 
