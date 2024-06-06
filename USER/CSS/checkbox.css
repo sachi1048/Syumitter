@@ -1,13 +1,14 @@
 .selectable {
+    width:27%;
+    overflow:scroll;
     display: inline-block; /* ラベルをインラインブロックにする */
     height:15px;
     padding: 10px 5px 20px 5px; /* ラベルの内側の余白を設定 */
     margin: 5px; /* ラベルの外側の余白を設定 */
-    border: 1px solid #18EBF9; /* ラベルの枠線を透明に設定 */
     cursor: pointer; /* ポインタカーソルを表示 */
     border-radius:17px;
-    font-size:20px;
-    color:#18EBF9;
+    font-size:14px;
+    font-weight:bold;
     background-color:#ffffff;
 }
 label.selectable:hover{

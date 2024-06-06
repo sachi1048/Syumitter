@@ -4,16 +4,12 @@
     $pdo = new PDO($connect, USER, PASS);
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['tagmei'])) {
-            // AIをつけ忘れたので主キーに要素数＋１をつける
-            $sql = $pdo->query('SELECT * FROM Tag');
-            $rowC = $sql->rowCount();
-            $rowC = $rowC + 1;
-            // 要素数＋１とタグ名をタグテーブルに追加する
-            $ssl = $pdo->prepare('INSERT INTO Tag VALUES(?, ?)');
-            $ssl->execute([$rowC, $_POST['tagmei']]);
+            $num1 = random_int(0,255);
+            $num2 = random_int(0,255);
+            $num3 = random_int(0,255);
+            $ssl = $pdo->prepare('INSERT INTO Tag VALUES(null, ?,?,?,?)');
+            $ssl->execute([$_POST['tagmei'],$num1,$num2,$num3]);
             $_SESSION['message'] = '趣味タグを追加しました';
-            header('Location: ' . $_SERVER['PHP_SELF']);
-            exit;
         }
     }
 
@@ -86,7 +82,7 @@
     <div id="notification"><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div>
     <!-- 趣味タグの追加 -->
     <form action="" method="post">
-        <input class="tag_inp" type="text" name="tagmei" placeholder="　新規タグ追加" required>　
+        <input class="tag_inp" type="text" name="tagmei" maxlength="13" placeholder="　新規タグ追加" required>　
         <button class="nizibutton" type="submit">追加</button>
         <p>３つまで選択可能</p>
     </form><br>
@@ -98,7 +94,7 @@
                $count = 1;
                foreach ($sql as $row) {
                     echo '<input type="checkbox" id="option', $count, '" name="selectedOptions[]" value="', $row['tag_id'], '">';
-                    echo '<label for="option', $count, '" class="selectable">#', $row['tag_mei'], '</label>';
+                    echo '<label for="option', $count, '" style="border:1.2px solid rgb(',$row['tag_color1'],',',$row['tag_color2'],',',$row['tag_color3'],'); color:rgb(',$row['tag_color1'],',',$row['tag_color2'],',',$row['tag_color3'],');" class="selectable">#', $row['tag_mei'], '</label>';
                     if($count%3 == 0){
                         echo '<br>';
                     }
