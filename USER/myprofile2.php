@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="CSS/main.css">
     <link rel="stylesheet" href="CSS/menu.css">
-    <title>マイプロフィール画面</title>
+    <title>マイプロフィールいいね画面</title>
 </head>
 <body>
     <h1 class="syumitter1">Syumitter</h1>
@@ -79,10 +79,10 @@
     </form> 
     <div style="width: 100%;">
         <a href="myprofile" style="text-decoration: none;">
-            <img class="icon1 icon2" src="img/imagebox.png">
+            <img class="icon1" src="img/imagebox.png">
         </a>
         <a href="myprofile2" style="text-decoration: none;">
-            <img class="icon1" src="img/heart.png">
+            <img class="icon1 icon2" src="img/heart.png">
         </a>
     </div>
     <hr>

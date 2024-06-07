@@ -1,3 +1,5 @@
+<?php session_start(); ?>
+<?php require 'db-connect.php'; ?>
 <!DOCTYPE html>
 <html lang="jp">
 <head>
@@ -15,6 +17,13 @@
     <title>マイプロフィール編集画面</title>
 </head>
 <body>
+    <?php 
+        $pdo = new PDO($connect, USER, PASS);
+        $user_name = $_SESSION['user']['user_name'];
+        $display_name = $_SESSION['user']['display_name'];
+        $aikon = $_SESSION['user']['aikon'];
+        $profile = $_SESSION['user']['profile'];
+    ?>
     <h1 class="h1-1">Syumitter</h1>
 
     <div class="frame">
@@ -22,8 +31,7 @@
         <form action="mypofile" method="POST">
         <div class="aikon">
             <lable label="file_label">
-                <!-- <p class="maru" style="background-image: url('img/top18.jpg');"></p> -->
-                <img src="img/top18.jpg" class="maru">
+                <img src="img/aikon/<?php echo $aikon; ?>" class="maru">
                 <input type="file" name="aikon">
             </lable>
             <p class="file_none">変更なし</p>
@@ -31,15 +39,15 @@
         <table style="margin:auto;">
             <tr>
                 <td>ユーザー名</td>
-                <td><input class="textbox" type="textbox" name="user" placeholder=""></td>
+                <td><input class="textbox" type="textbox" name="user" placeholder="<?php echo $user_name; ?>"></td>
             </tr>
             <tr>
                 <td>名前</td>
-                <td><input class="textbox" type="textbox" name="display" placeholder=""></td>
+                <td><input class="textbox" type="textbox" name="display" placeholder="<?php echo $display_name; ?>"></td>
             </tr>
             <tr>
                 <td>プロフィール</td>
-                <td><input class="textbox" type="textbox" name="profile" placeholder=""></td>
+                <td><input class="textbox" type="textbox" name="profile" placeholder="<?php echo $profile; ?>"></td>
             </tr>
             <tr>
                 <td>アドレス</td>
