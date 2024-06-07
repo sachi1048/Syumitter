@@ -82,9 +82,8 @@ body {
     opacity: 0.8;
 }
 
-.heart {
+.like-button i {
     font-size: 20px;
-    color: #ff69b4;
     margin-right: 5px;
 }
 
@@ -130,7 +129,6 @@ body {
     border-radius: 8px;
     background-color: #f9f9f9;
 }
-
 .comment-user-info {
     display: flex;
     align-items: center;

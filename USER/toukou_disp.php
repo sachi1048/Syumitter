@@ -182,8 +182,8 @@ try {
                     <div class="interaction-buttons">
     <form action="" method="post" class="like-form">
         <input type="hidden" name="post_id" value="<?php echo $post['toukou_id']; ?>">
-        <button type="submit" name="like" class="like-button">
-            <span class="heart">♡</span> <!-- ハートの形状 -->
+        <button type="button" name="like" class="like-button">
+        <i class="far fa-heart"></i>
         </button>
         <div class="like-count"><?php echo htmlspecialchars($post['like_count']); ?></div>
     </form>
