@@ -183,12 +183,12 @@ try {
     <form action="" method="post" class="like-form">
         <input type="hidden" name="post_id" value="<?php echo $post['toukou_id']; ?>">
         <button type="button" name="like" class="like-button">
-        <i class="far fa-heart"></i>
+        <div class="far fa-heart"></div>
         </button>
         <div class="like-count"><?php echo htmlspecialchars($post['like_count']); ?></div>
     </form>
     <button class="comment-button">
-                <i class="fas fa-comment"></i>
+                <div class="fas fa-comment"></div>
                 <div class="comment-count"><?php echo htmlspecialchars($post['comments']); ?></div>
             </button>
 </div>

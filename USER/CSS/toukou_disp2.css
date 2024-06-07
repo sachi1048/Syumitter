@@ -82,7 +82,7 @@ body {
     opacity: 0.8;
 }
 
-.like-button i {
+.far fa-heart{
     font-size: 20px;
     margin-right: 5px;
 }
@@ -93,7 +93,7 @@ body {
     color: #333;
 }
 
-.comment-button i {
+.fas fa-comment{
     font-size: 20px;
     margin-right: 5px;
     color: #ff69b4;
