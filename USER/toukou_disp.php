@@ -130,8 +130,15 @@ try {
                 getTagName($pdo, $post['tag_id2']),
                 getTagName($pdo, $post['tag_id3'])
             ];
-?>
+        }
+    }
 
+} catch (PDOException $e) {
+    // エラーメッセージを表示して、デバッグを容易にする
+    echo "エラー：" . $e->getMessage();
+}
+
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -139,115 +146,107 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="CSS/main.css">
     <link rel="stylesheet" href="CSS/toukou_disp2.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <title>投稿表示画面</title>
 </head>
 <body>
     <h1 class="syumitter1">Syumitter</h1>
 
-    <div class="post-container">
-        <div class="user-info">
-            <div class="aikon">
-                <img src="<?php echo 'img/aikon/' . htmlspecialchars($post['user_aikon']); ?>" alt="アイコン" class="user-icon">
+    <?php if (!empty($post)): ?>
+        <div class="post-container">
+            <div class="user-info">
+                <div class="aikon">
+                    <img src="<?php echo 'img/aikon/' . htmlspecialchars($post['user_aikon']); ?>" alt="アイコン" class="user-icon">
+                </div>
+                <span><?php echo htmlspecialchars($post['display_name']); ?></span>
+                <?php if ($current_user_name === $post['toukou_mei']): ?>
+                    <form action="" method="post" class="user-action-form">
+                        <button type="submit" name="delete_post" class="delete-button">×削除する</button>
+                    </form>
+                <?php else: ?>
+                    <form action="" method="post" class="user-action-form">
+                        <button type="submit" name="follow" class="follow-button">
+                            <?php echo $is_following ? 'フォロー中' : 'フォローする'; ?>
+                        </button>
+                    </form>
+                <?php endif; ?>
             </div>
-            <span><?php echo htmlspecialchars($post['display_name']); ?></span>
-            <?php if ($current_user_name === $post['toukou_mei']): ?>
-                <form action="" method="post" class="user-action-form">
-                    <button type="submit" name="delete_post" class="delete-button">×削除する</button>
-                </form>
-            <?php else: ?>
-                <form action="" method="post" class="user-action-form">
-                    <button type="submit" name="follow" class="follow-button">
-                        <?php echo $is_following ? 'フォロー中' : 'フォローする'; ?>
-                    </button>
-                </form>
+
+            <?php if (!empty($post['contents'])): ?>
+                <div class="post-content">
+                    <?php if (strpos($post['contents'], '.mp4') !== false): ?>
+                        <video controls><source src="img/toukou/<?php echo htmlspecialchars($post['contents']); ?>" type="video/mp4"></video>
+                    <?php else: ?>
+                        <img src="img/toukou/<?php echo htmlspecialchars($post['contents']); ?>" alt="投稿画像">
+                    <?php endif; ?>
+                    <div class="interaction-buttons">
+    <form action="" method="post" class="like-form">
+        <input type="hidden" name="post_id" value="<?php echo $post['toukou_id']; ?>">
+        <button type="submit" name="like" class="like-button">
+            <span class="heart">♡</span> <!-- ハートの形状 -->
+        </button>
+        <div class="like-count"><?php echo htmlspecialchars($post['like_count']); ?></div>
+    </form>
+    <button class="comment-button">
+                <i class="fas fa-comment"></i>
+                <div class="comment-count"><?php echo htmlspecialchars($post['comments']); ?></div>
+            </button>
+</div>
+
             <?php endif; ?>
-        </div>
 
-        <?php if (!empty($post['contents'])): ?>
-            <div class="post-content">
-                <?php
-                // 動画または画像の表示
-                if (strpos($post['contents'], '.mp4') !== false) {
-                    echo '<video controls><source src="img/toukou/' . htmlspecialchars($post['contents']) . '" type="video/mp4"></video>';
-                } else {
-                    echo '<img src="img/toukou/' . htmlspecialchars($post['contents']) . '" alt="投稿画像">';
-                }
-                ?>
-                <div class="interaction-buttons">
-                <button class="like-button">
-    <span class="heart-icon">♡</span>
-    <div class="like-count"><?php echo htmlspecialchars($post['like_count']); ?></div>
-</button>
-
-                    <button class="comment-button">
-                        <i class="fas fa-comment"></i>
-                        <div class="comment-count"><?php echo htmlspecialchars($post['comments']); ?></div>
-                    </button>
+            <div class="post-details">
+                <div class="post-title">
+                    <h2><?php echo htmlspecialchars($post['title']); ?></h2>
+                </div>
+                <div class="post-tags">
+                    <?php foreach ($tags as $tag): ?>
+                        <?php if ($tag): ?>
+                            <span class="tag">#<?php echo $tag; ?></span>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
                 </div>
             </div>
-        <?php endif; ?>
-        <div class="post-details">
-            <div class="post-title">
-            <h2><?php echo htmlspecialchars($post['title']); ?></h2>
+
+            <div class="post-date-right">
+                <?php
+                $weekdays = ["日", "月", "火", "水", "木", "金", "土"];
+                $timestamp = strtotime($post['toukou_datetime']);
+                $dayOfWeek = $weekdays[date('w', $timestamp)];
+                echo date('Y年m月d日', $timestamp) . ' (' . $dayOfWeek . ')';
+                ?>
             </div>
-            <div class="post-tags">
-                <?php foreach ($tags as $tag): ?>
-                    <?php if ($tag): ?>
-                        <span class="tag">#<?php echo $tag; ?></span>
-                    <?php endif; ?>
+
+            <div class="explain">
+                <?php echo htmlspecialchars($post['setumei']); ?>
+            </div>
+
+            <div class="comments">
+                <?php
+                $comment_stmt = $pdo->prepare("
+                    SELECT c.*, a.aikon, a.display_name as account_mei
+                    FROM Comment c
+                    JOIN Account a ON c.account_mei = a.user_name
+                    WHERE c.toukou_id = :toukou_id
+                ");
+                $comment_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
+                $comment_stmt->execute();
+                $comments = $comment_stmt->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($comments as $comment): ?>
+                    <div class="comment">
+                        <div class="comment-user-info">
+                            <img src="<?php echo 'img/aikon/' . htmlspecialchars($comment['aikon']); ?>" alt="アイコン" class="user-icon">
+                            <span><?php echo htmlspecialchars($comment['account_mei']); ?></span>
+                        </div>
+                        <div class="comment-content">
+                            <?php echo htmlspecialchars($comment['naiyou']); ?>
+                        </div>
+                    </div>
                 <?php endforeach; ?>
             </div>
         </div>
-        <div class="post-date-right">
-            <?php
-            // 日本語の曜日を表示するための配列
-            $weekdays = ["日", "月", "火", "水", "木", "金", "土"];
-            $timestamp = strtotime($post['toukou_datetime']);
-            $dayOfWeek = $weekdays[date('w', $timestamp)];
-            echo date('Y年m月d日', $timestamp) . ' (' . $dayOfWeek . ')';
-            ?>
-        </div>
-        <div class="explain">
-            <?php echo htmlspecialchars($post['explain']); ?>
-        </div>
-        <div class="comments">
-            <!-- <h2>コメント</h2> -->
-            <?php
-            // コメントの表示クエリ
-            $comment_stmt = $pdo->prepare("
-                SELECT c.*, a.aikon, a.display_name as account_mei
-                FROM Comment c
-                JOIN Account a ON c.account_mei = a.user_name
-                WHERE c.toukou_id = :toukou_id
-            ");
-            $comment_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
-            $comment_stmt->execute();
-            $comments = $comment_stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($comments as $comment): ?>
-                <div class="comment">
-                    <div class="comment-user-info">
-                        <img src="<?php echo 'img/aikon/' . htmlspecialchars($comment['aikon']); ?>" alt="アイコン" class="user-icon">
-                        <span><?php echo htmlspecialchars($comment['account_mei']); ?></span>
-                    </div>
-                    <div class="comment-content">
-                        <?php echo htmlspecialchars($comment['naiyou']); ?>
-                    </div>
-                </div>
-            <?php endforeach; ?>
-        </div>
-    </div>
+    <?php else: ?>
+        <p>投稿が見つかりませんでした</p>
+    <?php endif; ?>
 </body>
 </html>
-
-<?php
-        } else {
-            echo "投稿が見つかりませんでした";
-        }
-    } else {
-        echo "投稿IDが指定されていません";
-    }
-} catch (PDOException $e) {
-    die("エラー: " . $e->getMessage());
-}
-?>
