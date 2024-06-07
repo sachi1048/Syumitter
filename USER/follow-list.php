@@ -10,8 +10,9 @@
     <title>フォロー画面</title>
 </head>
 <script>
-    const follow{
-
+    function follow(event){
+        var obj=event.target;
+        obj.
     }
 </script>
 <body>
@@ -54,7 +55,7 @@
     <?php
     $sql=$pdo->prepare('select * from Follow where applicant_name=? order by zyoukyou DESC');
     $sql->execute([$user_name]);
-    echo '<table>';
+    echo '<table style="margin: auto;">';
     foreach($sql as $row){
         $sql2=$pdo->query('select * from Account where user_name="'.$row['approver_name'].'"');
         foreach($sql2 as $row2){
@@ -67,10 +68,11 @@
                   </td>
                   <td>
                     <div>';
+                    //写真を見て書くこと
                         if($row['zyoukyou'] == 1){
-                            echo '<input type="button" value="フォロー中" onclick="follow1">';
+                            echo '<button class="#" onclick="follow(event)">フォロー中</button>';
                         }else{
-                            echo '<input type="button" value="フォローする" onclick="follow2">';
+                            echo '<button class="#" onclick="follow(event)">フォローする</button>';
                         }
                 echo '</div>
                   </td></tr>';

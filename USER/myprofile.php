@@ -97,7 +97,7 @@
                 echo '<tr>';
             }
             echo '<td>',
-                    '<a href="toukou_disp.php?user_name="', $user_name, '"toukou_id=', $row4['toukou_id'], '"><img src="img/toukou/', $row4['contents'], '" class="size">';
+                    '<a href="toukou_disp.php?toukou_id=', $row4['toukou_id'], '"><img src="img/toukou/', $row4['contents'], '" class="size">';
             echo '</td>';
             $count++;
             if($count % 3 == 0){

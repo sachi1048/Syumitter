@@ -88,18 +88,20 @@
     <hr>
     <table>
         <?php 
-         $sql4=$pdo->prepare('select * from Toukou where toukou_mei=?');
+         $sql4=$pdo->prepare('select * from Comment where account_mei=? and comment_type=1');
          $sql4->execute([$user_name]);
          $count = 1;
          echo '<tr>';
          foreach($sql4 as $row4){
+            $sql5=$pdo->prepare('select contents from Toukou where toukou_id=?');
+            $sql5->execute([$row4['toukou_id']]);
             if($count % 3 == 0){
                 echo '<tr>';
             }
             echo '<td><div>',
                     // $row4['contents'],
                     //試しの画像
-                    '<img src="img/aikon/top18.jpg">';
+                    '<img src="img/aikon/', $sql5, '">';
             echo '</div></td>';
             $count++;
             if($count % 3 == 0){
