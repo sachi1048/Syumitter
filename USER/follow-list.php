@@ -10,10 +10,26 @@
     <title>フォロー画面</title>
 </head>
 <script>
-    function follow(event){
-        var obj=event.target;
-        obj.
-    }
+    document.getElementById("follow").addEventListener("click", function() {
+            var button = document.getElementById("follow");
+            if (button.innerHTML === "フォロー中" ) {
+                //「フォロー中」→「フォローする」
+                button.innerHTML = "フォローする";
+                <?php
+                    $sql3=$pdo->prepare('delete from Follow where follow_id=?');
+                    $sql3->execute([$row['follow_id']]);
+                ?>
+                    //相互フォローか？
+                    if(button.value === 1){
+                        $sqlup=$pdo->prepare('update Follow set zyoukyou=0 where follow_id=?');
+                        $sqlup=execute([$row3['follow_id']]);
+                    }
+            } else {
+                //「フォローする」→「フォロー中」
+                button.innerHTML = "フォロー中";
+                //insert
+            }
+        });
 </script>
 <body>
     <h1 class="h1-2">Syumitter</h1>
@@ -53,10 +69,13 @@
 
 
     <?php
+    //applicant_name=フォロー側　approver_name=フォローされてる側
+    //フォロー中のアカウントだけを表示
     $sql=$pdo->prepare('select * from Follow where applicant_name=? order by zyoukyou DESC');
     $sql->execute([$user_name]);
     echo '<table style="margin: auto;">';
     foreach($sql as $row){
+        //フォロー中のアカウントを検索
         $sql2=$pdo->query('select * from Account where user_name="'.$row['approver_name'].'"');
         foreach($sql2 as $row2){
             echo '<tr><td>';
@@ -70,9 +89,13 @@
                     <div>';
                     //写真を見て書くこと
                         if($row['zyoukyou'] == 1){
-                            echo '<button class="#" onclick="follow(event)">フォロー中</button>';
+                            //相互フォロー
+                            $sql3=$pdo->prepare('select * from Follow where applicant_name=? approver_name=?');
+                            $sql3->execute([$row['approver'],$row['applicant_name']]);
+                            echo '<button id="follow" value="1">フォロー中</button>';
                         }else{
-                            echo '<button class="#" onclick="follow(event)">フォローする</button>';
+                            //相互フォローでない
+                            echo '<button id="follow" value="0">フォロー中</button>';
                         }
                 echo '</div>
                   </td></tr>';
