@@ -40,7 +40,6 @@ input[type="checkbox"]:checked + label {
     margin-top:10px;
     margin-bottom:2px;
     border: 2px solid;
-    border-color: lightskyblue;
     padding: 2px 5px;
     border-radius:8px;
 }
