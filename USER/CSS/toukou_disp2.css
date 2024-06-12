@@ -82,9 +82,8 @@ body {
     opacity: 0.8;
 }
 
-.heart {
+.far fa-heart{
     font-size: 20px;
-    color: #ff69b4;
     margin-right: 5px;
 }
 
@@ -94,7 +93,7 @@ body {
     color: #333;
 }
 
-.comment-button i {
+.fas fa-comment{
     font-size: 20px;
     margin-right: 5px;
     color: #ff69b4;
@@ -130,7 +129,6 @@ body {
     border-radius: 8px;
     background-color: #f9f9f9;
 }
-
 .comment-user-info {
     display: flex;
     align-items: center;
