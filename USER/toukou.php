@@ -7,44 +7,46 @@ session_start();
 $pdo = new PDO($connect, USER, PASS);
 // 投稿処理
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // ログインしていなければ煽りとエラーを表示
-    if(!isset($_SESSION['user']['user_name'])){
-        echo '<h1 style="text-align:center red;">エラーですぅ(; ･`д･´)</h1>';
-    }else if (isset($_POST['toukousuru'])) {
-        // 現在の日付と時間を年/月/日 時：分：秒の形で変数に保存
-        $currentDateTime = date('Y-m-d H:i:s');
-        // ファイルがアップロードされたか確認
-        if (isset($_FILES['fileInput']) && $_FILES['fileInput']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = 'img/toukou/';
-            $uploadFile = $uploadDir . basename($_FILES['fileInput']['name']);
+    if (isset($_POST['toukousuru'])) {
+        // ログインしていなければ煽りとエラーを表示
+        if(!isset($_SESSION['user']['user_name'])){
+            echo '<h1 style="text-align:center red;">エラーが発生しました</h1>';
+        }else{
+            // 現在の日付と時間を年/月/日 時：分：秒の形で変数に保存
+            $currentDateTime = date('Y-m-d H:i:s');
+            // ファイルがアップロードされたか確認
+            if (isset($_FILES['fileInput']) && $_FILES['fileInput']['error'] === UPLOAD_ERR_OK) {
+                $uploadDir = 'img/toukou/';
+                $uploadFile = $uploadDir . basename($_FILES['fileInput']['name']);
 
-            // ファイルを指定のフォルダに移動
-            if (move_uploaded_file($_FILES['fileInput']['tmp_name'], $uploadFile)) {
-                $fileName = basename($_FILES['fileInput']['name']);
-            } else {
-                echo '<h2>ファイルのアップロードに失敗しました</h2>';
-                exit;
+                // ファイルを指定のフォルダに移動
+                if (move_uploaded_file($_FILES['fileInput']['tmp_name'], $uploadFile)) {
+                    $fileName = basename($_FILES['fileInput']['name']);
+                } else {
+                    echo '<h2>ファイルのアップロードに失敗しました</h2>';
+                    exit;
+                }
             }
-        }
-        // タグ１とタグ2、タグ３すべてにデータがある場合の追加処理
-        if (isset($_POST['tag1'], $_POST['tag2'], $_POST['tag3'])) {
-            $ads = $pdo->prepare('insert into Toukou values(null,?,?,?,?,?,?,?,?)');
-            $ads->execute([$_POST['title'], $currentDateTime, $_POST['naiyou'], $_POST['setumei'], $_POST['tag1'], $_POST['tag2'], $_POST['tag3'], $_SESSION['user']['user_name']]);
-            header("Location: myprofile.php");
-            exit;
-        } else if (isset($_POST['tag1'], $_POST['tag2'])) {
-            // タグ１とタグ２が
-            $ads = $pdo->prepare('insert into Toukou values(null,?,?,?,?,?,?,null,?)');
-            $ads->execute([$_POST['title'], $currentDateTime, $_POST['naiyou'], $_POST['setumei'], $_POST['tag1'], $_POST['tag2'], $_SESSION['user']['user_name']]);
-            header("Location: myprofile.php");
-            exit;
-        } else if (isset($_POST['tag1'])) {
-            $ads = $pdo->prepare('insert into Toukou values(null,?,?,?,?,?,null,null,?)');
-            $ads->execute([$_POST['title'], $currentDateTime, $_POST['naiyou'], $_POST['setumei'], $_POST['tag1'], $_SESSION['user']['user_name']]);
-            header("Location: myprofile.php");
-            exit;
-        } else {
-            echo '<h2>趣味タグを選択してください</h2>';
+            // タグ１とタグ2、タグ３すべてにデータがある場合の追加処理
+            if (isset($_POST['tag1'], $_POST['tag2'], $_POST['tag3'])) {
+                $ads = $pdo->prepare('insert into Toukou values(null,?,?,?,?,?,?,?,?)');
+                $ads->execute([$_POST['title'], $currentDateTime, $_POST['naiyou'], $_POST['setumei'], $_POST['tag1'], $_POST['tag2'], $_POST['tag3'], $_SESSION['user']['user_name']]);
+                header("Location: myprofile.php");
+                exit;
+            } else if (isset($_POST['tag1'], $_POST['tag2'])) {
+                // タグ１とタグ２が
+                $ads = $pdo->prepare('insert into Toukou values(null,?,?,?,?,?,?,null,?)');
+                $ads->execute([$_POST['title'], $currentDateTime, $_POST['naiyou'], $_POST['setumei'], $_POST['tag1'], $_POST['tag2'], $_SESSION['user']['user_name']]);
+                header("Location: myprofile.php");
+                exit;
+            } else if (isset($_POST['tag1'])) {
+                $ads = $pdo->prepare('insert into Toukou values(null,?,?,?,?,?,null,null,?)');
+                $ads->execute([$_POST['title'], $currentDateTime, $_POST['naiyou'], $_POST['setumei'], $_POST['tag1'], $_SESSION['user']['user_name']]);
+                header("Location: myprofile.php");
+                exit;
+            } else {
+                echo '<h2>趣味タグを選択してください</h2>';
+            }
         }
     }
 }
