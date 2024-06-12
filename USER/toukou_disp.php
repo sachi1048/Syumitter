@@ -183,11 +183,11 @@ ob_end_flush();
                     </div>
                 </div>
 
-                <!-- <?php -->
-                // if (isset($_POST['comment'])) {
-                    // $post['comments']++;
-                // }
-                // ?>
+                <?php
+// if (isset($_POST['comment'])) {
+//     $post['comments']++;
+// }
+?>
 
                 <?php
                 if (isset($_POST['like'])) {
