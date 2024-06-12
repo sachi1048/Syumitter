@@ -1,21 +1,18 @@
 <?php
+ob_start();
 session_start();
 require 'db-connect.php';
 
-$current_user_name = $_SESSION['user']['user_name']; // ログインしているユーザーの名前をセッションから取得
+$current_user_name = $_SESSION['user']['user_name'];
 $aikon = $_SESSION['user']['aikon'];
 
 try {
-    // データベースに接続
     $pdo = new PDO($connect, USER, PASS);
-    // エラーモードを例外モードに設定
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // URLパラメータから投稿IDを取得
     if (isset($_GET['toukou_id'])) {
         $toukou_id = $_GET['toukou_id'];
 
-        // 投稿情報を取得するクエリを準備
         $stmt = $pdo->prepare("
             SELECT t.*, a.aikon as user_aikon, a.display_name, 
                    (SELECT COUNT(*) FROM Comment c WHERE c.toukou_id = t.toukou_id AND c.comment_type = 1) as like_count, 
@@ -27,11 +24,9 @@ try {
         $stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
         $stmt->execute();
 
-        // 結果を取得
         $post = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($post) {
-            // フォロー状態を確認するクエリ
             $follow_stmt = $pdo->prepare("
                 SELECT COUNT(*) as is_following
                 FROM Follow
@@ -43,9 +38,7 @@ try {
             $follow_status = $follow_stmt->fetch(PDO::FETCH_ASSOC);
             $is_following = $follow_status['is_following'] > 0;
 
-            // フォローするボタンが押下された場合
             if (isset($_POST['follow'])) {
-                // フォロー情報を追加
                 $insert_follow_stmt = $pdo->prepare("
                     INSERT INTO Follow (applicant_name, approver_name, zyoukyou)
                     VALUES (:applicant_name, :approver_name, 1)
@@ -54,7 +47,6 @@ try {
                 $insert_follow_stmt->bindParam(':approver_name', $post['toukou_mei'], PDO::PARAM_STR);
                 $insert_follow_stmt->execute();
 
-                // 投稿主のフォロワー数を1増やす
                 $update_follower_count_stmt = $pdo->prepare("
                     UPDATE Account
                     SET follower_count = follower_count + 1
@@ -63,14 +55,11 @@ try {
                 $update_follower_count_stmt->bindParam(':user_name', $post['toukou_mei'], PDO::PARAM_STR);
                 $update_follower_count_stmt->execute();
 
-                // ページをリロードする
                 header("Location: {$_SERVER['REQUEST_URI']}");
                 exit();
             }
 
-            // アンフォローボタンが押下された場合
             if (isset($_POST['unfollow'])) {
-                // フォロー情報を削除
                 $delete_follow_stmt = $pdo->prepare("
                     DELETE FROM Follow
                     WHERE applicant_name = :applicant_name AND approver_name = :approver_name
@@ -79,7 +68,6 @@ try {
                 $delete_follow_stmt->bindParam(':approver_name', $post['toukou_mei'], PDO::PARAM_STR);
                 $delete_follow_stmt->execute();
 
-                // 投稿主のフォロワー数を1減らす
                 $update_follower_count_stmt = $pdo->prepare("
                     UPDATE Account
                     SET follower_count = follower_count - 1
@@ -88,14 +76,11 @@ try {
                 $update_follower_count_stmt->bindParam(':user_name', $post['toukou_mei'], PDO::PARAM_STR);
                 $update_follower_count_stmt->execute();
 
-                // ページをリロードする
                 header("Location: {$_SERVER['REQUEST_URI']}");
                 exit();
             }
 
-            // 投稿の削除
             if (isset($_POST['delete_post'])) {
-                // 投稿と関連するコメントを削除
                 $delete_comments_stmt = $pdo->prepare("
                     DELETE FROM Comment WHERE toukou_id = :toukou_id
                 ");
@@ -108,12 +93,10 @@ try {
                 $delete_post_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
                 $delete_post_stmt->execute();
 
-                // リダイレクト
-                header("Location: user_posts.php"); // ユーザーの投稿一覧にリダイレクト
+                header("Location: user_posts.php");
                 exit();
             }
 
-            // タグ名の取得クエリ
             function getTagName($pdo, $tag_id) {
                 if ($tag_id) {
                     $tag_stmt = $pdo->prepare("SELECT tag_mei FROM Tag WHERE tag_id = :tag_id");
@@ -134,11 +117,11 @@ try {
     }
 
 } catch (PDOException $e) {
-    // エラーメッセージを表示して、デバッグを容易にする
     echo "エラー：" . $e->getMessage();
 }
-
+ob_end_flush();
 ?>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -146,7 +129,9 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="CSS/main.css">
     <link rel="stylesheet" href="CSS/toukou_disp2.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="CSS/all.min.css">
+
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
     <title>投稿表示画面</title>
 </head>
 <body>
@@ -167,7 +152,8 @@ try {
                     <form action="" method="post" class="user-action-form">
                         <button type="submit" name="follow" class="follow-button">
                             <?php echo $is_following ? 'フォロー中' : 'フォローする'; ?>
-                        </button>
+                       
+                            </button>
                     </form>
                 <?php endif; ?>
             </div>
@@ -180,18 +166,68 @@ try {
                         <img src="img/toukou/<?php echo htmlspecialchars($post['contents']); ?>" alt="投稿画像">
                     <?php endif; ?>
                     <div class="interaction-buttons">
-    <form action="" method="post" class="like-form">
-        <input type="hidden" name="post_id" value="<?php echo $post['toukou_id']; ?>">
-        <button type="button" name="like" class="like-button">
-        <div class="far fa-heart"></div>
-        </button>
-        <div class="like-count"><?php echo htmlspecialchars($post['like_count']); ?></div>
-    </form>
-    <button class="comment-button">
-                <div class="fas fa-comment"></div>
-                <div class="comment-count"><?php echo htmlspecialchars($post['comments']); ?></div>
-            </button>
-</div>
+                        <form action="" method="post" class="like-form">
+                            <input type="hidden" name="toukou_id" value="<?php echo $post['toukou_id']; ?>">
+                            <button type="submit" name="like" class="like-button">
+                                <i class="far fa-heart"></i>
+                                <span class="like-count"><?php echo htmlspecialchars($post['like_count']); ?></span>
+                            </button>
+                        </form><form action="toukou_comment.php" method="post" class="comment-form">
+    <input type="hidden" name="toukou_id" value="<?php echo $post['toukou_id']; ?>">
+    <button type="submit" name="comment" class="comment-button">
+        <i class="fas fa-comment"></i>
+        <span class="comment-count"><?php echo htmlspecialchars($post['comments']); ?></span>
+    </button>
+</form>
+
+                    </div>
+                </div>
+
+                <!-- <?php -->
+                // if (isset($_POST['comment'])) {
+                    // $post['comments']++;
+                // }
+                // ?>
+
+                <?php
+                if (isset($_POST['like'])) {
+                    $liked_stmt = $pdo->prepare("
+                    SELECT COUNT(*) as liked
+                    FROM Comment
+                    WHERE toukou_id = :toukou_id AND account_mei = :current_user_name AND comment_type = 1
+                ");
+                $liked_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
+                $liked_stmt->bindParam(':current_user_name', $current_user_name, PDO::PARAM_STR);
+                $liked_stmt->execute();
+                $liked_status = $liked_stmt->fetch(PDO::FETCH_ASSOC);
+                $liked = $liked_status['liked'] > 0;
+                    if ($liked) {
+                        $unlike_stmt = $pdo->prepare("
+                            DELETE FROM Comment
+                            WHERE toukou_id = :toukou_id AND account_mei = :current_user_name AND comment_type = 1
+                        ");
+                        $unlike_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
+                        $unlike_stmt->bindParam(':current_user_name', $current_user_name, PDO::PARAM_STR);
+                        $unlike_stmt->execute();
+                        $post['like_count']--;
+                    } else {
+                        $like_stmt = $pdo->prepare("
+                            INSERT INTO Comment (toukou_id, account_mei, comment_type)
+                            VALUES (:toukou_id, :current_user_name, 1)
+                        ");
+                        $like_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
+                        $like_stmt->bindParam(':current_user_name', $current_user_name, PDO::PARAM_STR);
+                        $like_stmt->execute();
+                        $post['like_count']++;
+                    }
+                }
+                ?>
+
+                <?php
+                if (isset($_POST['comment'])) {
+                    $post['comments']++;
+                }
+                ?>
 
             <?php endif; ?>
 
@@ -221,29 +257,7 @@ try {
                 <?php echo htmlspecialchars($post['setumei']); ?>
             </div>
 
-            <div class="comments">
-                <?php
-                $comment_stmt = $pdo->prepare("
-                    SELECT c.*, a.aikon, a.display_name as account_mei
-                    FROM Comment c
-                    JOIN Account a ON c.account_mei = a.user_name
-                    WHERE c.toukou_id = :toukou_id
-                ");
-                $comment_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
-                $comment_stmt->execute();
-                $comments = $comment_stmt->fetchAll(PDO::FETCH_ASSOC);
-                foreach ($comments as $comment): ?>
-                    <div class="comment">
-                        <div class="comment-user-info">
-                            <img src="<?php echo 'img/aikon/' . htmlspecialchars($comment['aikon']); ?>" alt="アイコン" class="user-icon">
-                            <span><?php echo htmlspecialchars($comment['account_mei']); ?></span>
-                        </div>
-                        <div class="comment-content">
-                            <?php echo htmlspecialchars($comment['naiyou']); ?>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            </div>
+            
         </div>
     <?php else: ?>
         <p>投稿が見つかりませんでした</p>

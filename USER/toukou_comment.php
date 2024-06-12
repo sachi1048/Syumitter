@@ -37,9 +37,33 @@ try {
 
     // 結果を表示する
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        echo "<h1>" . $row['title'] . "のコメントです。</h1>";
+        echo "<h1>" . $row['title'] . "のコメント</h1>";
        
     }
+
+    <div class="comments">
+        
+                $comment_stmt = $pdo->prepare("
+                    SELECT c.*, a.aikon, a.display_name as account_mei
+                    FROM Comment c
+                    JOIN Account a ON c.account_mei = a.user_name
+                    WHERE c.toukou_id = :toukou_id
+                ");
+                $comment_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
+                $comment_stmt->execute();
+                $comments = $comment_stmt->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($comments as $comment): ?>
+                    <div class="comment">
+                        <div class="comment-user-info">
+                            <img src="<?php echo 'img/aikon/' . htmlspecialchars($comment['aikon']); ?>" alt="アイコン" class="user-icon">
+                            <span><?php echo htmlspecialchars($comment['account_mei']); ?></span>
+                        </div>
+                        <div class="comment-content">
+                        
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
     ?>
 </body>
 </html>
