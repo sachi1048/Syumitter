@@ -25,7 +25,12 @@ try {
         $stmt->execute();
 
         $post = $stmt->fetch(PDO::FETCH_ASSOC);
+        $commnet_count_query ="SELECT COUNT(*) AS comment_count FROM Comment WHERE toukou_id=$toukou_id";
 
+        $statement = $pdo->query($commnet_count_query);
+        
+$comment_count_result = $statement->fetch(PDO::FETCH_ASSOC);
+$comment_count = $comment_count_result['comment_count'];
         if ($post) {
             $follow_stmt = $pdo->prepare("
                 SELECT COUNT(*) as is_following
@@ -172,22 +177,25 @@ ob_end_flush();
                                 <i class="far fa-heart"></i>
                                 <span class="like-count"><?php echo htmlspecialchars($post['like_count']); ?></span>
                             </button>
-                        </form><form action="toukou_comment.php" method="post" class="comment-form">
-    <input type="hidden" name="toukou_id" value="<?php echo $post['toukou_id']; ?>">
-    <button type="submit" name="comment" class="comment-button">
-        <i class="fas fa-comment"></i>
-        <span class="comment-count"><?php echo htmlspecialchars($post['comments']); ?></span>
-    </button>
-</form>
+                        </form>
+                        <form action="toukou_comment.php" method="post" class="comment-form">
+                        <input type="hidden" name="toukou_id" value="<?php echo $post['toukou_id']; ?>">
+                            <button type="submit" name="comment" class="comment-button">
+                            <i class="fas fa-comment"></i>
+                            <span class="comment-count"><?php echo htmlspecialchars($comment_count); ?></span>
+                            </button>
+                        </form>
 
                     </div>
                 </div>
 
+                
                 <?php
 // if (isset($_POST['comment'])) {
 //     $post['comments']++;
 // }
 ?>
+
 
                 <?php
                 if (isset($_POST['like'])) {
