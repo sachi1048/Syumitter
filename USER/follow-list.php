@@ -16,18 +16,29 @@
                 //「フォロー中」→「フォローする」
                 button.innerHTML = "フォローする";
                 <?php
-                    $sql3=$pdo->prepare('delete from Follow where follow_id=?');
-                    $sql3->execute([$row['follow_id']]);
+                    $sqlup=$pdo->prepare('update Follow set zyoukyou=0 where applicant_name=? approver_naem=?');
+                    $sqlup->execute([$row['']]);
+                    //////
+
+                    $sqld=$pdo->prepare('delete from Follow where follow_id=?');
+                    $sqld->execute([$row['follow_id']]);
                 ?>
                     //相互フォローか？
                     if(button.value === 1){
                         $sqlup=$pdo->prepare('update Follow set zyoukyou=0 where follow_id=?');
-                        $sqlup=execute([$row3['follow_id']]);
+                        $sqlup->execute([$row3['follow_id']]);
                     }
             } else {
                 //「フォローする」→「フォロー中」
                 button.innerHTML = "フォロー中";
                 //insert
+                $sqlin=$pdo->prepare('insert into Follow (applicant_name,approver_name,zyoukyou) value (?,?,?)');
+                $sqlin->execute([$user_name],[$row['approver_name']],0);
+                if(select * from Follow where applicant_name=$row['approver_name'] approver_name=$user_name){
+                    $sqlup2=$pdo->prepare('update Follow set zyoukyou=1 whrere applicant_name=? approver_name=?');
+                    $sqlup2->execute([$user_name],[$row['approver_name']]);
+                    $sqlup2->execute([$row['approver_name']],[$user_name]);
+                }
             }
         });
 </script>
@@ -88,14 +99,10 @@
                   <td>
                     <div>';
                     //写真を見て書くこと
-                        if($row['zyoukyou'] == 1){
-                            //相互フォロー
-                            $sql3=$pdo->prepare('select * from Follow where applicant_name=? approver_name=?');
-                            $sql3->execute([$row['approver'],$row['applicant_name']]);
-                            echo '<button id="follow" value="1">フォロー中</button>';
+                        if($row['applicant_name']==$user_name && $row['approver_name'] == $row2['user_name']){
+                            echo '<button id="follow">フォロー中</button>';
                         }else{
-                            //相互フォローでない
-                            echo '<button id="follow" value="0">フォロー中</button>';
+                            echo '<button id="follow">フォローする</button>';
                         }
                 echo '</div>
                   </td></tr>';
