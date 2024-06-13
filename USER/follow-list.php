@@ -7,41 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="CSS/main.css">
     <link rel="stylesheet" href="CSS/menu.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>フォロー画面</title>
 </head>
-<script>
-    document.getElementById("follow").addEventListener("click", function() {
-            var button = document.getElementById("follow");
-            if (button.innerHTML === "フォロー中" ) {
-                //「フォロー中」→「フォローする」
-                button.innerHTML = "フォローする";
-                <?php
-                    $sqlup=$pdo->prepare('update Follow set zyoukyou=0 where applicant_name=? approver_naem=?');
-                    $sqlup->execute([$row['']]);
-                    //////
 
-                    $sqld=$pdo->prepare('delete from Follow where follow_id=?');
-                    $sqld->execute([$row['follow_id']]);
-                ?>
-                    //相互フォローか？
-                    if(button.value === 1){
-                        $sqlup=$pdo->prepare('update Follow set zyoukyou=0 where follow_id=?');
-                        $sqlup->execute([$row3['follow_id']]);
-                    }
-            } else {
-                //「フォローする」→「フォロー中」
-                button.innerHTML = "フォロー中";
-                //insert
-                $sqlin=$pdo->prepare('insert into Follow (applicant_name,approver_name,zyoukyou) value (?,?,?)');
-                $sqlin->execute([$user_name],[$row['approver_name']],0);
-                if(select * from Follow where applicant_name=$row['approver_name'] approver_name=$user_name){
-                    $sqlup2=$pdo->prepare('update Follow set zyoukyou=1 whrere applicant_name=? approver_name=?');
-                    $sqlup2->execute([$user_name],[$row['approver_name']]);
-                    $sqlup2->execute([$row['approver_name']],[$user_name]);
-                }
-            }
-        });
-</script>
 <body>
     <h1 class="h1-2">Syumitter</h1>
     <a href="myprofile.php">
@@ -115,6 +84,39 @@
     ?>
 
 
+<script>
+    $(document).ready(function(){
+        $('#follow').on('click', function(){
+             // PHP変数をJavaScript変数に変換
+             var approverName = "<?php echo $row['approver_name']; ?>";
+            $.ajax({
+                url: 'api.php',
+                type: 'POST',
+                data: {
+                    approver_name: approverName
+                    // 必要に応じてデータをここに追加
+                },
+                success: function(response) {
+                    // 成功時の処理
+                    console.log('API call successful.');
+                    console.log(response);
+                    
+                    // ボタンのテキストを変更する例
+                    if($('#follow').text() === 'フォローする') {
+                        $('#follow').text('フォロー中');
+                    } else {
+                        $('#follow').text('フォローする');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // エラー時の処理
+                    console.error('API call failed.');
+                    console.error(status, error);
+                }
+            });
+        });
+    });
+</script>
 
 </body>
 </html>
