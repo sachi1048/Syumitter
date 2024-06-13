@@ -1,0 +1,19 @@
+.waku{
+    width:70%;
+    margin: 20px auto;
+    border-radius: 8px;
+    background-color:#ffffff;
+    text-align:center;
+    border:1.2px solid;
+    border-color:#ff4ef8;
+}
+.backbutton{
+    background:none;
+    border:none;
+    margin-right:95%;
+}
+.menuicon{
+    background:none;
+    border:none;
+    margin-left:95%;
+}
