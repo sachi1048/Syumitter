@@ -91,6 +91,12 @@ input[type="file"]{
     color: #000000;
 }
 
+/* 趣味タグ用 */
+.s-tag{
+    padding: 2px;
+    margin: 2px;
+}
+
 /* プロフィール文用のCSS */
 .profile{
     width: 80%;
