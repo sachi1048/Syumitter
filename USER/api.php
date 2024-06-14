@@ -1,6 +1,6 @@
 <?php session_start(); ?>
 <?php require 'db-connect.php'; ?>
-<?php echo "完了"
+<?php 
 
 $pdo = new PDO($connect, USER, PASS);
 $user_name = $_SESSION['user']['user_name'];
@@ -35,61 +35,53 @@ $user_name = $_SESSION['user']['user_name'];
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 $a = $user_name; // フォローボタンを押したユーザー
-$b = $_POST['approver_name']; // フォローボタンを押されたユーザー
+$b = $_POST['approver_name']; // フォローされたユーザー
 
 // AがBをフォローしているか確認
 $sql = "SELECT * FROM Follow WHERE applicant_name = ? AND approver_name = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("ss", $a, $b);
-$stmt->execute();
-$result = $stmt->get_result();
+$stmt = $pdo->prepare($sql);
+$stmt->execute([$a, $b]);
+$result = $stmt->fetch();
 
-if ($result->num_rows > 0) {
+if ($result !== false) {
     // AがBをフォローしている場合、削除する
     $deleteSql = "DELETE FROM Follow WHERE applicant_name = ? AND approver_name = ?";
-    $deleteStmt = $conn->prepare($deleteSql);
-    $deleteStmt->bind_param("ss", $a, $b);
-    $deleteStmt->execute();
+    $deleteStmt = $pdo->prepare($deleteSql);
+    $deleteStmt->execute([$a, $b]);
     
     // BがAをフォローしているか確認
     $checkSql = "SELECT * FROM Follow WHERE applicant_name = ? AND approver_name = ? AND zyoukyou = 1";
-    $checkStmt = $conn->prepare($checkSql);
-    $checkStmt->bind_param("ss", $b, $a);
-    $checkStmt->execute();
-    $checkResult = $checkStmt->get_result();
+    $checkStmt = $pdo->prepare($checkSql);
+    $checkStmt->execute([$b, $a]);
+    $checkResult = $checkStmt->fetch();
     
-    if ($checkResult->num_rows > 0) {
+    if ($checkResult !== false) {
         // BがAをフォローしている場合、zyoukyouを0に更新
         $updateSql = "UPDATE Follow SET zyoukyou = 0 WHERE applicant_name = ? AND approver_name = ?";
-        $updateStmt = $conn->prepare($updateSql);
-        $updateStmt->bind_param("ss", $b, $a);
-        $updateStmt->execute();
+        $updateStmt = $pdo->prepare($updateSql);
+        $updateStmt->execute([$b, $a]);
     }
 } else {
     // AがBをフォローしていない場合
     $checkBSql = "SELECT * FROM Follow WHERE applicant_name = ? AND approver_name = ?";
-    $checkBStmt = $conn->prepare($checkBSql);
-    $checkBStmt->bind_param("ss", $b, $a);
-    $checkBStmt->execute();
-    $checkBResult = $checkBStmt->get_result();
+    $checkBStmt = $pdo->prepare($checkBSql);
+    $checkBStmt->execute([$b, $a]);
+    $checkBResult = $checkBStmt->fetch();
     
-    if ($checkBResult->num_rows > 0) {
+    if ($checkBResult !== false) {
         // BがAをフォローしている場合、AがBをフォローし、BのAに対するzyoukyouを1に更新
         $insertSql = "INSERT INTO Follow (applicant_name, approver_name, zyoukyou) VALUES (?, ?, 1)";
-        $insertStmt = $conn->prepare($insertSql);
-        $insertStmt->bind_param("ss", $a, $b);
-        $insertStmt->execute();
+        $insertStmt = $pdo->prepare($insertSql);
+        $insertStmt->execute([$a, $b]);
         
         $updateBSql = "UPDATE Follow SET zyoukyou = 1 WHERE applicant_name = ? AND approver_name = ?";
-        $updateBStmt = $conn->prepare($updateBSql);
-        $updateBStmt->bind_param("ss", $b, $a);
-        $updateBStmt->execute();
+        $updateBStmt = $pdo->prepare($updateBSql);
+        $updateBStmt->execute([$b, $a]);
     } else {
         // BがAをフォローしていない場合、AがBをフォローし、zyoukyouを0に設定
         $insertSql = "INSERT INTO Follow (applicant_name, approver_name, zyoukyou) VALUES (?, ?, 0)";
-        $insertStmt = $conn->prepare($insertSql);
-        $insertStmt->bind_param("ss", $a, $b);
-        $insertStmt->execute();
+        $insertStmt = $pdo->prepare($insertSql);
+        $insertStmt->execute([$a, $b]);
     }
 }
 
