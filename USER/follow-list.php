@@ -53,7 +53,7 @@
     //フォロー中のアカウントだけを表示
     $sql=$pdo->prepare('select * from Follow where applicant_name=? order by zyoukyou DESC');
     $sql->execute([$user_name]);
-    echo '<table style="margin: auto;">';
+    echo '<table class="table-follow">';
     foreach($sql as $row){
         //フォロー中のアカウントを検索
         $sql2=$pdo->query('select * from Account where user_name="'.$row['approver_name'].'"');
@@ -66,12 +66,12 @@
                     <h2>', $row2['user_name'], '</h2>
                   </td>
                   <td>
-                    <div>';
+                    <div class="btn-follow0">';
                     //写真を見て書くこと
                         if($row['applicant_name']==$user_name && $row['approver_name'] == $row2['user_name']){
-                            echo '<button id="follow">フォロー中</button>';
+                            echo '<button id="follow" class="btn-follow1">フォロー中</button>';
                         }else{
-                            echo '<button id="follow">フォローする</button>';
+                            echo '<button id="follow" class="btn-follow2">フォローする</button>';
                         }
                 echo '</div>
                   </td></tr>';
@@ -101,8 +101,9 @@
                     console.log('API call successful.');
                     console.log(response);
                     
-                    // ボタンのテキストを変更する例
-                    if($('#follow').text() === 'フォローする') {
+                    // ボタンのテキストとクラスを切り替える
+                    $('#follow').toggleClass('btn-follow1 btn-follow2');
+                    if($('#follow').hasClass('btn-follow1')) {
                         $('#follow').text('フォロー中');
                     } else {
                         $('#follow').text('フォローする');

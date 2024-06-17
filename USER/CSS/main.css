@@ -86,6 +86,14 @@ input[type="file"]{
     width: 80px;
 }
 
+.table-follow{
+    margin: auto;
+}
+
+.table-follow td{
+    padding: 2px;
+}
+
 .link{
     text-decoration: none;
     color: #000000;
@@ -180,6 +188,32 @@ input[type="file"]{
     border-right-color: currentColor;
     border-left: 0;
   }
+
+.btn-follow0{
+    width: 130px;
+    background:  linear-gradient(-45deg, #6ddcff, #ff4ef8, #ff5d5d);
+    border-radius: 5px;
+    /* paddingの値がborderの太さ */
+    padding: 2px;
+}  
+
+.btn-follow1{
+    width: 129px;
+    font-weight: bold;
+    background: linear-gradient(-45deg, #6ddcff, #ff4ef8, #ff5d5d);
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+}
+
+.btn-follow2{
+    width: 129px;
+    font-weight: bold;
+    background: #ffffff;
+    border-style: none;
+    border-radius: 5px;
+
+}
 
   /* 「フォロワー/フォロー」「グループチャット/ペアチャット」の切り替え用 */
   .switch{
