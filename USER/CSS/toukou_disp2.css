@@ -203,3 +203,14 @@ body {
 .like-button .far {
     color: grey;
 }
+
+.tag {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 3px;
+    margin: 2px;
+}
+.tag.color1 { background-color: #1abc9c; }
+.tag.color2 { background-color: #3498db; }
+.tag.color3 { background-color: #e74c3c; }
+
