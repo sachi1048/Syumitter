@@ -1,4 +1,4 @@
-<head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Cropper</title>
@@ -61,11 +61,11 @@
             });
 
              function cropp() {
-                /*画像切り取りボタン押下後処理*/
+                /*画像切り取り処理*/
                 var resultImgUrl = cropper.getCroppedCanvas().toDataURL();
                 var result = document.getElementById('result-img');
                 result.src = resultImgUrl;
-            };
+            }
 
             setInterval(cropp, 0.5);
 
@@ -73,4 +73,3 @@
         });
     </script>
 </body>
-</html>
