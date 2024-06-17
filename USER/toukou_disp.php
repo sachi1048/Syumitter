@@ -10,17 +10,17 @@ try {
     $pdo = new PDO($connect, USER, PASS);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+    $like_count = 0;
     if (isset($_GET['toukou_id'])) {
         $toukou_id = $_GET['toukou_id'];
 
         $stmt = $pdo->prepare("
-            SELECT t.*, a.aikon as user_aikon, a.display_name, 
-                   (SELECT COUNT(*) FROM Comment c WHERE c.toukou_id = t.toukou_id AND c.comment_type = 1) as like_count, 
-                   (SELECT COUNT(*) FROM Comment c WHERE c.toukou_id = t.toukou_id) as comments
-            FROM Toukou t
-            JOIN Account a ON t.toukou_mei = a.user_name
-            WHERE t.toukou_id = :toukou_id
+        SELECT t.*, a.aikon as user_aikon, a.display_name
+        FROM Toukou t
+        JOIN Account a ON t.toukou_mei = a.user_name
+        WHERE t.toukou_id = :toukou_id
         ");
+
         $stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
         $stmt->execute();
 
@@ -141,7 +141,30 @@ ob_end_flush();
 </head>
 <body>
     <h1 class="syumitter1">Syumitter</h1>
+    <?php
+                if (isset($_POST['like'])) {
+                    $liked_stmt = $pdo->prepare("
+                    SELECT COUNT(*) as liked
+                    FROM Comment
+                    WHERE comment_type = 1
+                ");
 
+                $post['like_count']=0;
+                
+                // $liked_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
+                // $liked_stmt->bindParam(':current_user_name', $current_user_name, PDO::PARAM_STR);
+                // SQL文の準備
+                $like_stmt = $pdo->prepare("SELECT COUNT(*) as like_count FROM Comment WHERE toukou_id = :toukou_id AND comment_type = 1");
+                $like_stmt->bindParam(':toukou_id', $_GET['toukou_id'], PDO::PARAM_INT);
+                $like_stmt->execute();
+                
+                // 結果を取得して変数に格納
+                $like_result = $like_stmt->fetch(PDO::FETCH_ASSOC);
+                $like_count = $like_result['like_count'];
+
+                ?>
+
+                
     <?php if (!empty($post)): ?>
         <div class="post-container">
             <div class="user-info">
@@ -163,6 +186,66 @@ ob_end_flush();
                 <?php endif; ?>
             </div>
 
+            <?php
+                if (isset($_POST['like'])) {
+                    $liked_stmt = $pdo->prepare("
+                    SELECT COUNT(*) as liked
+                    FROM Comment
+                    WHERE comment_type = 1
+                ");
+
+                $post['like_count']=0;
+                
+                // $liked_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
+                // $liked_stmt->bindParam(':current_user_name', $current_user_name, PDO::PARAM_STR);
+                // SQL文の準備
+                $like_stmt = $pdo->prepare("SELECT COUNT(*) as like_count FROM Comment WHERE toukou_id = :toukou_id AND comment_type = 1");
+                $like_stmt->bindParam(':toukou_id', $_GET['toukou_id'], PDO::PARAM_INT);
+                $like_stmt->execute();
+                
+                // 結果を取得して変数に格納
+                $like_result = $like_stmt->fetch(PDO::FETCH_ASSOC);
+                $like_count = $like_result['like_count'];
+                var_dump($like_count);
+                exit;
+                
+                // 取得した「いいね」数を表示（オプション）
+                // echo "いいねの数: " . $like_count;
+                $liked_stmt->execute();
+                $liked_status = $liked_stmt->fetch(PDO::FETCH_ASSOC);
+                $liked = $liked_status['liked'] > 0;
+                    if ($liked) {
+                        $unlike_stmt = $pdo->prepare("
+                            DELETE FROM Comment
+                            WHERE toukou_id = :toukou_id AND account_mei = :current_user_name AND comment_type = 0
+                        ");
+                        $unlike_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
+                        $unlike_stmt->bindParam(':current_user_name', $current_user_name, PDO::PARAM_STR);
+                        $unlike_stmt->execute();
+                        $post['like_count']--;
+                    } else {
+                        var_dump("aaa");
+                        exit;
+                        $like_stmt = $pdo->prepare("
+                            INSERT INTO Comment (toukou_id, account_mei, comment_type)
+                            VALUES (:toukou_id, :current_user_name, 0)
+                        ");
+                        $like_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
+                        $like_stmt->bindParam(':current_user_name', $current_user_name, PDO::PARAM_STR);
+                        $like_stmt->execute();
+                        $post['like_count']++;
+                    }
+                }
+                ?>
+
+                <?php
+                if (isset($_POST['comment'])) {
+                    $post['comments']++;
+                }
+                ?>
+
+            <?php endif; ?>
+
             <?php if (!empty($post['contents'])): ?>
                 <div class="post-content">
                     <?php if (strpos($post['contents'], '.mp4') !== false): ?>
@@ -171,13 +254,16 @@ ob_end_flush();
                         <img src="img/toukou/<?php echo htmlspecialchars($post['contents']); ?>" alt="投稿画像">
                     <?php endif; ?>
                     <div class="interaction-buttons">
-                        <form action="" method="post" class="like-form">
+                        <form action="touroku_like.php" method="post" class="like-form">
                             <input type="hidden" name="toukou_id" value="<?php echo $post['toukou_id']; ?>">
                             <button type="submit" name="like" class="like-button">
-                                <i class="far fa-heart"></i>
-                                <span class="like-count"><?php echo htmlspecialchars($post['like_count']); ?></span>
+                                <i class="far fa-heart"></i><?php echo htmlspecialchars($like_count); ?>
+                                
+        
                             </button>
                         </form>
+                    
+                    
                         <form action="toukou_comment.php" method="post" class="comment-form">
                         <input type="hidden" name="toukou_id" value="<?php echo $post['toukou_id']; ?>">
                             <button type="submit" name="comment" class="comment-button">
@@ -197,47 +283,7 @@ ob_end_flush();
 ?>
 
 
-                <?php
-                if (isset($_POST['like'])) {
-                    $liked_stmt = $pdo->prepare("
-                    SELECT COUNT(*) as liked
-                    FROM Comment
-                    WHERE toukou_id = :toukou_id AND account_mei = :current_user_name AND comment_type = 1
-                ");
-                $liked_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
-                $liked_stmt->bindParam(':current_user_name', $current_user_name, PDO::PARAM_STR);
-                $liked_stmt->execute();
-                $liked_status = $liked_stmt->fetch(PDO::FETCH_ASSOC);
-                $liked = $liked_status['liked'] > 0;
-                    if ($liked) {
-                        $unlike_stmt = $pdo->prepare("
-                            DELETE FROM Comment
-                            WHERE toukou_id = :toukou_id AND account_mei = :current_user_name AND comment_type = 1
-                        ");
-                        $unlike_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
-                        $unlike_stmt->bindParam(':current_user_name', $current_user_name, PDO::PARAM_STR);
-                        $unlike_stmt->execute();
-                        $post['like_count']--;
-                    } else {
-                        $like_stmt = $pdo->prepare("
-                            INSERT INTO Comment (toukou_id, account_mei, comment_type)
-                            VALUES (:toukou_id, :current_user_name, 1)
-                        ");
-                        $like_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
-                        $like_stmt->bindParam(':current_user_name', $current_user_name, PDO::PARAM_STR);
-                        $like_stmt->execute();
-                        $post['like_count']++;
-                    }
-                }
-                ?>
-
-                <?php
-                if (isset($_POST['comment'])) {
-                    $post['comments']++;
-                }
-                ?>
-
-            <?php endif; ?>
+                
 
             <div class="post-details">
                 <div class="post-title">
