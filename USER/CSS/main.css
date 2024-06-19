@@ -101,8 +101,10 @@ input[type="file"]{
 
 /* 趣味タグ用 */
 .s-tag{
-    padding: 2px;
+    padding: 2px 5px;
     margin: 2px;
+    display: inline-block;
+    border-radius: 5px;
 }
 
 /* プロフィール文用のCSS */
