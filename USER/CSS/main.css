@@ -107,12 +107,14 @@ input[type="file"]{
     color: #000000;
 }
 
-/* 趣味タグ用 */
+/* profileの趣味タグ用 */
 .s-tag{
     padding: 2px 5px;
     margin: 2px;
     display: inline-block;
+    border: none;
     border-radius: 5px;
+    color: #ffffff;
 }
 
 /* プロフィール文用のCSS */

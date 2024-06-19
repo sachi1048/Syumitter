@@ -10,7 +10,7 @@
     <title>マイプロフィールいいね画面</title>
 </head>
 <body>
-    <h1 class="syumitter1">Syumitter</h1>
+    <h1 class="h1-2">Syumitter</h1>
 
 <?php
     $pdo = new PDO($connect, USER, PASS);
@@ -67,8 +67,19 @@
     echo '<div class="left1">'; //後で変更
     echo '<h2>', $user_name, '</h2>';
     echo '<h4>', $display_name, '</h4>';
-    echo '</div>';
-    echo '<br><br><br><br>';
+    echo '</div><br><br><br><br><br><div>';
+    //趣味タグ表示
+    $sql4=$pdo->prepare('select * from User_tag where user_name=?');
+    $sql4->execute([$user_name]);
+    foreach($sql4 as $row4){
+        $sqltag=$pdo->prepare('select * from Tag where tag_id=?');
+        $sqltag->execute([$row4['tag_id']]);
+        foreach($sqltag as $tag){
+            echo '<div class="s-tag" style="background: rgb(', $tag['tag_color1'], ',', $tag['tag_color2'], ',', $tag['tag_color3'], '">', $tag['tag_mei'], '</div>';
+        }
+        
+            
+    }
     echo '<div class="profile">';
     echo '<p>', $profile, '</p>';
     echo '</div>';

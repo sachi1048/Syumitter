@@ -151,7 +151,7 @@
 </head>
 <body>
     <h1 class="h1-2">Syumitter</h1>
-
+    
     <nav>
         <a href="user.php">ユーザー</a>
         <a href="post.php">投稿</a>
