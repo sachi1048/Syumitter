@@ -66,7 +66,7 @@
     echo '<div class="left1">'; //後で変更
     echo '<h2>', $user_name, '</h2>';
     echo '<h4>', $display_name, '</h4>';
-    echo '</div><br>';
+    echo '</div><br><div>';
     //趣味タグ表示
     $sql4=$pdo->prepare('select * from User_tag where user_name=?');
     $sql4->execute([$user_name]);
@@ -79,7 +79,7 @@
         
             
     }
-    echo '<br><br><br><br>';
+    echo '</div><br><br><br><br>';
     echo '<div class="profile">';
     echo '<p>', $profile, '</p>';
     echo '</div>';
