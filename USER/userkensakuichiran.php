@@ -16,6 +16,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-direction: column;
             padding: 20px;
             font-family: "Pacifico", cursive;
             font-size: 36px;
@@ -31,8 +32,8 @@
         .back-button {
             position: absolute;
             left: 40px;
-            width: 0; 
-            height: 0; 
+            width: 0;
+            height: 0;
             border-top: 18px solid transparent;
             border-bottom: 18px solid transparent;
             border-right: 18px solid #0000ff;
@@ -47,8 +48,25 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+        .search-button {
+            margin-top: 10px;
+            background-color: white;
+            color: black;
+            border: 2px solid transparent;
+            background-image: linear-gradient(white, white), linear-gradient(to bottom right, #ffb380, #ff80bf, #d884e4, #add8e6);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            padding: 10px 30px;
+            font-size: 20px;
+            border-radius: 20px; /* 角をさらに丸く */
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .search-button:hover {
+            background-color: #f0f0f0;
+        }
         .results-container {
-            padding-top: 140px; /* ヘッダーの高さを考慮 */
+            padding-top: 165px; /* ヘッダーの高さを考慮 */
             overflow-y: auto;
             height: calc(100vh - 200px); /* フッターの高さを考慮して調整 */
             background-color: white;
@@ -145,6 +163,7 @@
     <div class="header-container">
         <div class="back-button" onclick="history.back()"></div>
         <h1>Syumitter</h1>
+        <button class="search-button">#検索</button>
     </div>
     <div class="results-container">
         <div class="user-card">
