@@ -185,12 +185,7 @@
         </div>
     </div>
 
-    <div class="footer-container">
-        <a href="post.php"><i class="fa fa-plus-square"></i></a>
-        <a href="search.php"><i class="fas fa-search"></i></a>
-        <a href="group_chat_list.php"><i class="fas fa-comments"></i></a>
-        <a href="profile.php"><i class="fas fa-user"></i></a>
-    </div>
+    <footer><?php require 'menu.php';?></footer>
 
     <script>
         function searchHobby() {
