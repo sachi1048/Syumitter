@@ -10,7 +10,7 @@
     <title>マイプロフィール画面</title>
 </head>
 <body>
-    <h1 class="syumitter1">Syumitter</h1>
+    <h1 class="h1-2">Syumitter</h1>
 
 <?php
     $pdo = new PDO($connect, USER, PASS);
@@ -125,3 +125,7 @@
     <footer><?php require 'menu.php';?></footer>
 </body>
 </html>
+
+<script>
+    var randomColor = "rgb(" + (~~(256 * Math.random())) + ", " + (~~(256 * Math.random())) + ", " + (~~(256 * Math.random())) + ")" ;
+</script>
