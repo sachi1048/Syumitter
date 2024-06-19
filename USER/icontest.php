@@ -42,7 +42,7 @@
             <p>ズーム、移動が可能です。</p>
             <img id="result-img" class="result">
             <p>プレビュー↑</p>
-            <p><button onclick="location.href='newgroup.html'">決定</button></p>
+            <p><button onclick="location.href='newgroup.php'">決定</button></p>
         </div>
     </div>
     <script src="js/cropper.min.js"></script>
