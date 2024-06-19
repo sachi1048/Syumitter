@@ -9,7 +9,7 @@
       <img src="img/kensaku.png">
     </div>
   </a>
-  <a href="#">
+  <a href="group_list.php">
     <div class="icon">
       <img src="img/chataikon.png">
     </div>

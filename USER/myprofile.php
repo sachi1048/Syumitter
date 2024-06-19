@@ -20,9 +20,8 @@
     $profile = $_SESSION['user']['profile'];
 
     echo '<table style="margin: auto;"><tr><td>';
-    echo '<div class="aikon">
-            <img src="img/aikon/', $aikon, '" alt="マイアイコン" class="maru">
-          </div></td>';
+    echo '<img src="img/aikon/', $aikon, '" alt="マイアイコン" class="maru">
+          </td>';
 
 
     $sql=$pdo->prepare('select * from Toukou where toukou_mei=?');
@@ -67,7 +66,19 @@
     echo '<div class="left1">'; //後で変更
     echo '<h2>', $user_name, '</h2>';
     echo '<h4>', $display_name, '</h4>';
-    echo '</div>';
+    echo '</div><br>';
+    //趣味タグ表示
+    $sql4=$pdo->prepare('select * from User_tag where user_name=?');
+    $sql4->execute([$user_name]);
+    foreach($sql4 as $row4){
+        $sqltag=$pdo->prepare('select * from Tag where tag_id=?');
+        $sqltag->execute([$row4['tag_id']]);
+        foreach($sqltag as $tag){
+            echo '<div class="s-tag">', $tag['tag_mei'], '</div>';
+        }
+        
+            
+    }
     echo '<br><br><br><br>';
     echo '<div class="profile">';
     echo '<p>', $profile, '</p>';
@@ -88,19 +99,18 @@
     <hr>
     <table>
         <?php 
-         $sql4=$pdo->prepare('select * from Toukou where toukou_mei=?');
-         $sql4->execute([$user_name]);
-         $count = 1;
+         $sql5=$pdo->prepare('select * from Toukou where toukou_mei=?');
+         $sql5->execute([$user_name]);
+         $count = 0;
          echo '<tr>';
-         foreach($sql4 as $row4){
-            if($count % 3 == 0){
+         foreach($sql5 as $row5){
+            if($count == 0){
+            }else if($count % 3 == 0){
                 echo '<tr>';
             }
-            echo '<td><div>',
-                    // $row4['contents'],
-                    //試しの画像
-                    '<img src="img/aikon/top18.jpg">';
-            echo '</div></td>';
+            echo '<td>',
+                    '<a href="toukou_disp.php?toukou_id=', $row5['toukou_id'], '"><img src="img/toukou/', $row5['contents'], '" class="size">';
+            echo '</td>';
             $count++;
             if($count % 3 == 0){
                 echo '</tr>';

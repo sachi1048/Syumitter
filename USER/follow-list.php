@@ -7,13 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="CSS/main.css">
     <link rel="stylesheet" href="CSS/menu.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>フォロー画面</title>
 </head>
-<script>
-    const follow{
 
-    }
-</script>
 <body>
     <h1 class="h1-2">Syumitter</h1>
     <a href="myprofile.php">
@@ -52,10 +49,13 @@
 
 
     <?php
+    //applicant_name=フォロー側　approver_name=フォローされてる側
+    //フォロー中のアカウントだけを表示
     $sql=$pdo->prepare('select * from Follow where applicant_name=? order by zyoukyou DESC');
     $sql->execute([$user_name]);
-    echo '<table>';
+    echo '<table class="table-follow">';
     foreach($sql as $row){
+        //フォロー中のアカウントを検索
         $sql2=$pdo->query('select * from Account where user_name="'.$row['approver_name'].'"');
         foreach($sql2 as $row2){
             echo '<tr><td>';
@@ -66,11 +66,12 @@
                     <h2>', $row2['user_name'], '</h2>
                   </td>
                   <td>
-                    <div>';
-                        if($row['zyoukyou'] == 1){
-                            echo '<input type="button" value="フォロー中" onclick="follow1">';
+                    <div class="btn-follow0">';
+                    //写真を見て書くこと
+                        if($row['applicant_name']==$user_name && $row['approver_name'] == $row2['user_name']){
+                            echo '<button id="follow" class="btn-follow1">フォロー中</button>';
                         }else{
-                            echo '<input type="button" value="フォローする" onclick="follow2">';
+                            echo '<button id="follow" class="btn-follow2">フォローする</button>';
                         }
                 echo '</div>
                   </td></tr>';
@@ -83,6 +84,40 @@
     ?>
 
 
+<script>
+    $(document).ready(function(){
+        $('#follow').on('click', function(){
+             // PHP変数をJavaScript変数に変換
+             var approverName = "<?php echo $row['approver_name']; ?>";
+            $.ajax({
+                url: 'api.php',
+                type: 'POST',
+                data: {
+                    approver_name: approverName
+                    // 必要に応じてデータをここに追加
+                },
+                success: function(response) {
+                    // 成功時の処理
+                    console.log('API call successful.');
+                    console.log(response);
+                    
+                    // ボタンのテキストとクラスを切り替える
+                    $('#follow').toggleClass('btn-follow1 btn-follow2');
+                    if($('#follow').hasClass('btn-follow1')) {
+                        $('#follow').text('フォロー中');
+                    } else {
+                        $('#follow').text('フォローする');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // エラー時の処理
+                    console.error('API call failed.');
+                    console.error(status, error);
+                }
+            });
+        });
+    });
+</script>
 
 </body>
 </html>
