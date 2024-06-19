@@ -1,6 +1,6 @@
 .selectable {
     width:27%;
-    overflow:scroll;
+    overflow:hidden;
     display: inline-block; /* ラベルをインラインブロックにする */
     height:15px;
     padding: 10px 5px 20px 5px; /* ラベルの内側の余白を設定 */
@@ -40,7 +40,6 @@ input[type="checkbox"]:checked + label {
     margin-top:10px;
     margin-bottom:2px;
     border: 2px solid;
-    border-color: lightskyblue;
     padding: 2px 5px;
     border-radius:8px;
 }

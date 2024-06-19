@@ -1,5 +1,3 @@
-/* main.css */
-
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -65,62 +63,76 @@ body {
     margin-bottom: 20px;
 }
 
+.interaction-buttons form,
 .interaction-buttons button {
     background: none;
-    color: white;
+    color: #161111;
     font-size: 16px;
     display: flex;
     align-items: center;
     cursor: pointer;
     padding: 5px 10px;
     border-radius: 4px;
-    margin-right: 10px; /* ボタン間の間隔を設定 */
+    margin-right: 10px;
+    border: none;
 }
 
-.interaction-buttons button i {
+.interaction-buttons form:hover,
+.interaction-buttons button:hover {
+    opacity: 0.8;
+}
+
+.far fa-heart{
     font-size: 20px;
     margin-right: 5px;
 }
 
-.interaction-buttons button .count {
-    margin-left: 5px;
-}
-
-.post-date-right {
-    font-size: 14px;
-    color: #888;
-    text-align: right;
-    margin-top: auto;
-}
-
-.post-tags {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-.tag {
-    background-color: #ffcc00;
-    padding: 5px 10px;
-    border-radius: 4px;
-    color: #fff;
-    font-size: 14px;
-}
-
-.explain {
+.like-count,
+.comment-count {
     font-size: 16px;
-    margin-bottom: 20px;
+    color: #333;
+}
+
+.fas fa-comment{
+    font-size: 20px;
+    margin-right: 5px;
+    color: #ff69b4;
+}
+
+.post-title h2 {
+    font-size: 24px;
+    margin: 0;
+}
+
+.user-action-form {
+    display: inline-block;
+}
+
+.delete-button {
+    background: none;
+    color: red;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.delete-button:hover {
+    opacity: 0.8;
 }
 
 .comment {
     display: flex;
     align-items: flex-start;
     margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
 }
-
 .comment-user-info {
     display: flex;
     align-items: center;
+    margin-right: 10px;
 }
 
 .comment-user-info .user-icon {
@@ -130,10 +142,10 @@ body {
 }
 
 .comment-content {
-    background-color: #f9f9f9;
+    background-color: #fff;
     padding: 10px;
     border-radius: 8px;
-    width: 100%;
+    flex-grow: 1;
 }
 
 .bottom-nav {
@@ -156,17 +168,49 @@ body {
 
 .like-button, .comment-button {
     background: none;
-    color: white;
+    color: #161111;
     font-size: 16px;
     display: flex;
     align-items: center;
     cursor: pointer;
     padding: 5px 10px;
     border-radius: 4px;
-    margin-right: 10px; /* ボタン間の間隔を設定 */
-    border: none; /* 外枠を削除 */
+    margin-right: 10px;
+    border: none;
 }
 
 .like-button:hover, .comment-button:hover {
-    opacity: 0.8; /* ホバー時の透明度を下げて、ボタンが押されたような効果を与える */
+    opacity: 0.8;
 }
+
+.comment-button {
+    background: none;
+    color: #161111;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin-right: 10px;
+    border: none;
+}
+
+.like-button .fas {
+    color: red;
+}
+
+.like-button .far {
+    color: grey;
+}
+
+.tag {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 3px;
+    margin: 2px;
+}
+.tag.color1 { background-color: #1abc9c; }
+.tag.color2 { background-color: #3498db; }
+.tag.color3 { background-color: #e74c3c; }
+
