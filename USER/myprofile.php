@@ -79,8 +79,7 @@
         
             
     }
-    echo '</div>';
-    echo '<div class="profile">';
+    echo '</div><div class="profile">';
     echo '<p>', $profile, '</p>';
     echo '</div>';
     echo '<a href="myprofile-edit" class="btn-profile">プロフィール編集</a>';
@@ -122,6 +121,6 @@
 
         ?>
     </table>
-    <footer><?php require 'menu.php';?></footer>
+    <footer><?php include 'menu.php';?></footer>
 </body>
 </html>
