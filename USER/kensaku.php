@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>Syumitter</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="CSS/menu.css">
+    <link rel="stylesheet" href="CSS/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
@@ -12,19 +14,7 @@
             margin: 0;
             padding: 0;
         }
-        .header-container {
-            text-align: center;
-            padding: 20px;
-            font-family: "Pacifico", cursive;
-            font-size: 36px;
-            margin-bottom: 20px;
-        }
-        .header-container h1 {
-            margin: 0;
-            background: -webkit-linear-gradient(#ffb380, #ff80bf, #d884e4);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        
         nav {
             background-color: #b0b0b0;
             overflow: hidden;
@@ -160,9 +150,7 @@
     </style>
 </head>
 <body>
-    <div class="header-container">
-        <h1>Syumitter</h1>
-    </div>
+    <h1 class="h1-2">Syumitter</h1>
 
     <nav>
         <a href="user.php">ユーザー</a>
@@ -185,12 +173,7 @@
         </div>
     </div>
 
-    <div class="footer-container">
-        <a href="post.php"><i class="fa fa-plus-square"></i></a>
-        <a href="search.php"><i class="fas fa-search"></i></a>
-        <a href="group_chat_list.php"><i class="fas fa-comments"></i></a>
-        <a href="profile.php"><i class="fas fa-user"></i></a>
-    </div>
+    <footer><?php require 'menu.php';?></footer>
 
     <script>
         function searchHobby() {

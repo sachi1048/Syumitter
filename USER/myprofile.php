@@ -10,7 +10,7 @@
     <title>マイプロフィール画面</title>
 </head>
 <body>
-    <h1 class="syumitter1">Syumitter</h1>
+    <h1 class="h1-2">Syumitter</h1>
 
 <?php
     $pdo = new PDO($connect, USER, PASS);
@@ -66,7 +66,7 @@
     echo '<div class="left1">'; //後で変更
     echo '<h2>', $user_name, '</h2>';
     echo '<h4>', $display_name, '</h4>';
-    echo '</div><br><div>';
+    echo '</div><br><br><br><br><br><div>';
     //趣味タグ表示
     $sql4=$pdo->prepare('select * from User_tag where user_name=?');
     $sql4->execute([$user_name]);
@@ -79,7 +79,7 @@
         
             
     }
-    echo '</div><br><br><br><br>';
+    echo '</div>';
     echo '<div class="profile">';
     echo '<p>', $profile, '</p>';
     echo '</div>';
@@ -125,3 +125,7 @@
     <footer><?php require 'menu.php';?></footer>
 </body>
 </html>
+
+<script>
+    var randomColor = "rgb(" + (~~(256 * Math.random())) + ", " + (~~(256 * Math.random())) + ", " + (~~(256 * Math.random())) + ")" ;
+</script>

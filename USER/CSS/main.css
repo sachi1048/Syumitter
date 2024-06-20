@@ -11,8 +11,16 @@ body {
 }
 
 .h1-2{
-    font-style: oblique;
+    /* font-style: oblique;
     background: linear-gradient(-45deg, #6ddcff, #ff4ef8, #ff5d5d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; */
+    text-align: center;
+    padding: 10px;
+    margin: auto;
+    font-family: "Pacifico", cursive;
+    font-size: xxx-large;
+    background: -webkit-linear-gradient(#ffb380, #ff80bf, #d884e4);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -101,8 +109,10 @@ input[type="file"]{
 
 /* 趣味タグ用 */
 .s-tag{
-    padding: 2px;
+    padding: 2px 5px;
     margin: 2px;
+    display: inline-block;
+    border-radius: 5px;
 }
 
 /* プロフィール文用のCSS */
