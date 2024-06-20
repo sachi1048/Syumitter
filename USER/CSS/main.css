@@ -248,3 +248,8 @@ input[type="file"]{
   .switch-right{
     margin: 0 30px 0 40px;
   }
+
+  .error {
+    color: red;
+    display: none;
+  }

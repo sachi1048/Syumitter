@@ -13,6 +13,21 @@
                 $('.file__none').text(file.name);
             });
         });
+
+        document.getElementById('passwordForm').addEventListener('submit', function(event) {
+            var password1 = document.getElementById('password1').value;
+            var password2 = document.getElementById('password2').value;
+            var errorMessage = document.getElementById('errorMessage');
+
+            if (password1 !== password2) {
+                event.preventDefault(); // フォームの送信を止める
+                errorMessage.style.display = 'block'; // エラーメッセージを表示する
+            } else {
+                errorMessage.style.display = 'none'; // エラーメッセージを非表示にする
+                // ここでフォームを送信します
+                window.location.href = 'success.html'; // パスワードが一致した場合に遷移する画面
+            }
+        });
     </script>
     <title>マイプロフィール編集画面</title>
 </head>
@@ -23,6 +38,9 @@
         $display_name = $_SESSION['user']['display_name'];
         $aikon = $_SESSION['user']['aikon'];
         $profile = $_SESSION['user']['profile'];
+
+        $sql=$pdo->prepare('select * from Account where user_mei=?');
+        $sql->execute([$user_name]);
     ?>
     <h1 class="h1-1">Syumitter</h1>
 
@@ -39,30 +57,30 @@
         <table style="margin:auto;">
             <tr>
                 <td>ユーザー名</td>
-                <td><input class="textbox" type="textbox" name="user" placeholder="<?php echo $user_name; ?>"></td>
+                <td><input class="textbox" type="textbox" name="user" placeholder="<?php echo $sql['user_name']; ?>"></td>
             </tr>
             <tr>
                 <td>名前</td>
-                <td><input class="textbox" type="textbox" name="display" placeholder="<?php echo $display_name; ?>"></td>
+                <td><input class="textbox" type="textbox" name="display" placeholder="<?php echo $sql['display_name']; ?>"></td>
             </tr>
             <tr>
                 <td>プロフィール</td>
-                <td><input class="textbox" type="textbox" name="profile" placeholder="<?php echo $profile; ?>"></td>
+                <td><textarea class="textbox" type="textbox" name="profile" placeholder="<?php echo $sql['profile']; ?>"></td>
             </tr>
             <tr>
                 <td>アドレス</td>
-                <td><input class="textbox" type="textbox" name="mail" placeholder=""></td>
+                <td><input class="textbox" type="textbox" name="mail" placeholder="<?php echo $sql['mail']; ?>"></td>
             </tr>
             <tr>
                 <td>パスワード</td>
-                <td><input class="textbox" type="textbox" placeholder=""></td>
+                <td><input class="textbox" type="password" id="password1" name="pass1" placeholder="<?php echo $sql['pass']; ?>" required></td>
             </tr>
             <tr>
                 <td>確認パスワード</td>
-                <td><input class="textbox" type="textbox" name="pass" placeholder=""></td>
+                <td><input class="textbox" type="password" id="password2" name="pass2" required></td>
             </tr>
         </table>
-
+        <p id="errorMessage" class="error">パスワードが一致しません。</p>
         <button class="nextbutton" type="submit">編集</button>
         </form>
     </div>
