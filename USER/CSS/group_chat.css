@@ -1,19 +1,144 @@
 .waku{
-    width:70%;
+    width: 90%;
+    height: 36px;
     margin: 20px auto;
     border-radius: 8px;
-    background-color:#ffffff;
-    text-align:center;
-    border:1.2px solid;
-    border-color:#ff4ef8;
+    background-color: #ffffff;
+    text-align: center;
+    border: 1.2px solid;
+    border-color: #ff4ef8;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    margin-bottom: 80px;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    padding: 5px;
 }
 .backbutton{
     background:none;
     border:none;
-    margin-right:95%;
+    margin-right: 10px; /* 適宜調整 */
+    flex-shrink: 0;
 }
 .menuicon{
     background:none;
     border:none;
-    margin-left:95%;
+    margin-left: 10px; /* 適宜調整 */
+    flex-shrink: 0;
 }
+.boda{
+    background-color:#ccebff;
+}
+.tablename{
+    flex-grow: 1;
+    text-align: center;
+}
+.chatcontainer {
+    display: flex;
+    flex-direction: column;
+    width: 300px; /* 適宜調整 */
+    margin: 10px auto;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom:60px;
+}
+
+/* 相手のメッセージ用スタイル */
+.message.other {
+    display: flex;
+    align-items: center;
+    margin: 10px;
+}
+
+.message.other .icon {
+    width: 40px;
+    height: 40px;
+    background-color: red;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.message.other .content {
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #33adff;
+    flex-grow: 1;
+}
+
+.message.other .timestamp {
+    margin-left: 10px;
+    font-size: 12px;
+    color: #555;
+}
+
+/* 自分のメッセージ用スタイル */
+.message.self {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin: 10px;
+}
+
+.message.self .content {
+    background-color: #33adff;
+    padding: 10px;
+    border-radius: 10px;
+    flex-grow: 1;
+    margin: 2px 10px;
+}
+
+.message.self .details {
+    text-align: right;
+    font-size: 12px;
+    color: #555;
+}
+
+.message.self .icon {
+    width: 40px;
+    height: 40px;
+    background-color: #00bcd4;
+    border-radius: 50%;
+}
+.datedisplay{
+    margin:10px auto;
+    padding:0px 20px;
+    width:67%;
+    font-weight:bold;
+    text-align:center;
+    background-color:lightgray;
+    border-radius:8px;
+}
+.btn-mdr2 {
+    display: inline-block;
+    margin-left: 5px;
+    margin-top: 6px;
+    color: #0047FF;
+    width: 0;
+    border-style: solid;
+    border-color: transparent;
+    border-width: 10px 15px;
+    border-right-color: currentColor;
+    border-left: 0;
+  }
+  .sendmessage{
+
+    position: fixed;
+    bottom: 10px; /* 下からの余白 */
+    left: 30px;   /* 左からの余白 */
+    padding: 10px;
+  }
+  .messages{
+    width:250px;
+    height:36px;
+    border-radius:8px;
+  }
+  .sousin{
+    background:none;
+    border:none;
+    color:#0047FF;
+  }
