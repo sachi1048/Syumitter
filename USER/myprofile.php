@@ -74,13 +74,12 @@
         $sqltag=$pdo->prepare('select * from Tag where tag_id=?');
         $sqltag->execute([$row4['tag_id']]);
         foreach($sqltag as $tag){
-            echo '<div class="s-tag">', $tag['tag_mei'], '</div>';
+            echo '<div class="s-tag" style="background: rgb(', $tag['tag_color1'], ',', $tag['tag_color2'], ',', $tag['tag_color3'], '">', $tag['tag_mei'], '</div>';
         }
         
             
     }
-    echo '</div>';
-    echo '<div class="profile">';
+    echo '</div><div class="profile">';
     echo '<p>', $profile, '</p>';
     echo '</div>';
     echo '<a href="myprofile-edit" class="btn-profile">プロフィール編集</a>';
@@ -122,10 +121,6 @@
 
         ?>
     </table>
-    <footer><?php require 'menu.php';?></footer>
+    <footer><?php include 'menu.php';?></footer>
 </body>
 </html>
-
-<script>
-    var randomColor = "rgb(" + (~~(256 * Math.random())) + ", " + (~~(256 * Math.random())) + ", " + (~~(256 * Math.random())) + ")" ;
-</script>
