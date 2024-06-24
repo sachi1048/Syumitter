@@ -96,7 +96,7 @@
         </a>
     </div>
     <hr>
-    <table>
+    <table style="padding-bottom: 100px; margin: auto;">
         <?php 
          $sql5=$pdo->prepare('select * from Toukou where toukou_mei=?');
          $sql5->execute([$user_name]);
