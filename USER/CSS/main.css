@@ -3,11 +3,28 @@ body {
     text-align: center;
 }
 
-/*「Syumitter」用のCSS*/
+/*「Syumitter」用のCSS 黒色用*/
 .h1-1 {
     /* letter-spacing: 0.001px; */
     font-style: oblique;
     font-family: "arial black";
+}
+
+
+/* 「Symitter」用のcss 虹色用 */
+.h1-2{
+    /* font-style: oblique;
+    background: linear-gradient(-45deg, #6ddcff, #ff4ef8, #ff5d5d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; */
+    text-align: center;
+    padding: 10px;
+    margin: auto;
+    font-family: "Pacifico", cursive;
+    font-size: xxx-large;
+    background: -webkit-linear-gradient(#ffb380, #ff80bf, #d884e4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 input {
@@ -46,9 +63,6 @@ input[type="file"]{
     font-weight: bold;  
 }
 
-.syumitter1 {
-    color: linear-gradient(-45deg, #6ddcff, #ff4ef8, #ff5d5d);
-}
 
 /* aikon用のCSS */
 .maru{
@@ -56,13 +70,15 @@ input[type="file"]{
     height: 100px;
     width: 100px;
     object-fit: cover;
-
 }
-/* .file_label {
-    text-align: center;
-    width: min(100%, 350px);
-    cursor: pointer;
-} */
+
+.maru2{
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    object-fit: cover;
+}
+
 
 
 /* myprofileのユーザー名と名前をちょい左にする */
@@ -73,6 +89,33 @@ input[type="file"]{
     margin-left: -350px;
 }
 
+.table1 td{
+    width: 80px;
+}
+
+.table-follow{
+    margin: auto;
+}
+
+.table-follow td{
+    padding: 2px;
+}
+
+.link{
+    text-decoration: none;
+    color: #000000;
+}
+
+/* profileの趣味タグ用 */
+.s-tag{
+    padding: 2px 5px;
+    margin: 2px;
+    display: inline-block;
+    border: none;
+    border-radius: 5px;
+    color: #ffffff;
+}
+
 /* プロフィール文用のCSS */
 .profile{
     width: 80%;
@@ -81,9 +124,16 @@ input[type="file"]{
 
 /* プロフィールの投稿とハートのアイコン用 */
 .icon1{
-    width: 40px;
-    height: 40px;
-    padding: 0 15% 0 15%;
+    width: 30px;
+    height: 30px;
+    margin: 0 15% 0 15%;
+    padding: 5px;
+}
+.icon2{
+    border-style: solid;
+    border-radius: 10%;
+    border-image-source: linear-gradient(-45deg, #6ddcff, #ff4ef8, #ff5d5d);
+    border-image-slice: 1;
 }
 
 /* 「プロフィール編集」ボタン */
@@ -98,6 +148,13 @@ input[type="file"]{
     font-weight: bold;
 }
 
+/* myprofileの投稿画像のサイズ */
+.size{
+    height: 135px;
+    width: 135px;
+    object-fit: cover;
+}
+
 
 /* 「◀戻る」ボタン */
 .btn-mdr{
@@ -110,7 +167,7 @@ input[type="file"]{
     float: left;
     margin-left: 10%;
 }
-/* 「◀」の部分 */
+/* 「◀戻る」の「◀」の部分 */
 .dli-caret-left {
     display: inline-block;
     vertical-align: middle;
@@ -123,4 +180,71 @@ input[type="file"]{
     border-width: 0.375em 0.64952em;
     border-right-color: currentColor;
     border-left: 0;
+  }
+
+  /* 画面左上の「◀」 */
+  .btn-mdr2 {
+    display: inline-block;
+    position: fixed;
+    top: 30px;
+    left: 30px;
+    vertical-align: middle;
+    color: #0047FF;
+    line-height: 1;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-color: transparent;
+    border-width: 15px 20px;
+    border-right-color: currentColor;
+    border-left: 0;
+  }
+
+.btn-follow0{
+    width: 130px;
+    background:  linear-gradient(-45deg, #6ddcff, #ff4ef8, #ff5d5d);
+    border-radius: 5px;
+    /* paddingの値がborderの太さ */
+    padding: 2px;
+}  
+
+.btn-follow1{
+    width: 129px;
+    font-weight: bold;
+    background: linear-gradient(-45deg, #6ddcff, #ff4ef8, #ff5d5d);
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+}
+
+.btn-follow2{
+    width: 129px;
+    font-weight: bold;
+    background: #ffffff;
+    border-style: none;
+    border-radius: 5px;
+
+}
+
+  /* 「フォロワー/フォロー」「グループチャット/ペアチャット」の切り替え用 */
+  .switch{
+    display: inline-block;
+    padding: 4px;
+    background-color: #d9d9d9;
+    border-radius: 5px;
+  }
+  .switch a{
+    font-weight: bold;
+  }
+  .switch2{
+    display: inline-block;
+    padding: 5px 23px;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+  }
+  .switch-left{
+    margin: 0 40px 0 30px;
+  }
+  .switch-right{
+    margin: 0 30px 0 40px;
   }
