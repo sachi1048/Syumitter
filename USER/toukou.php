@@ -111,6 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <br>
         <!-- 投稿を完了するためのボタン -->
         <button class="nextbutton" type="submit" name="toukousuru">投稿</button>
+        <?php echo '<a href="group_chat.php?group_id=1">グループチャットへ</a>';?><!-- これは一時的に作っているものなので実装後に消すこと！ -->
     </form>
     <!-- 共通メニューを表示 -->
     <?php require 'menu.php';?>
