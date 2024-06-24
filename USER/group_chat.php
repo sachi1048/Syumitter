@@ -2,7 +2,9 @@
 <?php
     require 'db-connect.php';
     $pdo = new PDO($connect,USER,PASS);
-    $group=$_GET['group_id'];// このデータ挿入は未完成
+    if(!isset($_SESSION['groupid'])){
+        $_SESSION['groupid']=$_GET['group_id'];
+    }
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['messagesend'])) {
             $currentDateTime = date('Y-m-d H:i:s');
@@ -12,7 +14,7 @@
     }
     // 既読機能（諦めるかも）
     $wsq=$pdo->prepare('select * from Group_Rireki where chat_id = ? and sender <> ?');
-    $wsq->execute([$group,$_SESSION['user']['user_name']]);
+    $wsq->execute([$_SESSION['groupid'],$_SESSION['user']['user_name']]);
     foreach($wsq as $rol){
         $sot=$pdo->prepare('select * from Group_Kidoku where user_name = ? and rireki_id = ?');
         $sot->execute([$_SESSION['user']['user_name'],$rol['rireki_id']]);
@@ -37,6 +39,9 @@
     <link rel="stylesheet" href="CSS/group_chat.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
     <script>
+        window.onload = function() {
+            window.scrollTo(0, document.body.scrollHeight);
+        }
         // ページを30秒ごとにリロードする
         setInterval(function() {
             location.reload();
@@ -59,7 +64,7 @@
         echo '</div>';
         echo '<br>';
         $sql=$pdo->prepare('select * from Group_Rireki where chat_id = ?');
-        $sql->execute([$group]);
+        $sql->execute([$_SESSION['groupid']]);
         // 最初の一回だけ日付を表示させるためにboolean型の変数flgにtrueを入れる
         $flg = true;
         echo '<div class="chatcontainer" style="margin-top:60px;">';
@@ -110,7 +115,7 @@
     <form action="group_chat.php" method="post">
         <div class="sendmessage">
             <input class="messages" inputmode="text" name="message" placeholder="メッセージを入力" required>
-            <input type="hidden" name="groupchatname" value="<?= $group ?>"><!-- ここは動くようになってから直しましょうかね -->
+            <input type="hidden" name="groupchatname" value="<?= $_SESSION['groupid'] ?>"><!-- ここは動くようになってから直しましょうかね -->
             <button class="sousin" type="submit" name="messagesend"><i class="fab fa-telegram-plane fa-2x"></i></button>
         </div>
     </form>
