@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <!-- ファイル名の表示部分を削除 -->
         </div>
         <input type="hidden" name="naiyou" id="naiyou"><!-- 画像ファイル名を保存するhiddenフィールド -->
-        
+        <?php echo '<a href="group_chat.php?group_id=1">グループチャットへ</a>';?><!-- これは一時的に作っているものなので実装後に消すこと！ -->
         <p class="koumoku">タイトル</p>
         <input class="inp" type="text" name="title" required><!-- 投稿テーブルのタイトルに入れる用の入力フォームrequiredを付けることで入力必須項目にしている-->
         <br>
@@ -111,7 +111,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <br>
         <!-- 投稿を完了するためのボタン -->
         <button class="nextbutton" type="submit" name="toukousuru">投稿</button>
-        <?php echo '<a href="group_chat.php?group_id=1">グループチャットへ</a>';?><!-- これは一時的に作っているものなので実装後に消すこと！ -->
     </form>
     <!-- 共通メニューを表示 -->
     <?php require 'menu.php';?>
