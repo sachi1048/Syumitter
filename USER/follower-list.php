@@ -64,6 +64,7 @@
                     <img src="img/aikon/', $row2['aikon'], '" alt="マイアイコン" class="maru2">
                   </div></td>';
             echo '<td>
+                    <a href="profile.php?user_name=', $row2['user_name'], '" style="Text-decoration:none; color:#000000;">
                     <h2>', $row2['user_name'], '</h2>
                   </td>
                   <td>
