@@ -50,8 +50,8 @@
                 </tr>
                 <tr>
                     <td>投稿数</td>
-                    <td><a href="follower-list.php" class="link">フォロワー</a></td>
-                    <td><a href="follow-list.php" class="link">フォロー</a></td>
+                    <td><a href="follower-list.php?user_name=', $user_name, '" class="link">フォロワー</a></td>
+                <td><a href="follow-list.php?user_name=', $user_name, '" class="link">フォロー</a></td>
                 </tr>
             </table></td></tr></table>';
         echo '<div class="left1">';
@@ -82,7 +82,7 @@
         </a>
     </div>
     <hr>
-    <table style="padding-bottom: 100px; margin: auto;">
+    <table style="padding-bottom: 100px;">
         <?php 
         $sql4 = $pdo->prepare('SELECT * FROM Comment WHERE account_mei = ? AND comment_type = 1');
         $sql4->execute([$user_name]);

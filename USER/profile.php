@@ -65,8 +65,8 @@
             </tr>
             <tr>
                 <td>投稿数</td>
-                <td><a href="follower-list.php" class="link">フォロワー</a></td>
-                <td><a href="follow-list.php" class="link">フォロー</td>
+                <td><a href="follower-list.php?user_name=', $user_name, '" class="link">フォロワー</a></td>
+                <td><a href="follow-list.php?user_name=', $user_name, '" class="link">フォロー</a></td>
             </tr>
         </table></td><tr></table>';
     echo '<div class="left1">'; //後で変更
@@ -100,7 +100,7 @@
         </a>
     </div>
     <hr>
-    <table style="padding-bottom: 100px; margin: auto;">
+    <table style="padding-bottom: 100px;">
         <?php 
          $sql5=$pdo->prepare('select * from Toukou where toukou_mei=?');
          $sql5->execute([$user_name]);
