@@ -42,8 +42,8 @@
     ?>
     <br>
     <div class="switch">
-        <a class="link switch2" href="follower-list.php">フォロワー</a>
-        <a class="link switch-right" href="follow-list.php">フォロー</a>
+        <a class="link switch2" href="myfollower-list.php">フォロワー</a>
+        <a class="link switch-right" href="myfollow-list.php">フォロー</a>
     </div>
 
 

@@ -43,8 +43,8 @@
     ?>
     <br>
     <div class="switch">
-        <a class="link switch-left" href="follower-list.php">フォロワー</a>
-        <a class="link switch2" href="follow-list.php">フォロー</a>
+        <a class="link switch-left" href="myfollower-list.php">フォロワー</a>
+        <a class="link switch2" href="myfollow-list.php">フォロー</a>
     </div>
 
 
@@ -63,7 +63,9 @@
                     <img src="img/aikon/', $row2['aikon'], '" alt="マイアイコン" class="maru2">
                   </div></td>';
             echo '<td>
+                  <a href="profile.php?user_name=', $row2['user_name'], '" style="Text-decoration:none; color:#000000;">        
                     <h2>', $row2['user_name'], '</h2>
+                  </a>
                   </td>
                   <td>
                     <div class="btn-follow0">';

@@ -16,7 +16,7 @@
     $pdo = new PDO($connect, USER, PASS);
     //ユーザーのDBを参照
     $user=$pdo->prepare('select * from Account where user_name=? ');
-    $user->execute([$user_name]);
+    $user->execute([$_GET['user_name']]);
     $rr = $user->fetch(PDO::FETCH_ASSOC);
     if($rr){
 
@@ -90,13 +90,12 @@
     echo '</div>';
 
 ?>
-    <form action="myprofile-edit.php" method="POST">
-    </form> 
+
     <div style="width: 100%;">
-        <a href="myprofile" style="text-decoration: none;">
+        <a href="profile.php?user_name=<?php echo $user_name; ?>" style="text-decoration: none;">
             <img class="icon1 icon2" src="img/imagebox.png">
         </a>
-        <a href="myprofile2" style="text-decoration: none;">
+        <a href="profile2.php?user_name=<?php echo $user_name; ?>" style="text-decoration: none;">
             <img class="icon1" src="img/heart.png">
         </a>
     </div>
