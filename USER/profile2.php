@@ -13,11 +13,17 @@
     <h1 class="h1-2">Syumitter</h1>
 
     <?php
+
         $pdo = new PDO($connect, USER, PASS);
-        $user_name = $_SESSION['user']['user_name'];
-        $display_name = $_SESSION['user']['display_name'];
-        $aikon = $_SESSION['user']['aikon'];
-        $profile = $_SESSION['user']['profile'];
+        $user=$pdo->prepare('select * from Account where user_name=? ');
+        $user->execute([$_GET['user_name']]);
+        $rr = $user->fetch(PDO::FETCH_ASSOC);
+        if($rr){
+        
+        $user_name = $rr['user_name'];
+        $display_name = $rr['display_name'];
+        $aikon = $rr['aikon'];
+        $profile = $rr['profile'];
 
         echo '<table style="margin: auto;"><tr><td>';
         echo '<div class="aikon">
@@ -44,8 +50,8 @@
                 </tr>
                 <tr>
                     <td>投稿数</td>
-                    <td><a href="follower-list.php" class="link">フォロワー</a></td>
-                    <td><a href="follow-list.php" class="link">フォロー</a></td>
+                    <td><a href="follower-list.php?user_name=', $user_name, '" class="link">フォロワー</a></td>
+                <td><a href="follow-list.php?user_name=', $user_name, '" class="link">フォロー</a></td>
                 </tr>
             </table></td></tr></table>';
         echo '<div class="left1">';
@@ -65,20 +71,18 @@
         echo '</div><div class="profile">';
         echo '<p>', $profile, '</p>';
         echo '</div>';
-        echo '<a href="myprofile-edit" class="btn-profile">プロフィール編集</a>';
     ?>
 
-    <form action="myprofile-edit.php" method="POST"></form>
     <div style="width: 100%;">
-        <a href="myprofile" style="text-decoration: none;">
+        <a href="profile.php?user_name=<?php echo $user_name; ?>" style="text-decoration: none;">
             <img class="icon1" src="img/imagebox.png">
         </a>
-        <a href="myprofile2" style="text-decoration: none;">
+        <a href="profile2.php?user_name=<?php echo $user_name; ?>" style="text-decoration: none;">
             <img class="icon1 icon2" src="img/heart.png">
         </a>
     </div>
     <hr>
-    <table style="padding-bottom: 100px; margin: auto;">
+    <table style="padding-bottom: 100px;">
         <?php 
         $sql4 = $pdo->prepare('SELECT * FROM Comment WHERE account_mei = ? AND comment_type = 1');
         $sql4->execute([$user_name]);
@@ -101,6 +105,7 @@
         }
         ?>
     </table>
+    <?php } ?>
     <footer><?php include 'menu.php';?></footer>
 </body>
 </html>
