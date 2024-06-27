@@ -1,14 +1,33 @@
 <?php session_start();?>
-<!-- 既読はめんどくさいので、ある程度ログインができるようになってから作ります -->
- <?php $_SESSION['user']['user_name'] = 'kitagawa';?><!-- ←これはkitagawa(自分)が送ったチャットの枠とか色がしっかり変わっていることを確認するために着けてるので、実装後はしっかり消すこと！ -->
-<?php require 'db-connect.php';
-$pdo = new PDO($connect,USER,PASS);
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+<?php
+    require 'db-connect.php';
+    $pdo = new PDO($connect,USER,PASS);
+    if(!isset($_SESSION['groupid'])){
+        $_SESSION['groupid']=$_GET['group_id'];
+    }
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['messagesend'])) {
             $currentDateTime = date('Y-m-d H:i:s');
-            $sdl=$pdo->prepare('insert into Rireki values(null,?,?,?,?,default)');
+            $sdl=$pdo->prepare('insert into Group_Rireki values(null,?,?,?,?,default)');
             $sdl->execute([$_POST['groupchatname'],$_SESSION['user']['user_name'],$_POST['message'],$currentDateTime]);
         }
+    }
+    // 既読機能（諦めるかも）
+    $wsq=$pdo->prepare('select * from Group_Rireki where chat_id = ? and sender <> ?');
+    $wsq->execute([$_SESSION['groupid'],$_SESSION['user']['user_name']]);
+    foreach($wsq as $rol){
+        $sot=$pdo->prepare('select * from Group_Kidoku where user_name = ? and rireki_id = ?');
+        $sot->execute([$_SESSION['user']['user_name'],$rol['rireki_id']]);
+        $result = $sot->fetch(PDO::FETCH_ASSOC);
+        if($result === false){// データがないことを確認
+            $sss=$pdo->prepare('insert into Group_Kidoku values(?,?)');
+            $sss->execute([$_SESSION['user']['user_name'],$rol['rireki_id']]);
+        }
+        $woo=$pdo->prepare('select count(*) as "count" from Group_Kidoku where rireki_id=?');
+        $woo->execute([$rol['rireki_id']]);
+        $count=$woo->fetch();
+        $cou=$pdo->prepare('update Group_Rireki set kidoku=? where rireki_id=?');
+        $cou->execute([$count['count'],$rol['rireki_id']]);
     }
 ?>
 <!DOCTYPE html>
@@ -19,6 +38,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>グループチャット画面</title>
     <link rel="stylesheet" href="CSS/group_chat.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+    <script>
+        window.onload = function() {
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+        // ページを30秒ごとにリロードする
+        setInterval(function() {
+            location.reload();
+        }, 20000); // 20000ミリ秒 = 20秒
+    </script>
 </head>
 <body class="boda">
     <?php
@@ -35,9 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo '</form>';
         echo '</div>';
         echo '<br>';
-        $group=1;// このデータ挿入は未完成
-        $sql=$pdo->prepare('select * from Rireki where chat_id = ?');
-        $sql->execute([$group]);
+        $sql=$pdo->prepare('select * from Group_Rireki where chat_id = ?');
+        $sql->execute([$_SESSION['groupid']]);
         // 最初の一回だけ日付を表示させるためにboolean型の変数flgにtrueを入れる
         $flg = true;
         echo '<div class="chatcontainer" style="margin-top:60px;">';
@@ -88,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <form action="group_chat.php" method="post">
         <div class="sendmessage">
             <input class="messages" inputmode="text" name="message" placeholder="メッセージを入力" required>
-            <input type="hidden" name="groupchatname" value="<?= $group ?>"><!-- ここは動くようになってから直しましょうかね -->
+            <input type="hidden" name="groupchatname" value="<?= $_SESSION['groupid'] ?>"><!-- ここは動くようになってから直しましょうかね -->
             <button class="sousin" type="submit" name="messagesend"><i class="fab fa-telegram-plane fa-2x"></i></button>
         </div>
     </form>
