@@ -3,14 +3,30 @@ ob_start();
 session_start();
 require 'db-connect.php';
 
-$current_user_name = $_SESSION['user']['user_name'];
+$current_user_name = isset($_SESSION['user']['user_name']) ? $_SESSION['user']['user_name'] : null; // ログインしているユーザーの名前をセッションから取得
 $aikon = $_SESSION['user']['aikon'];
 
 try {
     $pdo = new PDO($connect, USER, PASS);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $like_count = 0;
+    $like_stmt = $pdo->prepare("SELECT COUNT(*) as like_count FROM Comment WHERE toukou_id = :toukou_id AND comment_type = 1");
+    $like_stmt->bindParam(':toukou_id', $_GET['toukou_id'], PDO::PARAM_INT);
+    $like_stmt->execute();
+    
+    // 結果を取得して変数に格納
+    $like_result = $like_stmt->fetch(PDO::FETCH_ASSOC);
+    $like_count = $like_result['like_count'];
+
+    if($like_count>0){
+        $like_count = $like_result['like_count'];
+    }else {
+        $like_count = 0;
+    }
+
+
+
+    // ここにLIKEの取得を書きたい
     if (isset($_GET['toukou_id'])) {
         $toukou_id = $_GET['toukou_id'];
 
@@ -25,12 +41,13 @@ try {
         $stmt->execute();
 
         $post = $stmt->fetch(PDO::FETCH_ASSOC);
-        $commnet_count_query ="SELECT COUNT(*) AS comment_count FROM Comment WHERE toukou_id=$toukou_id";
-
+        $commnet_count_query ="SELECT COUNT(*) AS comment_count FROM Comment WHERE toukou_id=$toukou_id AND comment_type = 0";
+ 
         $statement = $pdo->query($commnet_count_query);
+
         
-$comment_count_result = $statement->fetch(PDO::FETCH_ASSOC);
-$comment_count = $comment_count_result['comment_count'];
+    $comment_count_result = $statement->fetch(PDO::FETCH_ASSOC);
+    $comment_count = $comment_count_result['comment_count'];
         if ($post) {
             $follow_stmt = $pdo->prepare("
                 SELECT COUNT(*) as is_following
@@ -140,31 +157,7 @@ ob_end_flush();
     <title>投稿表示画面</title>
 </head>
 <body>
-    <h1 class="syumitter1">Syumitter</h1>
-    <?php
-                if (isset($_POST['like'])) {
-                    $liked_stmt = $pdo->prepare("
-                    SELECT COUNT(*) as liked
-                    FROM Comment
-                    WHERE comment_type = 1
-                ");
-
-                $post['like_count']=0;
-                
-                // $liked_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
-                // $liked_stmt->bindParam(':current_user_name', $current_user_name, PDO::PARAM_STR);
-                // SQL文の準備
-                $like_stmt = $pdo->prepare("SELECT COUNT(*) as like_count FROM Comment WHERE toukou_id = :toukou_id AND comment_type = 1");
-                $like_stmt->bindParam(':toukou_id', $_GET['toukou_id'], PDO::PARAM_INT);
-                $like_stmt->execute();
-                
-                // 結果を取得して変数に格納
-                $like_result = $like_stmt->fetch(PDO::FETCH_ASSOC);
-                $like_count = $like_result['like_count'];
-
-                ?>
-
-                
+    <h1 class="syumitter1">Syumitter</h1>                
     <?php if (!empty($post)): ?>
         <div class="post-container">
             <div class="user-info">
@@ -187,56 +180,47 @@ ob_end_flush();
             </div>
 
             <?php
-                if (isset($_POST['like'])) {
-                    $liked_stmt = $pdo->prepare("
-                    SELECT COUNT(*) as liked
-                    FROM Comment
-                    WHERE comment_type = 1
-                ");
+if (isset($_POST['like'])) {
+    // いいねの状態を確認するクエリ
+    $check_like_stmt = $pdo->prepare("
+        SELECT COUNT(*) as liked
+        FROM Comment
+        WHERE toukou_id = :toukou_id AND account_mei = :current_user_name AND comment_type = 1
+    ");
+    $check_like_stmt->bindParam(':toukou_id', $_GET['toukou_id'], PDO::PARAM_INT);
+    $check_like_stmt->bindParam(':current_user_name', $current_user_name, PDO::PARAM_STR);
+    $check_like_stmt->execute();
+    $like_status = $check_like_stmt->fetch(PDO::FETCH_ASSOC);
+    $liked = $like_status['liked'] > 0;
 
-                $post['like_count']=0;
-                
-                // $liked_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
-                // $liked_stmt->bindParam(':current_user_name', $current_user_name, PDO::PARAM_STR);
-                // SQL文の準備
-                $like_stmt = $pdo->prepare("SELECT COUNT(*) as like_count FROM Comment WHERE toukou_id = :toukou_id AND comment_type = 1");
-                $like_stmt->bindParam(':toukou_id', $_GET['toukou_id'], PDO::PARAM_INT);
-                $like_stmt->execute();
-                
-                // 結果を取得して変数に格納
-                $like_result = $like_stmt->fetch(PDO::FETCH_ASSOC);
-                $like_count = $like_result['like_count'];
-                var_dump($like_count);
-                exit;
-                
-                // 取得した「いいね」数を表示（オプション）
-                // echo "いいねの数: " . $like_count;
-                $liked_stmt->execute();
-                $liked_status = $liked_stmt->fetch(PDO::FETCH_ASSOC);
-                $liked = $liked_status['liked'] > 0;
-                    if ($liked) {
-                        $unlike_stmt = $pdo->prepare("
-                            DELETE FROM Comment
-                            WHERE toukou_id = :toukou_id AND account_mei = :current_user_name AND comment_type = 0
-                        ");
-                        $unlike_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
-                        $unlike_stmt->bindParam(':current_user_name', $current_user_name, PDO::PARAM_STR);
-                        $unlike_stmt->execute();
-                        $post['like_count']--;
-                    } else {
-                        var_dump("aaa");
-                        exit;
-                        $like_stmt = $pdo->prepare("
-                            INSERT INTO Comment (toukou_id, account_mei, comment_type)
-                            VALUES (:toukou_id, :current_user_name, 0)
-                        ");
-                        $like_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
-                        $like_stmt->bindParam(':current_user_name', $current_user_name, PDO::PARAM_STR);
-                        $like_stmt->execute();
-                        $post['like_count']++;
-                    }
-                }
-                ?>
+    if ($liked) {
+        // すでにいいねしている場合、いいねを取り消す
+        $unlike_stmt = $pdo->prepare("
+            DELETE FROM Comment
+            WHERE toukou_id = :toukou_id AND account_mei = :current_user_name AND comment_type = 1
+        ");
+        $unlike_stmt->bindParam(':toukou_id', $_GET['toukou_id'], PDO::PARAM_INT);
+        $unlike_stmt->bindParam(':current_user_name', $current_user_name, PDO::PARAM_STR);
+        $unlike_stmt->execute();
+        $post['like_count']--;
+    } else {
+        // まだいいねしていない場合、いいねを追加する
+        $like_stmt = $pdo->prepare("
+            INSERT INTO Comment (toukou_id, account_mei, comment_type)
+            VALUES (:toukou_id, :current_user_name, 1)
+        ");
+        $like_stmt->bindParam(':toukou_id', $_GET['toukou_id'], PDO::PARAM_INT);
+        $like_stmt->bindParam(':current_user_name', $current_user_name, PDO::PARAM_STR);
+        $like_stmt->execute();
+        $post['like_count']++;
+    }
+
+    // 再送信を防ぐためにリダイレクトする
+    header("Location: {$_SERVER['REQUEST_URI']}");
+    exit();
+}
+?>
+
 
                 <?php
                 if (isset($_POST['comment'])) {
@@ -264,7 +248,7 @@ ob_end_flush();
                         </form>
                     
                     
-                        <form action="toukou_comment.php" method="post" class="comment-form">
+                        <form action="toukou_comment.php" method="get" class="comment-form">
                         <input type="hidden" name="toukou_id" value="<?php echo $post['toukou_id']; ?>">
                             <button type="submit" name="comment" class="comment-button">
                             <i class="fas fa-comment"></i>
