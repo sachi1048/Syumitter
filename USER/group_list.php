@@ -46,8 +46,8 @@
         <a class="link switch2" href="group_list.php?user_name=<?php echo $user_name; ?>">グループチャット</a>
         <a class="link switch-right" href="pair_list.php?user_name=<?php echo $user_name; ?>">ペアチャット</a>
     </div>
-
-    <table style="margin: auto;">
+    
+    <table class="table-chat">
 
     <?php
         $sql=$pdo->query('select * from Group_chat');
@@ -59,17 +59,37 @@
                     </div>
                 </td>
                 <td>
-                    <a href="group_chat.php?group_id=', $row['group_id'], '" style="Text-decoration:none; color:#000000;">
-                    <h2>', $row['group_mei'], '</h2>
-                </td>
-                <td>
+                    <a href="group_chat.php?group_id=', $row['group_id'], '" class="chat-mei">', $row['group_mei'], '</a><br>';
+                    //趣味タグ表示
+                    $sql2=$pdo->prepare('select * from Tag where tag_id=?');
+                    $sql2->execute([$row['tag_id']]);
+                    foreach($sql2 as $row2){
+                        echo '<div class="s-tag" style="background: rgb(', $row2['tag_color1'], ',', $row2['tag_color2'], ',', $row2['tag_color3'], '">', $row2['tag_mei'], '</div><br>';
+                    }
+                    //メンバー名表示
+                    $sql3=$pdo->prepare('select * from Group_member where group_id=?');
+                    $sql3->execute([$row['group_id']]);
+                    foreach($sql3 as $row3){
+                        $sql4=$pdo->prepare('select display_name from Account where user_name=?');
+                        $sql4->execute([$row3['member']]);
+                        $row4 = $sql4->fetch(PDO::FETCH_ASSOC);
+                        echo $row4['display_name'];
+                    }
 
+
+            echo '</td>
+                <td>
+                    <div class="chat-action">
+                        99
+                    </div>
                 </td>
             </tr>';
         }
 
     ?>
     </table>
+
+
 
     <footer><?php include 'menu.php';?></footer>
 </body>
