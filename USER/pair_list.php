@@ -1,54 +1,13 @@
-<?php 
-const SERVER = 'mysql301.phy.lolipop.lan';
-const DBNAME = 'LAA1517472-syumitta';
-const USER = 'LAA1517472';
-const PASS = 'kitagawa';
-
-// MySQLデータベースに接続
-
-try {
-    $connect = new PDO('mysql:host='.SERVER.';dbname='.DBNAME.';charset=utf8', USER, PASS);
-    $connect->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Connection failed: " . $e->getMessage());
-}
-
-//ペアチャットの取得 (PDOを使用)
-try {
-    $sql = "
-    SELECT f1.applicant_name AS user1, f2.approver_name AS user2
-    FROM Follow f1
-    INNER JOIN Follow f2 ON f1.applicant_name = f2.approver_name AND f1.approver_name = f2.applicant_name
-    WHERE f1.zyoukyou = 1;
-    ";
-    $stmt = $connect->prepare($sql);
-    $stmt->execute();
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    die("Query failed: " . $e->getMessage());
-}
-//$connect = new PDO('mysql:host='.SERVER.';dbname='.DBNAME.';charset=utf8', USER, PASS);
-
-
- ?>
+<?php session_start(); ?>
+<?php require 'db-connect.php'; ?>
 <?php
-//$conn = new mysqli(SERVER, USER, PASS, DBNAME);
 
+    $_SESSION['group_id'] = array();
 
-//if ($conn->connect_error) {
-    //die("Connection failed: " . $conn->connect_error);
-//}
-
-//ペアチャットの取得
-//$sql = "
-//SELECT f1.applicant_name AS user1, f2.approver_name AS user2
-//FROM Follow f1
-//INNER JOIN Follow f2 ON f1.applicant_name = f2.approver_name AND f1.approver_name = f2.applicant_name
-//WHERE f1.zyoukyou = 1;
-
-//";
-//AND f2.zyoukyou = 1
-//$result = $conn->query($sql);
+    $pdo = new PDO($connect, USER, PASS);
+    $user_name = $_SESSION['user']['user_name'];
+    $display_name = $_SESSION['user']['display_name'];
+    $aikon = $_SESSION['user']['aikon'];
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -56,26 +15,50 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="CSS/main.css">
+    <link rel="stylesheet" href="CSS/menu.css">
+    <link rel="stylesheet" href="CSS/group_list.css">
     <title>Syumitter</title>
-    
     
     <title>ペアチャット一覧画面</title>
 </head>
 <body>
-<div class="container">
-<div class="header">Syumitter</div>
-        <ul class="chat-list">
-            <?php while($row = $result->fetch_assoc()): ?>
-            <li class="chat-item">
-            <li class="chat-item">
-            <div class="info">
-                <div><?php echo htmlspecialchars($row['user1']); ?> & <?php echo htmlspecialchars($row['user2']); ?></div>
-                <div>ペアチャット</div>
-            </div>
-            </li>
-            <?php endwhile; ?>
-        </ul>
+    <h1 class="h1-2">Syumitter</h1>
+    <br>
+    <div class="switch">
+        <a class="link switch2" href="group_list.php">グループチャット</a>
+        <a class="link switch-right" href="pair_list.php">ペアチャット</a>
     </div>
-        
+
+    <table class="table-chat">
+
+    <?php
+        //コピペっただけ　相互の人を表示
+        $sql=$pdo->query('select * from Group_chat');
+        foreach($sql as $row){
+            echo '<tr>
+                <td>
+                    <div class="aikon">
+                    <img src="img/chat/', $row['aikon'], '" alt="チャットアイコン" class="maru">
+                    </div>
+                </td>
+                <td>
+                    <a href="group_chat.php?group_id=', $row['group_id'], '" class="chat-mei">', $row['group_mei'], '</a><br>';
+            echo '</td>';
+            //通知
+            echo '<td>
+                    <div class="chat-action">
+                        99
+                    </div>
+                </td>
+            </tr>';
+        }
+
+    ?>
+    </table>
+
+
+
+    <footer><?php include 'menu.php';?></footer>
 </body>
 </html>
+

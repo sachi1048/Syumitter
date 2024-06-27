@@ -8,25 +8,6 @@
     $user_name = $_SESSION['user']['user_name'];
     $display_name = $_SESSION['user']['display_name'];
     $aikon = $_SESSION['user']['aikon'];
-    // try {
-    //     $conn = new PDO($connect, USER, PASS);
-    //     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
-    //     // グループチャットの取得
-    //     $sql = "
-    //     SELECT g.group_id, g.group_mei, g.aikon, COUNT(gm.member) AS member_count
-    //     FROM `Group` g
-    //     LEFT JOIN Group_member gm ON g.group_id = gm.group_id
-    //     LEFT JOIN Follow f ON g.group_id = f.follow_id
-    //     WHERE f.zyoukyou = 1
-    //     GROUP BY g.group_id, g.group_mei, g.aikon;
-    //     ";
-    //     $stmt = $conn->prepare($sql);
-    //     $stmt->execute();
-    //     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    // } catch (PDOException $e) {
-    //     echo "Connection failed: " . $e->getMessage();
-    // }
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -44,10 +25,10 @@
     <h1 class="h1-2">Syumitter</h1>
     <br>
     <div class="switch">
-        <a class="link switch2" href="group_list.php?user_name=<?php echo $user_name; ?>">グループチャット</a>
-        <a class="link switch-right" href="pair_list.php?user_name=<?php echo $user_name; ?>">ペアチャット</a>
+        <a class="link switch2" href="group_list.php">グループチャット</a>
+        <a class="link switch-right" href="pair_list.php">ペアチャット</a>
     </div>
-    
+
     <table class="table-chat">
 
     <?php
@@ -78,8 +59,9 @@
                     }
 
 
-            echo '</td>
-                <td>
+            echo '</td>';
+            //通知
+            echo '<td>
                     <div class="chat-action">
                         99
                     </div>
