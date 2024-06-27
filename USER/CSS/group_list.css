@@ -31,3 +31,38 @@
 .info {
     text-align: left;
 }
+
+
+
+
+.chat-action{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    width: 40px;
+    font-family: fantasy;
+    color: #ffffff;
+    background: #FF1414;
+    border-radius: 50%;
+    border: none;
+  }
+
+
+.chat-mei{
+    Text-decoration:none;
+    font-size: x-large;
+    font-weight: bold;
+    color:#000000;
+}
+
+
+.table-chat{
+    margin: auto;
+    padding-top: 10px;
+    width: 380px;
+}
+
+.table-chat td{
+    padding: 2px;
+}
