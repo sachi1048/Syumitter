@@ -50,12 +50,12 @@
                 $sss=$pdo->prepare('select * from Account where user_name = ?');
                 $sss->execute([$row['member']]);
                 foreach($sss as $roo){
-                    echo '<img src="img/aikon/',$roo['aikon'],'" alt="アカウントアイコン">';
+                    echo '<img class="maru2" src="img/aikon/',$roo['aikon'],'" alt="アカウントアイコン">';
                     echo '　',$roo['display_name'];
                 }
             }
             echo '<form action="group_member.php" method="post">';
-            ehco '<input type="hidden" name="group_id" value="',$group_id,'">';
+            echo '<input type="hidden" name="group_id" value="',$group_id,'">';
             echo '<button type="submit">メンバーの招待・退会</button>';
             echo '</form>';
         ?>

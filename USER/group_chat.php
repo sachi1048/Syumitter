@@ -2,7 +2,7 @@
 <?php
     require 'db-connect.php';
     $pdo = new PDO($connect,USER,PASS);
-    if(!isset($_SESSION['group_id'])){
+    if(isset($_GET['group_id'])){
         $_SESSION['group_id']=$_GET['group_id'];
     }
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -51,13 +51,13 @@
 <body class="boda">
     <?php
         // このチャットの名前と所属人数を取り出す
-        $spl=$pdo->prepare('SELECT gc.group_mei,COUNT(gm.member) AS member_count FROM Group_chat gc LEFT JOIN Group_member gm ON gc.group_id = gm.group_id WHERE gm.group_id = ? GROUP BY gc.group_mei;');// 完成
+        $spl=$pdo->prepare('SELECT gc.group_mei,COUNT(gm.member) AS member_count FROM Group_chat gc LEFT JOIN Group_member gm ON gc.group_id = gm.group_id WHERE gm.group_id = ? GROUP BY gc.group_mei');
         $spl->execute([$_SESSION['group_id']]);
-        $result = $spl->fetch(PDO::FETCH_ASSOC);
+        $kekka = $spl->fetch(PDO::FETCH_ASSOC);
         // 上の戻るボタンとグループ名（所属人数）、メニューボタン
         echo '<div class="waku">';
         echo '<a href="group_list.php"><span class="btn-mdr2"></span></a>';
-        echo '<div class="tablename">',$result['group_mei'],'(',$result['member_count'],')</div>';
+        echo '<div class="tablename">',$kekka['group_mei'],'(',$kekka['member_count'],')</div>';
         echo '<form action="group_edit.php" method="post">';
         echo '<input type="hidden" name="chat_id" value="',$_SESSION['group_id'],'">';
         echo '<button class="menuicon" type="submit"><i class="fas fa-bars fa-2x"></i></button>';
@@ -116,7 +116,7 @@
     <form action="group_chat.php" method="post">
         <div class="sendmessage">
             <input class="messages" inputmode="text" name="message" placeholder="メッセージを入力" required>
-            <input type="hidden" name="groupchatname" value="<?= $_SESSION['group_id'] ?>"><!-- ここは動くようになってから直しましょうかね -->
+            <input type="hidden" name="groupchatname" value="<?= $_SESSION['group_id'] ?>">
             <button class="sousin" type="submit" name="messagesend"><i class="fab fa-telegram-plane fa-2x"></i></button>
         </div>
     </form>
