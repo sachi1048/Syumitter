@@ -3,7 +3,6 @@
     require 'db-connect.php';
     $pdo = new PDO($connect,USER,PASS);
     if(!isset($_SESSION['group_id'])){
-        $_SESSION['group_id'] = array();
         $_SESSION['group_id']=$_GET['group_id'];
     }
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {

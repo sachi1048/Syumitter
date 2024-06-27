@@ -2,7 +2,6 @@
 <?php require 'db-connect.php'; ?>
 <?php
 
-    $_SESSION['group_id'] = array();
 
     $pdo = new PDO($connect, USER, PASS);
     $user_name = $_SESSION['user']['user_name'];
