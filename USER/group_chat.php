@@ -3,8 +3,10 @@
     require 'db-connect.php';
     $pdo = new PDO($connect,USER,PASS);
     if(!isset($_SESSION['group_id'])){
+        unset($_SESSION['group_id']);
         $_SESSION['group_id']=$_GET['group_id'];
     }
+    var_dump($_SESSION['group_id']);
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['messagesend'])) {
             $currentDateTime = date('Y-m-d H:i:s');
