@@ -1,5 +1,6 @@
 <?php
 session_start();
+session_unset();
 require 'db-connect.php';
 
 if (isset($_POST['user_name']) && isset($_POST['pass'])) {

@@ -1,9 +1,8 @@
 <?php session_start(); ?>
 <?php require 'db-connect.php'; ?>
 <?php
-
-    $_SESSION['group_id'] = array();
-
+    
+    unset($_SESSION['group_id']);
     $pdo = new PDO($connect, USER, PASS);
     $user_name = $_SESSION['user']['user_name'];
     $display_name = $_SESSION['user']['display_name'];
