@@ -3,10 +3,8 @@
     require 'db-connect.php';
     $pdo = new PDO($connect,USER,PASS);
     if(!isset($_SESSION['group_id'])){
-        unset($_SESSION['group_id']);
         $_SESSION['group_id']=$_GET['group_id'];
     }
-    var_dump($_SESSION['group_id']);
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['messagesend'])) {
             $currentDateTime = date('Y-m-d H:i:s');
@@ -44,7 +42,7 @@
         window.onload = function() {
             window.scrollTo(0, document.body.scrollHeight);
         }
-        // ページを30秒ごとにリロードする
+        // ページを20秒ごとにリロードする
         setInterval(function() {
             location.reload();
         }, 20000); // 20000ミリ秒 = 20秒
@@ -53,7 +51,8 @@
 <body class="boda">
     <?php
         // このチャットの名前と所属人数を取り出す
-        $spl=$pdo->query('SELECT gc.group_mei,COUNT(gm.member) AS member_count FROM Group_chat gc LEFT JOIN Group_member gm ON gc.group_id = gm.group_id WHERE gm.group_id = 1 GROUP BY gc.group_mei;');// ←未完成
+        $spl=$pdo->prepare('SELECT gc.group_mei,COUNT(gm.member) AS member_count FROM Group_chat gc LEFT JOIN Group_member gm ON gc.group_id = gm.group_id WHERE gm.group_id = ? GROUP BY gc.group_mei;');// 完成
+        $spl->execute([$_SESSION['group_id']]);
         $result = $spl->fetch(PDO::FETCH_ASSOC);
         // 上の戻るボタンとグループ名（所属人数）、メニューボタン
         echo '<div class="waku">';
