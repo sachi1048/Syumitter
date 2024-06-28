@@ -22,6 +22,11 @@
 </head>
 <body>
     <h1 class="h1-2">Syumitter</h1>
+
+    <a href="group_new.php">
+        <img src="img/newchat" class="newchat" alt="新規グループチャット">
+    </a>
+
     <br>
     <div class="switch">
         <a class="link switch2" href="group_list.php">グループチャット</a>

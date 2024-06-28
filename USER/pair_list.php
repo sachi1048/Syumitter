@@ -23,26 +23,35 @@
 </head>
 <body>
     <h1 class="h1-2">Syumitter</h1>
+
+    <a href="pair_new.php">
+        <img src="img/newchat" class="newchat" alt="新規ペアチャット">
+    </a>
+
     <br>
     <div class="switch">
-        <a class="link switch2" href="group_list.php">グループチャット</a>
-        <a class="link switch-right" href="pair_list.php">ペアチャット</a>
+        <a class="link switch-left" href="group_list.php">グループチャット</a>
+        <a class="link switch2" href="pair_list.php">ペアチャット</a>
     </div>
 
     <table class="table-chat">
 
     <?php
         //コピペっただけ　相互の人を表示
-        $sql=$pdo->query('select * from Group_chat');
+        $sql=$pdo->prepare('select * from Follow where zyoukyou=1 and applicant_name=?');
+        $sql->execute([$user_name]);
         foreach($sql as $row){
+            $sql2=$pdo->prepare('select * from Account where user_name=?');
+            $sql2->execute([$row['approver_name']]);
+            foreach($sql2 as $row2)
             echo '<tr>
                 <td>
                     <div class="aikon">
-                    <img src="img/chat/', $row['aikon'], '" alt="チャットアイコン" class="maru">
+                    <img src="img/aikon/', $row2['aikon'], '" alt="チャットアイコン" class="maru">
                     </div>
                 </td>
                 <td>
-                    <a href="group_chat.php?group_id=', $row['group_id'], '" class="chat-mei">', $row['group_mei'], '</a><br>';
+                    <a href="#" class="chat-mei">', $row2['user_name'], '</a><br>';
             echo '</td>';
             //通知
             echo '<td>
