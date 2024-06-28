@@ -10,139 +10,62 @@ try {
     $pdo = new PDO($connect, USER, PASS);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $like_stmt = $pdo->prepare("SELECT COUNT(*) as like_count FROM Comment WHERE toukou_id = :toukou_id AND comment_type = 1");
-    $like_stmt->bindParam(':toukou_id', $_GET['toukou_id'], PDO::PARAM_INT);
-    $like_stmt->execute();
-    
-    // 結果を取得して変数に格納
-    $like_result = $like_stmt->fetch(PDO::FETCH_ASSOC);
-    $like_count = $like_result['like_count'];
-
-    if($like_count>0){
-        $like_count = $like_result['like_count'];
-    }else {
-        $like_count = 0;
-    }
-
-
-
-    // ここにLIKEの取得を書きたい
     if (isset($_GET['toukou_id'])) {
         $toukou_id = $_GET['toukou_id'];
 
-        $stmt = $pdo->prepare("
-        SELECT t.*, a.aikon as user_aikon, a.display_name
-        FROM Toukou t
-        JOIN Account a ON t.toukou_mei = a.user_name
-        WHERE t.toukou_id = :toukou_id
-        ");
+        // いいね数の取得
+        $like_stmt = $pdo->prepare("SELECT COUNT(*) as like_count FROM Comment WHERE toukou_id = :toukou_id AND comment_type = 1");
+        $like_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
+        $like_stmt->execute();
+        $like_result = $like_stmt->fetch(PDO::FETCH_ASSOC);
+        $like_count = $like_result ? $like_result['like_count'] : 0;
 
+        // 投稿の取得
+        $stmt = $pdo->prepare("
+            SELECT t.*, a.aikon as user_aikon, a.display_name
+            FROM Toukou t
+            JOIN Account a ON t.toukou_mei = a.user_name
+            WHERE t.toukou_id = :toukou_id
+        ");
         $stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
         $stmt->execute();
-
         $post = $stmt->fetch(PDO::FETCH_ASSOC);
-        $commnet_count_query ="SELECT COUNT(*) AS comment_count FROM Comment WHERE toukou_id=$toukou_id AND comment_type = 0";
- 
-        $statement = $pdo->query($commnet_count_query);
 
-        
-    $comment_count_result = $statement->fetch(PDO::FETCH_ASSOC);
-    $comment_count = $comment_count_result['comment_count'];
-        if ($post) {
-            $follow_stmt = $pdo->prepare("
-                SELECT COUNT(*) as is_following
-                FROM Follow
-                WHERE applicant_name = :current_user_name AND approver_name = :post_user_name AND zyoukyou = 1
-            ");
-            $follow_stmt->bindParam(':current_user_name', $current_user_name, PDO::PARAM_STR);
-            $follow_stmt->bindParam(':post_user_name', $post['toukou_mei'], PDO::PARAM_STR);
-            $follow_stmt->execute();
-            $follow_status = $follow_stmt->fetch(PDO::FETCH_ASSOC);
-            $is_following = $follow_status['is_following'] > 0;
+        // コメント数の取得
+        $comment_count_query = "SELECT COUNT(*) AS comment_count FROM Comment WHERE toukou_id = :toukou_id AND comment_type = 0";
+        $comment_stmt = $pdo->prepare($comment_count_query);
+        $comment_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
+        $comment_stmt->execute();
+        $comment_count_result = $comment_stmt->fetch(PDO::FETCH_ASSOC);
+        $comment_count = $comment_count_result ? $comment_count_result['comment_count'] : 0;
 
-            if (isset($_POST['follow'])) {
-                $insert_follow_stmt = $pdo->prepare("
-                    INSERT INTO Follow (applicant_name, approver_name, zyoukyou)
-                    VALUES (:applicant_name, :approver_name, 1)
-                ");
-                $insert_follow_stmt->bindParam(':applicant_name', $current_user_name, PDO::PARAM_STR);
-                $insert_follow_stmt->bindParam(':approver_name', $post['toukou_mei'], PDO::PARAM_STR);
-                $insert_follow_stmt->execute();
-
-                $update_follower_count_stmt = $pdo->prepare("
-                    UPDATE Account
-                    SET follower_count = follower_count + 1
-                    WHERE user_name = :user_name
-                ");
-                $update_follower_count_stmt->bindParam(':user_name', $post['toukou_mei'], PDO::PARAM_STR);
-                $update_follower_count_stmt->execute();
-
-                header("Location: {$_SERVER['REQUEST_URI']}");
-                exit();
+        // タグ名の取得
+        function getTagName($pdo, $tag_id) {
+            if ($tag_id) {
+                $tag_stmt = $pdo->prepare("SELECT tag_mei FROM Tag WHERE tag_id = :tag_id");
+                $tag_stmt->bindParam(':tag_id', $tag_id, PDO::PARAM_INT);
+                $tag_stmt->execute();
+                $tag = $tag_stmt->fetch(PDO::FETCH_ASSOC);
+                return $tag ? htmlspecialchars($tag['tag_mei']) : null; // タグが見つからなかった場合はnullを返す
             }
-
-            if (isset($_POST['unfollow'])) {
-                $delete_follow_stmt = $pdo->prepare("
-                    DELETE FROM Follow
-                    WHERE applicant_name = :applicant_name AND approver_name = :approver_name
-                ");
-                $delete_follow_stmt->bindParam(':applicant_name', $current_user_name, PDO::PARAM_STR);
-                $delete_follow_stmt->bindParam(':approver_name', $post['toukou_mei'], PDO::PARAM_STR);
-                $delete_follow_stmt->execute();
-
-                $update_follower_count_stmt = $pdo->prepare("
-                    UPDATE Account
-                    SET follower_count = follower_count - 1
-                    WHERE user_name = :user_name
-                ");
-                $update_follower_count_stmt->bindParam(':user_name', $post['toukou_mei'], PDO::PARAM_STR);
-                $update_follower_count_stmt->execute();
-
-                header("Location: {$_SERVER['REQUEST_URI']}");
-                exit();
-            }
-
-            if (isset($_POST['delete_post'])) {
-                $delete_comments_stmt = $pdo->prepare("
-                    DELETE FROM Comment WHERE toukou_id = :toukou_id
-                ");
-                $delete_comments_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
-                $delete_comments_stmt->execute();
-
-                $delete_post_stmt = $pdo->prepare("
-                    DELETE FROM Toukou WHERE toukou_id = :toukou_id
-                ");
-                $delete_post_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
-                $delete_post_stmt->execute();
-
-                header("Location: user_posts.php");
-                exit();
-            }
-
-            function getTagName($pdo, $tag_id) {
-                if ($tag_id) {
-                    $tag_stmt = $pdo->prepare("SELECT tag_mei FROM Tag WHERE tag_id = :tag_id");
-                    $tag_stmt->bindParam(':tag_id', $tag_id, PDO::PARAM_INT);
-                    $tag_stmt->execute();
-                    $tag = $tag_stmt->fetch(PDO::FETCH_ASSOC);
-                    return $tag ? htmlspecialchars($tag['tag_mei']) : null;
-                }
-                return null;
-            }
-
-            $tags = [
-                getTagName($pdo, $post['tag_id1']),
-                getTagName($pdo, $post['tag_id2']),
-                getTagName($pdo, $post['tag_id3'])
-            ];
+            return null;
         }
+        
+        // タグ名の取得
+        $tags = [
+            getTagName($pdo, isset($post['tag_id1']) ? $post['tag_id1'] : null),
+            getTagName($pdo, isset($post['tag_id2']) ? $post['tag_id2'] : null),
+            getTagName($pdo, isset($post['tag_id3']) ? $post['tag_id3'] : null)
+        ];
     }
-
 } catch (PDOException $e) {
     echo "エラー：" . $e->getMessage();
 }
 ob_end_flush();
 ?>
+
+
+
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -153,12 +76,62 @@ ob_end_flush();
     <link rel="stylesheet" href="CSS/menu.css">
     <link rel="stylesheet" href="CSS/toukou_disp2.css">
     <link rel="stylesheet" href="CSS/all.min.css">
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
     <title>投稿表示画面</title>
+<script>
+$(document).ready(function(){
+    $('.follow-button').on('click', function(e){
+        e.preventDefault();
+        var button = $(this);
+        var approverName = button.data('approver-name'); // ボタンのデータ属性からフォロー相手のユーザー名を取得
+
+        $.ajax({
+            url: 'api.php',
+            type: 'POST',
+            data: {
+                approver_name: approverName
+                // 必要に応じてデータをここに追加
+            },
+            success: function(response) {
+                console.log('API call successful.');
+                console.log(response);
+                
+                // ボタンのテキストとクラスを切り替える
+                if (button.hasClass('following')) {
+                    button.removeClass('following').text('フォローする');
+                } else {
+                    button.addClass('following').text('フォロー中');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('API call failed.');
+                console.error(status, error);
+            }
+        });
+    });
+});
+</script>
+
+
 </head>
 <body>
-<h1 class="h1-2">Syumitter</h1>                
+<h1 class="h1-2">Syumitter</h1>  
+    <?php
+    foreach($stmt as $row){
+        $sql2=$pdo->query('select * from Account where user_name="'.$row['applicant_name'].'"');
+        foreach($sql2 as $row2){
+           
+                        if($row['zyoukyou'] == 1){
+                            echo '<button id="follow" class="btn-follow1">フォロー中</button>';
+                        }else{
+                            echo '<button id="follow" class="btn-follow2">フォローする</button>';
+                        }
+
+        }
+
+    }
+                        ?>
     <?php if (!empty($post)): ?>
         <div class="post-container">
             <div class="user-info">
@@ -167,13 +140,14 @@ ob_end_flush();
                 </div>
                 <span><?php echo htmlspecialchars($post['display_name']); ?></span>
                 <?php if ($current_user_name === $post['toukou_mei']): ?>
-                    <form action="" method="post" class="user-action-form">
-                        <button type="submit" name="delete_post" class="delete-button">×削除する</button>
-                    </form>
-                <?php else: ?>
+    <form action="toukou_delete.php" method="post" class="user-action-form">
+        <input type="hidden" name="toukou_id" value="<?php echo htmlspecialchars($post['toukou_id']); ?>">
+        <button type="submit" name="delete_post" class="delete-button">×削除する</button>
+    </form>
+<?php endif; ?>
                     <form action="" method="post" class="user-action-form">
                         <button type="submit" name="follow" class="follow-button">
-                            <?php echo $is_following ? 'フォロー中' : 'フォローする'; ?>
+        
                        
                             </button>
                     </form>
@@ -188,7 +162,7 @@ ob_end_flush();
                 }
                 ?>
 
-            <?php endif; ?>
+           <!-- cc -->
 
             <?php if (!empty($post['contents'])): ?>
                 <div class="post-content">
@@ -219,15 +193,7 @@ ob_end_flush();
                     </div>
                 </div>
 
-                
-                <?php
-// if (isset($_POST['comment'])) {
-//     $post['comments']++;
-// }
-?>
-
-
-                
+            
 
             <div class="post-details">
                 <div class="post-title">
