@@ -110,6 +110,7 @@ input[type="file"]{
     padding: 2px;
 }
 
+
 .link{
     text-decoration: none;
     color: #000000;
@@ -262,4 +263,5 @@ input[type="file"]{
     color: red;
     display: none;
   }
+
 

@@ -2,8 +2,8 @@
 <?php
     require 'db-connect.php';
     $pdo = new PDO($connect,USER,PASS);
-    if(!isset($_SESSION['groupid'])){
-        $_SESSION['groupid']=$_GET['group_id'];
+    if(isset($_GET['group_id'])){
+        $_SESSION['group_id']=$_GET['group_id'];
     }
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['messagesend'])) {
@@ -12,9 +12,9 @@
             $sdl->execute([$_POST['groupchatname'],$_SESSION['user']['user_name'],$_POST['message'],$currentDateTime]);
         }
     }
-    // 既読機能（諦めるかも）
+    // 既読機能（できた）
     $wsq=$pdo->prepare('select * from Group_Rireki where chat_id = ? and sender <> ?');
-    $wsq->execute([$_SESSION['groupid'],$_SESSION['user']['user_name']]);
+    $wsq->execute([$_SESSION['group_id'],$_SESSION['user']['user_name']]);
     foreach($wsq as $rol){
         $sot=$pdo->prepare('select * from Group_Kidoku where user_name = ? and rireki_id = ?');
         $sot->execute([$_SESSION['user']['user_name'],$rol['rireki_id']]);
@@ -42,7 +42,7 @@
         window.onload = function() {
             window.scrollTo(0, document.body.scrollHeight);
         }
-        // ページを30秒ごとにリロードする
+        // ページを20秒ごとにリロードする
         setInterval(function() {
             location.reload();
         }, 20000); // 20000ミリ秒 = 20秒
@@ -51,20 +51,21 @@
 <body class="boda">
     <?php
         // このチャットの名前と所属人数を取り出す
-        $spl=$pdo->query('SELECT gc.group_mei,COUNT(gm.member) AS member_count FROM Group_chat gc LEFT JOIN Group_member gm ON gc.group_id = gm.group_id WHERE gm.group_id = 1 GROUP BY gc.group_mei;');// ←未完成
-        $result = $spl->fetch(PDO::FETCH_ASSOC);
+        $spl=$pdo->prepare('SELECT gc.group_mei,COUNT(gm.member) AS member_count FROM Group_chat gc LEFT JOIN Group_member gm ON gc.group_id = gm.group_id WHERE gm.group_id = ? GROUP BY gc.group_mei');
+        $spl->execute([$_SESSION['group_id']]);
+        $kekka = $spl->fetch(PDO::FETCH_ASSOC);
         // 上の戻るボタンとグループ名（所属人数）、メニューボタン
         echo '<div class="waku">';
-        echo '<a href="myprofile.php"><span class="btn-mdr2"></span></a>';
-        echo '<div class="tablename">',$result['group_mei'],'(',$result['member_count'],')</div>';
-        echo '<form action="#" method="post">';
-        echo '<input type="hidden" name="chat_id" value="1">';
+        echo '<a href="group_list.php"><span class="btn-mdr2"></span></a>';
+        echo '<div class="tablename">',$kekka['group_mei'],'(',$kekka['member_count'],')</div>';
+        echo '<form action="group_edit.php" method="post">';
+        echo '<input type="hidden" name="chat_id" value="',$_SESSION['group_id'],'">';
         echo '<button class="menuicon" type="submit"><i class="fas fa-bars fa-2x"></i></button>';
         echo '</form>';
         echo '</div>';
         echo '<br>';
         $sql=$pdo->prepare('select * from Group_Rireki where chat_id = ?');
-        $sql->execute([$_SESSION['groupid']]);
+        $sql->execute([$_SESSION['group_id']]);
         // 最初の一回だけ日付を表示させるためにboolean型の変数flgにtrueを入れる
         $flg = true;
         echo '<div class="chatcontainer" style="margin-top:60px;">';
@@ -115,7 +116,7 @@
     <form action="group_chat.php" method="post">
         <div class="sendmessage">
             <input class="messages" inputmode="text" name="message" placeholder="メッセージを入力" required>
-            <input type="hidden" name="groupchatname" value="<?= $_SESSION['groupid'] ?>"><!-- ここは動くようになってから直しましょうかね -->
+            <input type="hidden" name="groupchatname" value="<?= $_SESSION['group_id'] ?>">
             <button class="sousin" type="submit" name="messagesend"><i class="fab fa-telegram-plane fa-2x"></i></button>
         </div>
     </form>
