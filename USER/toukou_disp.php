@@ -150,6 +150,7 @@ ob_end_flush();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="CSS/main.css">
+    <link rel="stylesheet" href="CSS/menu.css">
     <link rel="stylesheet" href="CSS/toukou_disp2.css">
     <link rel="stylesheet" href="CSS/all.min.css">
 
@@ -157,7 +158,7 @@ ob_end_flush();
     <title>投稿表示画面</title>
 </head>
 <body>
-    <h1 class="syumitter1">Syumitter</h1>                
+<h1 class="h1-2">Syumitter</h1>                
     <?php if (!empty($post)): ?>
         <div class="post-container">
             <div class="user-info">
@@ -179,48 +180,7 @@ ob_end_flush();
                 <?php endif; ?>
             </div>
 
-            <?php
-if (isset($_POST['like'])) {
-    // いいねの状態を確認するクエリ
-    $check_like_stmt = $pdo->prepare("
-        SELECT COUNT(*) as liked
-        FROM Comment
-        WHERE toukou_id = :toukou_id AND account_mei = :current_user_name AND comment_type = 1
-    ");
-    $check_like_stmt->bindParam(':toukou_id', $_GET['toukou_id'], PDO::PARAM_INT);
-    $check_like_stmt->bindParam(':current_user_name', $current_user_name, PDO::PARAM_STR);
-    $check_like_stmt->execute();
-    $like_status = $check_like_stmt->fetch(PDO::FETCH_ASSOC);
-    $liked = $like_status['liked'] > 0;
-
-    if ($liked) {
-        // すでにいいねしている場合、いいねを取り消す
-        $unlike_stmt = $pdo->prepare("
-            DELETE FROM Comment
-            WHERE toukou_id = :toukou_id AND account_mei = :current_user_name AND comment_type = 1
-        ");
-        $unlike_stmt->bindParam(':toukou_id', $_GET['toukou_id'], PDO::PARAM_INT);
-        $unlike_stmt->bindParam(':current_user_name', $current_user_name, PDO::PARAM_STR);
-        $unlike_stmt->execute();
-        $post['like_count']--;
-    } else {
-        // まだいいねしていない場合、いいねを追加する
-        $like_stmt = $pdo->prepare("
-            INSERT INTO Comment (toukou_id, account_mei, comment_type)
-            VALUES (:toukou_id, :current_user_name, 1)
-        ");
-        $like_stmt->bindParam(':toukou_id', $_GET['toukou_id'], PDO::PARAM_INT);
-        $like_stmt->bindParam(':current_user_name', $current_user_name, PDO::PARAM_STR);
-        $like_stmt->execute();
-        $post['like_count']++;
-    }
-
-    // 再送信を防ぐためにリダイレクトする
-    header("Location: {$_SERVER['REQUEST_URI']}");
-    exit();
-}
-?>
-
+        
 
                 <?php
                 if (isset($_POST['comment'])) {
