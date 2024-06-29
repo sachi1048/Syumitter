@@ -81,7 +81,7 @@ ob_end_flush();
     <title>投稿表示画面</title>
 <script>
 $(document).ready(function(){
-    $('.follow-button').on('click', function(e){
+    $(document).on('click', '.follow-button', function(e){
         e.preventDefault();
         var button = $(this);
         var approverName = button.data('approver-name'); // ボタンのデータ属性からフォロー相手のユーザー名を取得
@@ -94,9 +94,9 @@ $(document).ready(function(){
                 // 必要に応じてデータをここに追加
             },
             success: function(response) {
-                console.log('API call successful.');
+                console.log('APIコール成功');
                 console.log(response);
-                
+
                 // ボタンのテキストとクラスを切り替える
                 if (button.hasClass('following')) {
                     button.removeClass('following').text('フォローする');
@@ -105,18 +105,24 @@ $(document).ready(function(){
                 }
             },
             error: function(xhr, status, error) {
-                console.error('API call failed.');
+                console.error('APIコール失敗');
                 console.error(status, error);
             }
         });
     });
 });
+
 </script>
 
 
 </head>
 <body>
+<footer><?php require 'menu.php'; ?></footer>
 <h1 class="h1-2">Syumitter</h1>  
+<a href="profile.php?user_name=<?php echo htmlspecialchars($current_user_name, ENT_QUOTES, 'UTF-8'); ?>">
+    <span class="btn-mdr2"></span>
+</a>
+
     <?php
     foreach($stmt as $row){
         $sql2=$pdo->query('select * from Account where user_name="'.$row['applicant_name'].'"');
@@ -131,28 +137,40 @@ $(document).ready(function(){
         }
 
     }
+    if (!empty($post)) {
+        $follow_stmt = $pdo->prepare("
+            SELECT COUNT(*) as is_following 
+            FROM Follow 
+            WHERE applicant_name = :current_user_name AND approver_name = :toukou_mei
+        ");
+        $follow_stmt->bindParam(':current_user_name', $current_user_name, PDO::PARAM_STR);
+        $follow_stmt->bindParam(':toukou_mei', $post['toukou_mei'], PDO::PARAM_STR);
+        $follow_stmt->execute();
+        $follow_result = $follow_stmt->fetch(PDO::FETCH_ASSOC);
+        $is_following = $follow_result ? $follow_result['is_following'] : 0;
+    }
                         ?>
     <?php if (!empty($post)): ?>
-        <div class="post-container">
-            <div class="user-info">
-                <div class="aikon">
-                    <img src="<?php echo 'img/aikon/' . htmlspecialchars($post['user_aikon']); ?>" alt="アイコン" class="user-icon">
-                </div>
-                <span><?php echo htmlspecialchars($post['display_name']); ?></span>
-                <?php if ($current_user_name === $post['toukou_mei']): ?>
-    <form action="toukou_delete.php" method="post" class="user-action-form">
-        <input type="hidden" name="toukou_id" value="<?php echo htmlspecialchars($post['toukou_id']); ?>">
-        <button type="submit" name="delete_post" class="delete-button">×削除する</button>
-    </form>
-<?php endif; ?>
-                    <form action="" method="post" class="user-action-form">
-                        <button type="submit" name="follow" class="follow-button">
-        
-                       
-                            </button>
-                    </form>
-                <?php endif; ?>
+    <div class="post-container">
+        <div class="user-info">
+            <div class="aikon">
+                <img src="<?php echo 'img/aikon/' . htmlspecialchars($post['user_aikon']); ?>" alt="アイコン" class="user-icon">
             </div>
+            <span><?php echo htmlspecialchars($post['display_name']); ?></span>
+            <?php if ($current_user_name === $post['toukou_mei']): ?>
+                <form action="toukou_delete.php" method="post" class="user-action-form">
+                    <input type="hidden" name="toukou_id" value="<?php echo htmlspecialchars($post['toukou_id']); ?>">
+                    <button type="submit" name="delete_post" class="delete-button">×削除する</button>
+                </form>
+            <?php else: ?>
+                <form action="" method="post" class="user-action-form">
+                    <button type="submit" name="follow" class="follow-button <?php echo $is_following ? 'following' : ''; ?>">
+                        <?php echo $is_following ? 'フォロー中' : 'フォローする'; ?>
+                    </button>
+                </form>
+            <?php endif; ?>
+        </div>
+        <?php endif; ?>
 
         
 
@@ -200,11 +218,18 @@ $(document).ready(function(){
                     <h2><?php echo htmlspecialchars($post['title']); ?></h2>
                 </div>
                 <div class="post-tags">
-                    <?php foreach ($tags as $tag): ?>
-                        <?php if ($tag): ?>
-                            <span class="tag">#<?php echo $tag; ?></span>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
+                <?php
+                $sql4=$pdo->prepare('select * from User_tag where user_name=?');
+    $sql4->execute([$current_user_name]);
+    foreach($sql4 as $row4){
+        $sqltag=$pdo->prepare('select * from Tag where tag_id=?');
+        $sqltag->execute([$row4['tag_id']]);
+        foreach($sqltag as $tag){
+            echo '<div class="s-tag" style="background: rgb(', $tag['tag_color1'], ',', $tag['tag_color2'], ',', $tag['tag_color3'], '">', $tag['tag_mei'], '</div>';
+        }
+        
+    }
+    ?>
                 </div>
             </div>
 
@@ -226,5 +251,6 @@ $(document).ready(function(){
     <?php else: ?>
         <p>投稿が見つかりませんでした</p>
     <?php endif; ?>
+    
 </body>
 </html>
