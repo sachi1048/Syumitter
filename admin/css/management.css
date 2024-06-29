@@ -1,0 +1,168 @@
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+    background-color: #f9f9f9;
+}
+
+
+.center{
+    display: flex;
+    flex-direction: column;
+    height: 50vh;
+    margin: 0;
+    align-items: center;
+}
+
+
+.container {
+    padding: 35px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+    margin-top: 20px;
+}
+.container2 {
+    padding: 35px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 500px;
+    margin-top: 10px;
+}
+
+
+.button {
+    background-color: #3180c5;
+    color: white;
+    padding: 15px 30px;
+    margin: 30px 0;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+.button:hover {
+    background-color: #86c3f8;
+}
+
+
+.back-button {
+    background-color: #e0e0e0;
+    color: black;
+    padding: 12px 25px;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: center;
+    align-self: flex-start;
+    margin: 20px;
+    
+}
+.back-button:hover {
+    background-color: #d4d4d4;
+}
+
+
+.decision-button{
+    background-color: #f3bc57;
+    padding: 10px 55px;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: right;
+    align-self: flex-start;
+    margin:20px;
+}
+.decision-button2{
+    background-color: rgb(0, 229, 255);
+    color: rgb(236, 11, 11);
+    padding: 10px 55px;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: right;
+    align-self: flex-start;
+    margin:20px;
+}
+.decision-button:hover{
+    background-color: #d4d4d4;
+}
+.decision{
+    text-align: right;
+}
+.decision2{
+    text-align: center;
+}
+
+
+.frame {
+margin: auto;
+padding: 50px;
+width: 75%;
+border: none;
+background: #de9c296d;
+text-align: center;
+color: #000000;
+font-size: 17px;
+}
+
+
+.frame2{
+text-align: left;
+margin-left: auto;
+margin-right: auto;
+padding: 10px;
+width: 50%;
+}
+
+
+.table {
+    margin: auto;
+    padding: 55px;
+    width: 90%;
+    border: none;
+    text-align: center;
+    color: #000000;
+    font-size: 15px;
+    }
+table{
+    width: 370px;
+    height: 100px;
+}
+table,table th , table td {
+        padding: 2px;
+        border: 1px solid black;
+        border-collapse: collapse;
+        min-width: 10%;
+}
+table th {
+        background-color: rgb(162, 216, 248);
+}
+.master{
+    width: 65%;
+}
+
+
+.content{
+    padding: 10px;
+    position: relative;
+    align-items: left;      
+}
+.content li{
+    list-style: none;
+}
+.content img{
+    border: solid 1px #777777;
+}
+.content input{
+    position: absolute;
+    margin-left: 85px;
+}
