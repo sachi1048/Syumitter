@@ -12,6 +12,11 @@
     <div class="center">
         <div class="container">
         <div class="table">
+        <?php
+        $users=[["user1","a@a.co.jp","1"],["user2","b@b.co.jp","2"],["user3","c@c.co.jp","3"]];
+        $accounts=$_POST["accounts"];
+        var_dump($accounts);
+        ?>
             <table>
                 <thead>
                     <tr>

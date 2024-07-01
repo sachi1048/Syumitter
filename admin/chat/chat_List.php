@@ -41,6 +41,7 @@
     </div>
     <div class="decision">
     <input type="submit" value="作成"class="decision-button">
+    </form>
 </div>
 </body>
 </html>
