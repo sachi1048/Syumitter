@@ -41,7 +41,7 @@ try {
 
     // デバッグ: いいねの状態を確認
     error_log("Liked status: " . ($liked ? "true" : "false"));
-
+    $is_liked = false; // 初期化
     if ($liked) {
         // すでにいいねしている場合、いいねを取り消す
         $unlike_stmt = $pdo->prepare("
@@ -52,6 +52,10 @@ try {
         $unlike_stmt->bindParam(':current_user_name', $current_user_name, PDO::PARAM_STR);
         $unlike_stmt->execute();
         error_log("Unliked");
+        $is_liked = true;
+        
+
+
     } else {
         // まだいいねしていない場合、いいねを追加する
         $like_stmt = $pdo->prepare("
