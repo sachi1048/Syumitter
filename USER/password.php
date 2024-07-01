@@ -29,6 +29,7 @@
         </div>
         <button class="backbutton" onclick="history.back()">
             <i class="fas fa-caret-left fa-2x"></i>戻る
+            
         </button>
 
     </div>
