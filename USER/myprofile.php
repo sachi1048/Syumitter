@@ -79,6 +79,9 @@
         
             
     }
+    echo '<a href="myprofile-tag.php">
+            <img src="img/puramai.png" class="puramai">
+          </a>';
     echo '</div><div class="profile">';
     echo '<p>', $profile, '</p>';
     echo '</div>';
