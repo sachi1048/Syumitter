@@ -59,10 +59,24 @@
 
 .table-chat{
     margin: auto;
+    margin-bottom: 100px;
     padding-top: 10px;
     width: 380px;
 }
 
 .table-chat td{
     padding: 2px;
+}
+
+
+.newchat {
+    display: inline-block;
+    position: fixed;
+    top: 25px;
+    right: 25px;
+    vertical-align: middle;
+    color: #0047FF;
+    line-height: 1;
+    width: 60px;
+    height: 60px;
 }

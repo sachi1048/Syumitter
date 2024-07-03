@@ -236,6 +236,22 @@ input[type="file"]{
 
 }
 
+
+/* 新規チャット画面の画面遷移ボタン */
+.btn-tag{
+
+}
+
+.puramai{
+    display: inline-block;
+    position: fixed;
+    vertical-align: middle;
+    line-height: 1;
+    width: 30px;
+    height: 30px;
+    margin-left: 5px;
+}
+
   /* 「フォロワー/フォロー」「グループチャット/ペアチャット」の切り替え用 */
   .switch{
     display: inline-block;
