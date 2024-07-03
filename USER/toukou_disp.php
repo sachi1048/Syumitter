@@ -77,75 +77,8 @@ ob_end_flush();
     <link rel="stylesheet" href="CSS/toukou_disp2.css">
     <link rel="stylesheet" href="CSS/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <!-- <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css"> -->
     <title>投稿表示画面</title>
-<script>
-// $(document).ready(function(){
-//     $(document).on('click', '.follow-button', function(e){
-//         e.preventDefault();
-//         var button = $(this);
-//         var approverName = button.data('approver_name'); // ボタンのデータ属性からフォロー相手のユーザー名を取得
-
-//         $.ajax({
-//             url: 'api.php',
-//             type: 'POST',
-//             data: {
-//                 approver_name: approverName
-//                 // 必要に応じてデータをここに追加
-//             },
-//             success: function(response) {
-//                 console.log('APIコール成功');
-//                 console.log(response);
-
-//                 // ボタンのテキストとクラスを切り替える
-//                 if (button.hasClass('following')) {
-//                     button.removeClass('following').text('フォローする');
-//                 } else {
-//                     button.addClass('following').text('フォロー中');
-//                 }
-//             },
-//             error: function(xhr, status, error) {
-//                 console.error('APIコール失敗');
-//                 console.error(status, error);
-//             }
-//         });
-//     });
-// });
-
-$(document).ready(function(){
-        $('#follow').on('click', function(){
-             // PHP変数をJavaScript変数に変換
-             var approverName = "<?php echo $row['approver_name']; ?>";
-            $.ajax({
-                url: 'api.php',
-                type: 'POST',
-                data: {
-                    approver_name: approverName
-                    // 必要に応じてデータをここに追加
-                },
-                success: function(response) {
-                    // 成功時の処理
-                    console.log('API call successful.');
-                    console.log(response);
-                    
-                    // ボタンのテキストとクラスを切り替える
-                    $('#follow').toggleClass('btn-follow1 btn-follow2');
-                    if($('#follow').hasClass('btn-follow1')) {
-                        $('#follow').text('フォロー中');
-                    } else {
-                        $('#follow').text('フォローする');
-                    }
-                },
-                error: function(xhr, status, error) {
-                    // エラー時の処理
-                    console.error('API call failed.');
-                    console.error(status, error);
-                }
-            });
-        });
-    });
-
-</script>
 
 
 </head>
@@ -157,19 +90,7 @@ $(document).ready(function(){
 </a>
 
     <?php
-    // foreach($stmt as $row){
-    //     $sql2=$pdo->query('select * from Account where user_name="'.$row['applicant_name'].'"');
-    //     foreach($sql2 as $row2){
-           
-    //                     if($row['zyoukyou'] == 1){
-    //                         echo '<button id="follow" class="btn-follow1">フォロー中</button>';
-    //                     }else{
-    //                         echo '<button id="follow" class="btn-follow2">フォローする</button>';
-    //                     }
 
-    //     }
-
-    // }
     if (!empty($post)) {
         $follow_stmt = $pdo->prepare("
             SELECT COUNT(*) as is_following 
@@ -200,8 +121,8 @@ $(document).ready(function(){
                 <div class="btn-follow0">
                 <?php 
                     $user_name = $_SESSION['user']['user_name'];
-                    $tt=$pdo->prepare('select toukou_mei from Toukou where toukou_id');
-                    $tt->execute([$toukou_id]);
+                    $tt=$pdo->prepare('select toukou_mei from Toukou where toukou_id=?');
+                    $tt->execute([$_GET['toukou_id']]);
                     foreach($tt as $ttt){
 
                     $sqlll=$pdo->prepare('select * from Follow where applicant_name=?');
@@ -302,6 +223,46 @@ $(document).ready(function(){
     <?php else: ?>
         <p>投稿が見つかりませんでした</p>
     <?php endif; ?>
-    
+<div>    <?php var_dump($tt); ?>
+    </div>
+    <div>
+    <?php var_dump($ttt); ?>
+    </div>
 </body>
+
+<script>
+$(document).ready(function(){
+        $('#follow').on('click', function(){
+             // PHP変数をJavaScript変数に変換
+             var approverName = "<?php echo $ttt['toukou_mei']; ?>";
+            $.ajax({
+                url: 'api.php',
+                type: 'POST',
+                data: {
+                    approver_name: approverName
+                    // 必要に応じてデータをここに追加
+                },
+                success: function(response) {
+                    // 成功時の処理
+                    console.log('API call successful.');
+                    console.log(response);
+                    
+                    // ボタンのテキストとクラスを切り替える
+                    $('#follow').toggleClass('btn-follow1 btn-follow2');
+                    if($('#follow').hasClass('btn-follow1')) {
+                        $('#follow').text('フォロー中');
+                    } else {
+                        $('#follow').text('フォローする');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // エラー時の処理
+                    console.error('API call failed.');
+                    console.error(status, error);
+                }
+            });
+        });
+    });
+
+</script>
 </html>
