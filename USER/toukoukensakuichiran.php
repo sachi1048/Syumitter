@@ -1,3 +1,30 @@
+<?php session_start(); 
+require 'db-connect.php'; 
+$input_tag = isset($_GET['tag']) ? $_GET['tag'] : '';
+
+if (empty($input_tag)) {
+    echo "タグを入力してください。";
+    exit;
+}
+
+// タグIDを取得するSQLクエリ
+$pdo = new PDO($connect, USER, PASS);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$sql = "SELECT tag_id FROM Tag WHERE tag_mei = ?";
+$stmt = $pdo->prepare($sql);
+$stmt->execute([$input_tag]);
+$tag_ids = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+// タグIDが見つからない場合はエラーメッセージを表示
+if (empty($tag_ids)) {
+    echo "タグが見つかりませんでした。";
+    exit;
+}
+
+// プレースホルダの準備
+$placeholders = implode(',', array_fill(0, count($tag_ids), '?'));
+
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -5,6 +32,8 @@
     <title>Syumitter - 検索結果</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="CSS/main.css">
+    <link rel="stylesheet" href="CSS/menu.css">
     <style>
         body {
             font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -123,39 +152,41 @@
 <body>
     <div class="header-container">
         <div class="back-button" onclick="history.back()"></div>
-        <h1>Syumitter</h1>
+        <h1 class="h1-2">Syumitter</h1>
         <button class="search-button">#検索</button>
     </div>
 
     <div class="results-container">
         <div class="grid-container">
-            <div class="grid-item"><img src="/mnt/data/スクリーンショット 2024-05-30 102534.png" alt="User Image"></div>
-            <div class="grid-item"><img src="/mnt/data/スクリーンショット 2024-05-30 102534.png" alt="User Image"></div>
-            <div class="grid-item"><img src="/mnt/data/スクリーンショット 2024-05-30 102534.png" alt="User Image"></div>
-            <div class="grid-item"><img src="/mnt/data/スクリーンショット 2024-05-30 102534.png" alt="User Image"></div>
-            <div class="grid-item"><img src="/mnt/data/スクリーンショット 2024-05-30 102534.png" alt="User Image"></div>
-            <div class="grid-item"><img src="/mnt/data/スクリーンショット 2024-05-30 102534.png" alt="User Image"></div>
-            <div class="grid-item"><img src="/mnt/data/スクリーンショット 2024-05-30 102534.png" alt="User Image"></div>
-            <div class="grid-item"><img src="/mnt/data/スクリーンショット 2024-05-30 102534.png" alt="User Image"></div>
-            <div class="grid-item"><img src="/mnt/data/スクリーンショット 2024-05-30 102534.png" alt="User Image"></div>
-            <div class="grid-item"><img src="/mnt/data/スクリーンショット 2024-05-30 102534.png" alt="User Image"></div>
-            <div class="grid-item"><img src="/mnt/data/スクリーンショット 2024-05-30 102534.png" alt="User Image"></div>
-            <div class="grid-item"><img src="/mnt/data/スクリーンショット 2024-05-30 102534.png" alt="User Image"></div>
-            <div class="grid-item"><img src="/mnt/data/スクリーンショット 2024-05-30 102534.png" alt="User Image"></div>
-            <div class="grid-item"><img src="/mnt/data/スクリーンショット 2024-05-30 102534.png" alt="User Image"></div>
-            <div class="grid-item"><img src="/mnt/data/スクリーンショット 2024-05-30 102534.png" alt="User Image"></div>
-            <div class="grid-item"><img src="/mnt/data/スクリーンショット 2024-05-30 102534.png" alt="User Image"></div>
-            <div class="grid-item"><img src="/mnt/data/スクリーンショット 2024-05-30 102534.png" alt="User Image"></div>
-            <div class="grid-item"><img src="/mnt/data/スクリーンショット 2024-05-30 102534.png" alt="User Image"></div>
-            <!-- Add more grid-items here as needed -->
+        <table style="padding-bottom: 100px;">
+        <?php 
+        $sql = "SELECT * FROM Toukou WHERE tag_id1 IN ($placeholders) OR tag_id2 IN ($placeholders) OR tag_id3 IN ($placeholders)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(array_merge($tag_ids, $tag_ids, $tag_ids));
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+         $count = 0;
+         echo '<tr>';
+
+         foreach ($results as $row) {
+            if ($count % 3 == 0 && $count != 0) {
+                echo '</tr><tr>';
+            }
+            echo '<td>';
+            echo '<a href="toukou_disp.php?toukou_id=', $row['toukou_id'], '"><img src="img/toukou/', $row['contents'], '" class="size">';
+            echo '</td>';
+            $count++;
+        }
+        if ($count % 3 != 0) {
+            echo '</tr>';
+        }
+        echo '</table>';
+    
+        ?>
+    </table>
         </div>
     </div>
 
-    <div class="footer-container">
-        <a href="#"><i class="fas fa-plus"></i></a>
-        <a href="#"><i class="fas fa-search"></i></a>
-        <a href="#"><i class="fas fa-comments"></i></a>
-        <a href="#"><i class="fas fa-user"></i></a>
-    </div>
+    <footer><?php require 'menu.php'; ?></footer>
 </body>
 </html>
