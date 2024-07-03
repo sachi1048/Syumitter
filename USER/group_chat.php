@@ -10,6 +10,8 @@
             $currentDateTime = date('Y-m-d H:i:s');
             $sdl=$pdo->prepare('insert into Group_Rireki values(null,?,?,?,?,default)');
             $sdl->execute([$_POST['groupchatname'],$_SESSION['user']['user_name'],$_POST['message'],$currentDateTime]);
+            header("Location: group_chat.php");
+            exit;
         }
     }
     // 既読機能（できた）
@@ -41,11 +43,49 @@
     <script>
         window.onload = function() {
             window.scrollTo(0, document.body.scrollHeight);
+            restoreMessage(); // メッセージの復元
         }
+
         // ページを20秒ごとにリロードする
         setInterval(function() {
+            saveMessage(); // リロード前にメッセージを保存
             location.reload();
         }, 20000); // 20000ミリ秒 = 20秒
+
+        // メッセージを保存する関数
+        function saveMessage() {
+            var message = document.querySelector('input[name="message"]').value;
+            localStorage.setItem('unsentMessage', message);
+        }
+
+        // メッセージを復元する関数
+        function restoreMessage() {
+            var unsentMessage = localStorage.getItem('unsentMessage');
+            if (unsentMessage) {
+                document.querySelector('input[name="message"]').value = unsentMessage;
+            }
+        }
+
+        // フォーム送信時にローカルストレージをクリア
+        function sendMessage(event) {
+            event.preventDefault(); // デフォルトのフォーム送信を防止
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "group_chat.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    // メッセージ送信後にフォームをクリア
+                    document.getElementById("messageForm").reset();
+                    localStorage.removeItem('unsentMessage'); // ローカルストレージをクリア
+                }
+            };
+
+            var message = document.querySelector('input[name="message"]').value;
+            var groupchatname = document.querySelector('input[name="groupchatname"]').value;
+            xhr.send("messagesend=true&message=" + encodeURIComponent(message) + "&groupchatname=" + encodeURIComponent(groupchatname));
+        }
     </script>
 </head>
 <body class="boda">
@@ -59,7 +99,7 @@
         echo '<a href="group_list.php"><span class="btn-mdr2"></span></a>';
         echo '<div class="tablename">',$kekka['group_mei'],'(',$kekka['member_count'],')</div>';
         echo '<form action="group_edit.php" method="post">';
-        echo '<input type="hidden" name="chat_id" value="',$_SESSION['group_id'],'">';
+        echo '<input type="hidden" name="group_id" value="',$kekka['group_mei'],'">';
         echo '<button class="menuicon" type="submit"><i class="fas fa-bars fa-2x"></i></button>';
         echo '</form>';
         echo '</div>';
@@ -113,7 +153,7 @@
         }
         echo '</div>';
     ?>
-    <form action="group_chat.php" method="post">
+    <form id="messageForm" onsubmit="sendMessage(event)">
         <div class="sendmessage">
             <input class="messages" inputmode="text" name="message" placeholder="メッセージを入力" required>
             <input type="hidden" name="groupchatname" value="<?= $_SESSION['group_id'] ?>">

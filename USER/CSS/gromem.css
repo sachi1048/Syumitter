@@ -1,0 +1,67 @@
+.exit{
+    width:140px;
+    height:25px;
+    text-align:center;
+    border:none;
+    background-color:red;
+    border-radius:6px;
+    color:#ffffff;
+}
+.invitation{
+    width:140px;
+    height:25px;
+    text-align:center;
+    border-color:#FBB161;
+    background-color:white;
+    color:#FBB161;
+    border-radius:6px;
+}
+.likebutton{
+    width:140px;
+    height:25px;
+    text-align:center;
+    border:none;
+    background-color:#FBB161;
+    color:white;
+    border-radius:6px;
+}
+.invitationbutton{
+    width: 50%;
+    height: 27px;
+    margin: 10px auto;
+    color: skyblue;
+    font-size: 13px;
+    border-color: skyblue;
+    background-color: white;
+    border-radius: 8px;
+}
+.taikai{
+    margin-top: 20px;
+    width: 53%;
+    height: 44px;
+    font-size: 20px;
+    color: white;
+    background-color: red;
+    border: none;
+    border-radius: 8px;
+}
+.narabi{
+    display: flex;
+    margin-top: 20px;
+    align-content: space-between;
+    align-items: center;
+    justify-content: space-around;
+}
+.meme{
+    color:rgb(163, 163, 163);
+}
+.midasi{
+    font-size: 30px;
+    font-weight: bold;
+}
+.members{
+    margin: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
