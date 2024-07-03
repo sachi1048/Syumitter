@@ -75,7 +75,6 @@
                   </td>
                   <td>
                     <div class="btn-follow0">';
-                    //写真を見て書くこと
                         if($row['applicant_name']==$user_name && $row['approver_name'] == $row2['user_name']){
                             echo '<button id="follow" class="btn-follow1">フォロー中</button>';
                         }else{
