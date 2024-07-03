@@ -153,8 +153,15 @@ $placeholders = implode(',', array_fill(0, count($tag_ids), '?'));
     <div class="header-container">
         <div class="back-button" onclick="history.back()"></div>
         <h1 class="h1-2">Syumitter</h1>
-        <button class="search-button">#検索</button>
+        <div class="search-button">
+        <?php 
+        
+         if(isset($_GET['tag'])){
+            echo '#' . htmlspecialchars($_GET['tag']);
+         }
+         ?>
     </div>
+        </div>
 
     <div class="results-container">
         <div class="grid-container">
