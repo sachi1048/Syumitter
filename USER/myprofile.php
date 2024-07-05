@@ -125,5 +125,10 @@
         ?>
     </table>
     <footer><?php include 'menu.php';?></footer>
+    <script>
+        window.onload = function() {
+            localStorage.clear();
+        };
+    </script>
 </body>
 </html>
