@@ -59,7 +59,7 @@
                         $sql4=$pdo->prepare('select display_name from Account where user_name=?');
                         $sql4->execute([$row3['member']]);
                         $row4 = $sql4->fetch(PDO::FETCH_ASSOC);
-                        echo $row4['display_name'];
+                        echo $row4['display_name'], ' ';
                     }
 
 
