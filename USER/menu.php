@@ -4,9 +4,9 @@
       <img src="img/toukou.png">
     </div>
   </a>
-  <a href="kensaku.php">
+  <a href="search.php">
     <div class="icon">
-      <img src="img/kensaku.png">
+      <img src="img/search.png">
     </div>
   </a>
   <a href="group_list.php">

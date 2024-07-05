@@ -15,9 +15,18 @@
     <h1 class="h1-2">Syumitter</h1>
 
     <nav>
-        <a href="user.php">ユーザー</a>
-        <a href="post.php">投稿</a>
-        <a href="group_chat.php">グループチャット</a>
+        <label>
+            <input type="radio" name="nav" value="user.php" onclick="navigate(this.value);">
+            ユーザー
+        </label>
+        <label>
+            <input type="radio" name="nav" value="post.php" onclick="navigate(this.value);">
+            投稿
+        </label>
+        <label>
+            <input type="radio" name="nav" value="group_chat.php" onclick="navigate(this.value);">
+            グループチャット
+        </label>
     </nav>
 
     <div class="search-container">
@@ -46,6 +55,10 @@
                 return false; // 空の入力は無視
             }
             return true; // 検索を実行
+        }
+
+        function navigate(url) {
+            window.location.href = url;
         }
     </script>
 </body>
