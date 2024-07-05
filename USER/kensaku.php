@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <title>Syumitter</title>
@@ -9,9 +10,10 @@
     <link rel="stylesheet" href="CSS/search_v.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
+
 <body>
     <h1 class="h1-2">Syumitter</h1>
-    
+
     <nav>
         <a href="user.php">ユーザー</a>
         <a href="post.php">投稿</a>
@@ -33,7 +35,9 @@
         </div>
     </div>
 
-    <footer><?php require 'menu.php';?></footer>
+    <footer>
+        <?php require 'menu.php'; ?>
+    </footer>
 
     <script>
         function searchHobby() {
@@ -45,4 +49,5 @@
         }
     </script>
 </body>
+
 </html>
