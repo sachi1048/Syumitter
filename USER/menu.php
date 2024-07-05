@@ -4,7 +4,7 @@
       <img src="img/toukou.png">
     </div>
   </a>
-  <a href="search.php">
+  <a href="search_v.php">
     <div class="icon">
       <img src="img/search.png">
     </div>
