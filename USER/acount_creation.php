@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="form-container">
             <h2 class="form-title">アカウント新規作成</h2>
             <div class="avatar">
-                <img src="avatar.png" alt="Avatar">
+                
             </div>
             <form method="POST">
                 <label for="username">ユーザー名</label>
