@@ -10,10 +10,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         // フォームからのデータを取得
-        $username = $_POST['username'];
-        $name = $_POST['name'];
+        $user_name = $_POST['username'];
+        $display_name = $_POST['name'];
         $profile = $_POST['profile'];
-        $email = $_POST['email'];
+        $mail = $_POST['email'];
         $password = $_POST['password'];
         $confirm_password = $_POST['confirm_password'];
 
@@ -23,12 +23,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
             // データベースにユーザーを追加
-            $stmt = $pdo->prepare("INSERT INTO users (username, name, profile, email, password) VALUES (:username, :name, :profile, :email, :password)");
-            $stmt->bindParam(':username', $username);
-            $stmt->bindParam(':name', $name);
+            $stmt = $pdo->prepare("INSERT INTO Account (user_name, display_name, profile, mail, pass) VALUES (:user_name, :display_name, :profile, :mail, :pass)");
+            $stmt->bindParam(':user_name', $user_name);
+            $stmt->bindParam(':display_name', $display_name);
             $stmt->bindParam(':profile', $profile);
-            $stmt->bindParam(':email', $email);
-            $stmt->bindParam(':password', $hashed_password);
+            $stmt->bindParam(':mail', $mail);
+            $stmt->bindParam(':pass', $hashed_password);
             $stmt->execute();
             echo "アカウントが作成されました。";
         }
@@ -37,6 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -58,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label for="username">ユーザー名</label>
                 <input type="text" id="username" name="username" required>
 
-                <label for="name">名前</label>
+                <label for="displayname">名前</label>
                 <input type="text" id="name" name="name" required>
 
                 <label for="profile">プロフィール</label>
