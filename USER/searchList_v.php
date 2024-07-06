@@ -15,95 +15,18 @@
     </div>
     <div class="results-container">
         <div class="user-card">
+        <?php foreach ($results as $row) { ?>
             <div class="user-icon">
-                <img src="user1.jpg" alt="User 1">
+                <img src="<?php echo "img/aikon/".$row['aikon']?>" alt="User 1">
             </div>
             <div class="user-info">
-                <h3>ユーザー名1</h3>
-                <p><a class="tag-uranai" href="search_hobby.php?hobby=#占い">#占い</a> <a class="tag-tsuri" href="search_hobby.php?hobby=#釣り">#釣り</a> <a class="tag-jpop" href="search_hobby.php?hobby=#J-POP">#J-POP</a></p>
+                <h3><?php echo $row['user_name']; ?></h3>
+                <p>
+                    <a class="tag-uranai">#<?php echo $row['tag_mei']; ?></a>
+                </p>
             </div>
         </div>
-        <div class="user-card">
-            <div class="user-icon">
-                <img src="user2.jpg" alt="User 2">
-            </div>
-            <div class="user-info">
-                <h3>ユーザー名2</h3>
-                <p><a class="tag-uranai" href="search_hobby.php?hobby=#占い">#占い</a> <a class="tag-tsuri" href="search_hobby.php?hobby=#釣り">#釣り</a> <a class="tag-cafe" href="search_hobby.php?hobby=#カフェ巡り">#カフェ巡り</a></p>
-            </div>
-        </div>
-        <div class="user-card">
-            <div class="user-icon">
-                <img src="user3.jpg" alt="User 3">
-            </div>
-            <div class="user-info">
-                <h3>ユーザー名3</h3>
-                <p><a class="tag-jpop" href="search_hobby.php?hobby=#J-POP">#J-POP</a> <a class="tag-uranai" href="search_hobby.php?hobby=#占い">#占い</a> <a class="tag-tsuri" href="search_hobby.php?hobby=#釣り">#釣り</a></p>
-            </div>
-        </div>
-        <div class="user-card">
-            <div class="user-icon">
-                <img src="user4.jpg" alt="User 4">
-            </div>
-            <div class="user-info">
-                <h3>ユーザー名4</h3>
-                <p><a class="tag-jpop" href="search_hobby.php?hobby=#J-POP">#J-POP</a> <a class="tag-uranai" href="search_hobby.php?hobby=#占い">#占い</a> <a class="tag-tsuri" href="search_hobby.php?hobby=#釣り">#釣り</a></p>
-            </div>
-        </div>
-        <div class="user-card">
-            <div class="user-icon">
-                <img src="user5.jpg" alt="User 5">
-            </div>
-            <div class="user-info">
-                <h3>ユーザー名5</h3>
-                <p><a class="tag-uranai" href="search_hobby.php?hobby=#占い">#占い</a> <a class="tag-jpop" href="search_hobby.php?hobby=#J-POP">#J-POP</a> <a class="tag-cafe" href="search_hobby.php?hobby=#カフェ巡り">#カフェ巡り</a></p>
-            </div>
-        </div>
-        <div class="user-card">
-            <div class="user-icon">
-                <img src="user6.jpg" alt="User 6">
-            </div>
-            <div class="user-info">
-                <h3>ユーザー名6</h3>
-                <p><a class="tag-cafe" href="search_hobby.php?hobby=#カフェ巡り">#カフェ巡り</a> <a class="tag-uranai" href="search_hobby.php?hobby=#占い">#占い</a> <a class="tag-tsuri" href="search_hobby.php?hobby=#釣り">#釣り</a></p>
-            </div>
-        </div>
-        <div class="user-card">
-            <div class="user-icon">
-                <img src="user7.jpg" alt="User 7">
-            </div>
-            <div class="user-info">
-                <h3>ユーザー名7</h3>
-                <p><a class="tag-jpop" href="search_hobby.php?hobby=#J-POP">#J-POP</a> <a class="tag-tsuri" href="search_hobby.php?hobby=#釣り">#釣り</a> <a class="tag-uranai" href="search_hobby.php?hobby=#占い">#占い</a></p>
-            </div>
-        </div>
-        <div class="user-card">
-            <div class="user-icon">
-                <img src="user8.jpg" alt="User 8">
-            </div>
-            <div class="user-info">
-                <h3>ユーザー名8</h3>
-                <p><a class="tag-tsuri" href="search_hobby.php?hobby=#釣り">#釣り</a> <a class="tag-uranai" href="search_hobby.php?hobby=#占い">#占い</a> <a class="tag-cafe" href="search_hobby.php?hobby=#カフェ巡り">#カフェ巡り</a></p>
-            </div>
-        </div>
-        <div class="user-card">
-            <div class="user-icon">
-                <img src="user9.jpg" alt="User 9">
-            </div>
-            <div class="user-info">
-                <h3>ユーザー名9</h3>
-                <p><a class="tag-cafe" href="search_hobby.php?hobby=#カフェ巡り">#カフェ巡り</a> <a class="tag-tsuri" href="search_hobby.php?hobby=#釣り">#釣り</a> <a class="tag-uranai" href="search_hobby.php?hobby=#占い">#占い</a></p>
-            </div>
-        </div>
-        <div class="user-card">
-            <div class="user-icon">
-                <img src="user10.jpg" alt="User 10">
-            </div>
-            <div class="user-info">
-                <h3>ユーザー名10</h3>
-                <p><a class="tag-jpop" href="search_hobby.php?hobby=#J-POP">#J-POP</a> <a class="tag-cafe" href="search_hobby.php?hobby=#カフェ巡り">#カフェ巡り</a> <a class="tag-tsuri" href="search_hobby.php?hobby=#釣り">#釣り</a></p>
-            </div>
-        </div>
+        <?php } ?>
     </div>
 
     <div class="footer-container">
