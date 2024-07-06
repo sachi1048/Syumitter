@@ -73,7 +73,7 @@ body {
     margin-bottom: 10px;
     transition: background 0.3s ease;
     color: #333;
-    margin-top: 20px; /* ユーザーカードの上部にマージンを追加 */
+    margin-top: 3%; /* ユーザーカードの上部にマージンを追加 */
 }
 .user-card:hover {
     background-color: #f0f0f0;
