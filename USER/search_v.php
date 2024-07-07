@@ -28,7 +28,8 @@
     </nav>
 
     <div class="search-container">
-        <form method="get" action="search_c.php" onsubmit="return searchHobby();">
+        <form method="get" action="search_c.php">
+            <input type="hidden" name="method" value="index">
             <input type="hidden" name="nav" id="navInput">
             <input type="text" name="hobby" placeholder="#趣味を検索する...">
             <button type="submit">
