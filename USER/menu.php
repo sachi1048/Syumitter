@@ -4,9 +4,9 @@
       <img src="img/toukou.png">
     </div>
   </a>
-  <a href="kensaku.php">
+  <a href="search_v.php">
     <div class="icon">
-      <img src="img/kensaku.png">
+      <img src="img/search.png">
     </div>
   </a>
   <a href="group_list.php">
@@ -14,7 +14,7 @@
       <img src="img/chataikon.png">
     </div>
   </a>
-  <a href="myprofile">
+  <a href="myprofile.php">
     <div class="icon">
       <img src="img/hito.png">
     </div>
