@@ -1,7 +1,8 @@
-<?php session_start(); ?>
-<?php require 'db-connect.php'; ?>
+<?php session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+require 'db-connect.php';
 
-<?php
 $pdo = new PDO($connect, USER, PASS);
 $user_name = $_SESSION['user']['user_name'];
 $display_name = $_SESSION['user']['display_name'];
@@ -50,28 +51,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (empty($errors)) {
         $group_name = $_POST['group_name'];
         $tag_id = $selectedTags[0]; //タグが一つしか選択できないので
-        $aikonn = basename($_FILES['aikon']['name']); // ファイル名を取得
+        $aikonn = $aikon; // ファイル名を取得
 
+        // ファイルが選択された場合
+        if (isset($_FILES['aikon']) && $_FILES['aikon']['error'] == UPLOAD_ERR_OK) {
+            $aikonn = basename($_FILES['aikon']['name']); // ファイル名を取得
+            $upload_dir = 'img/aikon/';
+            $upload_file = $upload_dir . $aikonn;
 
-        $stmt = $pdo->prepare('INSERT INTO Group_chat (group_mei, creator_mei, aikon, tag_id) VALUES (?, ?, ?, ?)');
-        $stmt->execute([$group_name, $user_name, $aikon, $tag_id]);
-
-        // 挿入したグループのIDを取得
-        $group_id = $pdo->lastInsertId();
-
-        // 作成者をグループメンバーとして追加
-        $stmt = $pdo->prepare('INSERT INTO Group_member (group_id, user_name) VALUES (?, ?)');
-        $stmt->execute([$group_id, $user_name]);
-
-        // 選択されたメンバーをグループに追加
-        foreach ($selectedMembers as $member) {
-            $stmt = $pdo->prepare('INSERT INTO Group_member (group_id, user_name) VALUES (?, ?)');
-            $stmt->execute([$group_id, $member]);
+            // ファイルのアップロード処理
+            if (!move_uploaded_file($_FILES['aikon']['tmp_name'], $upload_file)) {
+                $errors[] = 'ファイルのアップロードに失敗しました。';
+            }
         }
 
-        // 成功したらグループ一覧ページにリダイレクト
-        header('Location: group_list.php');
-        exit();
+        if (empty($errors)) {
+            $stmt = $pdo->prepare('INSERT INTO Group_chat (group_mei, creator_mei, aikon, tag_id) VALUES (?, ?, ?, ?)');
+            $stmt->execute([$group_name, $user_name, $aikonn, $tag_id]);
+
+            // 挿入したグループのIDを取得
+            $group_id = $pdo->lastInsertId();
+
+            // 作成者をグループメンバーとして追加
+            $stmt = $pdo->prepare('INSERT INTO Group_member (group_id, member) VALUES (?, ?)');
+            $stmt->execute([$group_id, $user_name]);
+
+            // 選択されたメンバーをグループに追加
+            foreach ($selectedMembers as $member) {
+                $stmt = $pdo->prepare('INSERT INTO Group_member (group_id, member) VALUES (?, ?)');
+                $stmt->execute([$group_id, $member]);
+            }
+
+            // 成功したらグループ一覧ページにリダイレクト
+            header('Location: group_list.php');
+            exit();
+        }
+
+        
     }
 }
 
@@ -107,12 +123,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <form action="group_new.php" method="post" enctype="multipart/form-data">
         <div class="aikon">
             <lable label="file_label">
-                <img id="aikonPreview" src="img/aikon/<?php echo $aikon; ?>" class="maru">
-                <input type="file" name="aikon" id="aikonIput">
-                <input type="hidden" name="aikonn" id="aikonnHidden" value="<?php echo $aikon; ?>">
+                <img id="aikonPreview" src="img/aikon/<?php echo htmlspecialchars($aikon, ENT_QUOTES, 'UTF-8'); ?>" class="maru">
+                <input type="file" name="aikon" id="aikonInput">
+                <input type="hidden" name="aikonn" id="aikonnHidden" value="<?php echo htmlspecialchars($aikon, ENT_QUOTES, 'UTF-8'); ?>">
             </lable>
         </div>
-        
+        <br>
         <!-- グループ名の入力 -->
         <input type="text" name="group_name" placeholder="チャット名" value="<?php echo isset($_POST['group_name']) ? htmlspecialchars($_POST['group_name'], ENT_QUOTES, 'UTF-8') : ''; ?>" required>
         <br>
