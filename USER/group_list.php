@@ -65,12 +65,23 @@
 
             echo '</td>';
             //通知
-            echo '<td>
+            $zzz=$pdo->prepare('select count(*) as con from Group_Rireki where chat_id = ? and sender <> ?');
+            $zzz->execute([$row['group_id'],$_SESSION['user']['user_name']]);
+            $kekka=$zzz->fetch(PDO::FETCH_ASSOC);
+            $lol=$pdo->prepare('select count(*) as com from Group_Kidoku where user_name = ? and group_id = ?');
+            $lol->execute([$_SESSION['user']['user_name'],$row['group_id']]);
+            $sa=$lol->fetch(PDO::FETCH_ASSOC);
+            $tuuti=$kekka['con']-$sa['com'];
+            if($tuuti == 0){
+                echo '<td></td>';
+            }else{
+                echo '<td>
                     <div class="chat-action">
-                        99
+                        ',$tuuti,'
                     </div>
-                </td>
-            </tr>';
+                </td>';
+            }
+            echo '</tr>';
         }
 
     ?>
