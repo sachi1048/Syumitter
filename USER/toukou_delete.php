@@ -23,13 +23,13 @@ if (isset($_POST['delete_post'])) {
         $delete_post_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
         $delete_post_stmt->execute();
 
-        header("Location: user_posts.php");
+        header("Location: myprofile.php");
         exit();
     } catch (PDOException $e) {
         echo "エラー：" . $e->getMessage();
     }
 } else {
-    header("Location: user_posts.php");
+    header("Location: myprofile.php");
     exit();
 }
 ?>
