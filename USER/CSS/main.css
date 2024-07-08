@@ -239,7 +239,12 @@ input[type="file"]{
 
 /* 新規チャット画面の画面遷移ボタン */
 .btn-tag{
-
+    margin: 10px;
+    width: 130px;
+    height: 30px;
+    color: #00b2D9;
+    border: solid 2px #00B2D9;
+    border-radius: 10px;
 }
 
 .puramai{

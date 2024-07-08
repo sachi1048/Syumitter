@@ -1,32 +1,36 @@
 .selectable {
-    width:27%;
-    overflow:hidden;
-    display: inline-block; /* ラベルをインラインブロックにする */
-    height:15px;
-    padding: 10px 5px 20px 5px; /* ラベルの内側の余白を設定 */
-    margin: 5px; /* ラベルの外側の余白を設定 */
-    cursor: pointer; /* ポインタカーソルを表示 */
-    border-radius:17px;
-    font-size:14px;
-    font-weight:bold;
-    background-color:#ffffff;
+    width: 27%;
+    overflow: hidden;
+    display: inline-block;
+    height: 15px;
+    padding: 10px 5px 20px 5px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 17px;
+    font-size: 14px;
+    font-weight: bold;
+    background-color: #ffffff;
 }
-label.selectable:hover{
-    background-color:#18EBF9;
-    color:#ffffff;
-    border:none;
+
+label.selectable:hover {
+    /* hover時のスタイルはJavaScriptで設定 */
+    border: none;
 }
+
 input[type="checkbox"] {
-    display: none; /* チェックボックスを非表示にする */
+    display: none;
 }
+
 input[type="checkbox"]:checked + label {
-    border-color: blue; /* チェックされたときのラベルの枠線の色を青に変更 */
-    background-color: lightblue; /* チェックされたときのラベルの背景色をライトブルーに変更 */
+    border-color: blue;
+    background-color: lightblue;
 }
-.aokusitai{
-    color:rgb(45, 77, 255);
+
+.aokusitai {
+    color: rgb(45, 77, 255);
 }
-.backbutton{
+
+.backbutton {
     width: 19%;
     height: 30px;
     border-color: rgb(45, 77, 255);
@@ -36,51 +40,56 @@ input[type="checkbox"]:checked + label {
     text-align: left;
     border-radius: 8px;
 }
-.tag_ln{
-    margin-top:10px;
-    margin-bottom:2px;
+
+.tag_ln {
+    margin-top: 10px;
+    margin-bottom: 2px;
     border: 2px solid;
     padding: 2px 5px;
-    border-radius:8px;
+    border-radius: 8px;
 }
-.koumoku{
-    margin-top:20px;
-    margin-bottom:2px;
-    text-align:left;
-    margin-left:15%;
+
+.koumoku {
+    margin-top: 20px;
+    margin-bottom: 2px;
+    text-align: left;
+    margin-left: 15%;
 }
+
 .tagbutton {
-    margin-top:10px;
-    background-color: #ffffff; /* ボタンの背景色 */
-    padding: 10px 24px; /* ボタンのパディング */
+    margin-top: 10px;
+    background-color: #ffffff;
+    padding: 10px 24px;
     background: linear-gradient(to right, #6ddcff, #ff4ef8, #ff5d5d);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-    text-align: center; /* ボタンのテキストを中央揃え */
-    text-decoration: none; /* ボタンの下線をなしに */
-    font-size: 14px; /* ボタンのフォントサイズ */
-    cursor: pointer; /* マウスカーソルをポインターに */
-    border-radius: 5px; /* ボタンの角丸 */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
     border: 1px solid;
-    /* ボーダーカラーをグラデーションに */
     border-image: linear-gradient(to right, #6ddcff, #ff4ef8, #ff5d5d);
-    border-image-slice: 1; /* グラデーションを全体に適用 */
+    border-image-slice: 1;
 }
+
 .syumitter1 {
     font-weight: bold;
     background: linear-gradient(-45deg, #6ddcff, #ff4ef8, #ff5d5d);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     font-style: oblique;
 }
-.inp{
-    width:70%;
+
+.inp {
+    width: 70%;
     box-sizing: border-box;
     margin: 5px;
     padding: 5px;
     border-radius: 5px;
     border: 2px solid #aaa;
 }
+
 .nextbutton {
     margin-top: 10px;
     margin-bottom: 200px;
@@ -89,21 +98,24 @@ input[type="checkbox"]:checked + label {
     border-color: #8f8f8f;
     background-color: #fff500;
     color: #A73030;
-    font-weight: bold;  
+    font-weight: bold;
 }
+
 body {
     text-align: center;
 }
-.setumeinp{
-    width:70%;
-    height:120px;
+
+.setumeinp {
+    width: 70%;
+    height: 120px;
     box-sizing: border-box;
     margin: 5px;
     padding: 5px;
     border-radius: 5px;
     border: 2px solid #aaa;
-    font-size:17px;
+    font-size: 17px;
 }
+
 .toukougazou {
     position: relative;
     width: 70%;
@@ -116,6 +128,7 @@ body {
     background-color: lightgray;
     border: 1.2px solid;
 }
+
 .center-button {
     position: absolute;
     top: 50%;
@@ -125,27 +138,30 @@ body {
     padding: 10px 20px;
     background-color: rgba(255, 255, 255, 0.7);
     font-weight: bold;
-    /* border: none; */
     cursor: pointer;
     border: 1.2px solid #ff9929;
-    border-radius:8px;
+    border-radius: 8px;
 }
+
 #fileName {
     text-align: center;
     margin-top: 10px;
 }
+
 .h1-1 {
     font-weight: bold;
     font-style: oblique;
     font-family: "arial black";
 }
-.tag_inp{
-    width:50%;
-    height:35px;
-    border:1.2px solid #000000;
-    border-radius:8px;
+
+.tag_inp {
+    width: 50%;
+    height: 35px;
+    border: 1.2px solid #000000;
+    border-radius: 8px;
 }
-.nizibutton{
+
+.nizibutton {
     width: 15%;
     height: 35px;
     border: none;
@@ -154,13 +170,15 @@ body {
     background: linear-gradient(-45deg, #6ddcff, #ff4ef8, #ff5d5d);
     color: #ffffff;
 }
-.tag_syumi{
+
+.tag_syumi {
     background: linear-gradient(-45deg, #6ddcff, #ff4ef8, #ff5d5d);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-size:30px;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 30px;
 }
-.lastbutton{
+
+.lastbutton {
     margin-top: 10px;
     padding: 5px 20px;
     border-radius: 5px;

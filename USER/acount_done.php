@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>アカウント作成完了</title>
+    <title>新規作成完了</title>
     <style>
         body {
             display: flex;

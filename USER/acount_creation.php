@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bindParam(':mail', $mail);
             $stmt->bindParam(':pass', $hashed_password);
             $stmt->execute();
-            echo "アカウントが作成されました。";
+            echo "あ";
         }
     } catch (PDOException $e) {
         echo "データベース接続失敗: " . $e->getMessage();
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>アカウント新規作成</title>
+    <title>新規情報入力画面</title>
     <link rel="stylesheet" href="CSS/creation.css">
 </head>
 <body>
