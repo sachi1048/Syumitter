@@ -8,10 +8,10 @@ $pdo = new PDO($connect, USER, PASS);
 // 投稿処理
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['toukousuru'])) {
-        // ログインしていなければ煽りとエラーを表示
+        // ログインしていなければエラーを表示
         if(!isset($_SESSION['user']['user_name'])){
-            echo '<h1 style="text-align:center red;">エラーが発生しました</h1>';
-        }else{
+            echo '<h1 style="text-align:center; color:red;">エラーが発生しました</h1>';
+        } else {
             // 現在の日付と時間を年/月/日 時：分：秒の形で変数に保存
             $currentDateTime = date('Y-m-d H:i:s');
             // ファイルがアップロードされたか確認
@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <input type="hidden" name="naiyou" id="naiyou"><!-- 画像ファイル名を保存するhiddenフィールド -->
         <p class="koumoku">タイトル</p>
-        <input class="inp" type="text" name="title" required><!-- 投稿テーブルのタイトルに入れる用の入力フォームrequiredを付けることで入力必須項目にしている-->
+        <input class="inp" type="text" name="title" id="title" required><!-- 投稿テーブルのタイトルに入れる用の入力フォームrequiredを付けることで入力必須項目にしている-->
         <br>
         <?php
         // 初期化
@@ -103,10 +103,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // $selectedTagsを使って必要な処理を続けることができます。
         ?>
         <!-- 趣味タグ選択するための画面に映るためのボタン -->
-        <button class="tagbutton" type="button" onclick="location.href='tag_sentaku.php'">＃趣味タグ追加</button>
+        <button class="tagbutton" type="button" onclick="saveFormData(); location.href='tag_sentaku.php';">＃趣味タグ追加</button>
         <!-- 投稿内容の説明を表示するエリア -->
         <p class="koumoku">キャプション</p>
-        <textarea class="setumeinp" type="text" name="setumei" required></textarea><!-- 投稿の説明？-->
+        <textarea class="setumeinp" name="setumei" id="setumei" required></textarea><!-- 投稿の説明？-->
         <br>
         <!-- 投稿を完了するためのボタン -->
         <button class="nextbutton" type="submit" name="toukousuru">投稿</button>
@@ -115,18 +115,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php require 'menu.php';?>
 
     <script>
+        function saveFormData() {
+            var title = document.getElementById('title').value;
+            var setumei = document.getElementById('setumei').value;
+            var fileInput = document.getElementById('fileInput').files[0];
+
+            localStorage.setItem('title', title);
+            localStorage.setItem('setumei', setumei);
+            if (fileInput) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    localStorage.setItem('fileInput', e.target.result);
+                }
+                reader.readAsDataURL(fileInput);
+            }
+        }
+
+        function loadFormData() {
+            var title = localStorage.getItem('title');
+            var setumei = localStorage.getItem('setumei');
+            var fileInput = localStorage.getItem('fileInput');
+
+            if (title) {
+                document.getElementById('title').value = title;
+            }
+            if (setumei) {
+                document.getElementById('setumei').value = setumei;
+            }
+            if (fileInput) {
+                document.getElementById('toukougazou').style.backgroundImage = 'url(' + fileInput + ')';
+            }
+        }
+
         document.getElementById('fileInput').addEventListener('change', function() {
             var file = this.files[0];
             if (file) {
                 var reader = new FileReader();
                 reader.onload = function(e) {
                     document.getElementById('toukougazou').style.backgroundImage = 'url(' + e.target.result + ')';
+                    document.getElementById('naiyou').value = e.target.result.split(',')[1]; // Base64データ部分だけを保存
                 }
                 reader.readAsDataURL(file);
-                // document.getElementById('fileName').textContent = file.name; // ファイル名の表示部分を削除
-                document.getElementById('naiyou').value = file.name;
             }
         });
+
+        window.onload = function() {
+            loadFormData();
+        };
     </script>
 </body>
 </html>
