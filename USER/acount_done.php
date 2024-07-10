@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bindParam(':mail', $mail);
             $stmt->bindParam(':pass', $hashed_password);
             $stmt->execute();
-            echo "あ";
+            echo "";
         }
     } catch (PDOException $e) {
         echo "データベース接続失敗: " . $e->getMessage();
