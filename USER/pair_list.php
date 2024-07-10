@@ -38,11 +38,11 @@
 
     <?php
         //コピペっただけ　相互の人を表示
-        $sql=$pdo->prepare('select * from Follow where zyoukyou=1 and applicant_name=?');
+        $sql=$pdo->prepare('select * from Pair_chat where user1=?');
         $sql->execute([$user_name]);
         foreach($sql as $row){
             $sql2=$pdo->prepare('select * from Account where user_name=?');
-            $sql2->execute([$row['approver_name']]);
+            $sql2->execute([$row['user2']]);
             foreach($sql2 as $row2)
             echo '<tr>
                 <td>
