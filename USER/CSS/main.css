@@ -247,14 +247,25 @@ input[type="file"]{
     border-radius: 10px;
 }
 
+/* myprofileの趣味タグ追加・削除ボタン */
 .puramai{
     display: inline-block;
-    position: fixed;
+    position: absolute;
     vertical-align: middle;
     line-height: 1;
     width: 30px;
     height: 30px;
     margin-left: 5px;
+}
+
+.invisible-link {
+    text-decoration: none; /* 下線を消す */
+    color: transparent;    /* テキストの色を透明にする */
+    pointer-events: none;  /* aタグのイベントを無効にする */
+}
+
+.invisible-link img {
+    pointer-events: auto; /* imgタグのイベントを有効にする */
 }
 
   /* 「フォロワー/フォロー」「グループチャット/ペアチャット」の切り替え用 */

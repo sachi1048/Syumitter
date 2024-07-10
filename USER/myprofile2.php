@@ -62,7 +62,7 @@
                 echo '<div class="s-tag" style="background: rgb(', $tag['tag_color1'], ',', $tag['tag_color2'], ',', $tag['tag_color3'], ')">', $tag['tag_mei'], '</div>';
             }
         }
-        echo '<a href="myprofile-tag.php">
+        echo '<a href="myprofile-tag.php" class="invisible-line">
                 <img src="img/puramai.png" class="puramai">
               </a>';
         echo '</div><div class="profile">';

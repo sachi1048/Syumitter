@@ -79,7 +79,7 @@
         
             
     }
-    echo '<a href="myprofile-tag.php">
+    echo '<a href="myprofile-tag.php" class="invisible-line">
             <img src="img/puramai.png" class="puramai">
           </a>';
     echo '</div><div class="profile">';
