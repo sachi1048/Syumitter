@@ -94,9 +94,12 @@
         $spl->execute([$_SESSION['chat_id'],$_SESSION['user']['user_name']]);
         $kekka = $spl->fetch(PDO::FETCH_ASSOC);
         // 上の戻るボタンとグループ名（所属人数）、メニューボタン
+        $ldk=$pdo->prepare('select * from Account where user_name = ?');
+        $ldk->execute([$kekka['user2']]);
+        $sokka=$ldk->fetch(PDO::FETCH_ASSOC);
         echo '<div class="waku">';
         echo '<a href="pair_list.php"><span class="btn-mdr2"></span></a>';
-        echo '<div class="tablename">',$kekka['user2'],'</div>';
+        echo '<div class="tablename">',$sokka['display_name'],'</div>';
         echo '<form action="pair_edit.php" method="post">';
         echo '<button class="menuicon" type="submit"><i class="fas fa-bars fa-2x"></i></button>';
         echo '</form>';
