@@ -1,42 +1,4 @@
-<?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $server = 'mysql301.phy.lolipop.lan';
-    $dbname = 'LAA1517472-syumitta';
-    $user = 'LAA1517472';
-    $pass = 'kitagawa';
 
-    try {
-        $pdo = new PDO("mysql:host=$server;dbname=$dbname;charset=utf8", $user, $pass);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        // フォームからのデータを取得
-        $user_name = $_POST['username'];
-        $display_name = $_POST['name'];
-        $profile = $_POST['profile'];
-        $mail = $_POST['email'];
-        $password = $_POST['password'];
-        $confirm_password = $_POST['confirm_password'];
-
-        if ($password !== $confirm_password) {
-            echo "パスワードが一致しません。";
-        } else {
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
-            // データベースにユーザーを追加
-            $stmt = $pdo->prepare("INSERT INTO Account (user_name, display_name, profile, mail, pass) VALUES (:user_name, :display_name, :profile, :mail, :pass)");
-            $stmt->bindParam(':user_name', $user_name);
-            $stmt->bindParam(':display_name', $display_name);
-            $stmt->bindParam(':profile', $profile);
-            $stmt->bindParam(':mail', $mail);
-            $stmt->bindParam(':pass', $hashed_password);
-            $stmt->execute();
-            echo "あ";
-        }
-    } catch (PDOException $e) {
-        echo "データベース接続失敗: " . $e->getMessage();
-    }
-}
-?>
 
 
 <!DOCTYPE html>
@@ -55,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="avatar">
                 
             </div>
-            <form method="POST">
+            <form action="acount_done.php" method="POST">
                 <label for="username">ユーザー名</label>
                 <input type="text" id="username" name="username" required>
 
