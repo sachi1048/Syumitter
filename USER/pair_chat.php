@@ -2,33 +2,33 @@
 <?php
     require 'db-connect.php';
     $pdo = new PDO($connect,USER,PASS);
-    if(isset($_GET['group_id'])){
-        $_SESSION['group_id']=$_GET['group_id'];
+    if(isset($_GET['pair_chat'])){
+        $_SESSION['chat_id']=$_GET['pair_chat'];
     }
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['messagesend'])) {
             $currentDateTime = date('Y-m-d H:i:s');
-            $sdl=$pdo->prepare('insert into Group_Rireki values(null,?,?,?,?,default)');
-            $sdl->execute([$_POST['groupchatname'],$_SESSION['user']['user_name'],$_POST['message'],$currentDateTime]);
-            header("Location: group_chat.php");
+            $sdl=$pdo->prepare('insert into Pair_Rireki values(null,?,?,?,?,default)');
+            $sdl->execute([$_SESSION['chat_id'],$_SESSION['user']['user_name'],$_POST['message'],$currentDateTime]);
+            header("Location: pair_chat.php");
             exit;
         }
     }
     // 既読機能（できた）
-    $wsq=$pdo->prepare('select * from Group_Rireki where chat_id = ? and sender <> ?');
-    $wsq->execute([$_SESSION['group_id'],$_SESSION['user']['user_name']]);
+    $wsq=$pdo->prepare('select * from Pair_Rireki where chat_id = ? and sender <> ?');
+    $wsq->execute([$_SESSION['chat_id'],$_SESSION['user']['user_name']]);
     foreach($wsq as $rol){
-        $sot=$pdo->prepare('select * from Group_Kidoku where user_name = ? and rireki_id = ?');
+        $sot=$pdo->prepare('select * from Pair_Kidoku where user_name = ? and rireki_id = ?');
         $sot->execute([$_SESSION['user']['user_name'],$rol['rireki_id']]);
         $result = $sot->fetch(PDO::FETCH_ASSOC);
         if($result === false){// データがないことを確認
-            $sss=$pdo->prepare('insert into Group_Kidoku values(?,?,?)');
-            $sss->execute([$_SESSION['user']['user_name'],$_SESSION['group_id'],$rol['rireki_id']]);
+            $sss=$pdo->prepare('insert into Pair_Kidoku values(?,?,?)');
+            $sss->execute([$_SESSION['user']['user_name'],$_SESSION['chat_id'],$rol['rireki_id']]);
         }
-        $woo=$pdo->prepare('select count(*) as "count" from Group_Kidoku where rireki_id=?');
+        $woo=$pdo->prepare('select count(*) as "count" from Pair_Kidoku where rireki_id=?');
         $woo->execute([$rol['rireki_id']]);
         $count=$woo->fetch();
-        $cou=$pdo->prepare('update Group_Rireki set kidoku=? where rireki_id=?');
+        $cou=$pdo->prepare('update Pair_Rireki set kidoku=? where rireki_id=?');
         $cou->execute([$count['count'],$rol['rireki_id']]);
     }
 ?>
@@ -37,7 +37,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>グループチャット画面</title>
+    <title>ペアチャット画面</title>
     <link rel="stylesheet" href="CSS/group_chat.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
     <script>
@@ -71,7 +71,7 @@
             event.preventDefault(); // デフォルトのフォーム送信を防止
 
             var xhr = new XMLHttpRequest();
-            xhr.open("POST", "group_chat.php", true);
+            xhr.open("POST", "pair_chat.php", true);
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
             xhr.onreadystatechange = function() {
@@ -83,29 +83,30 @@
             };
 
             var message = document.querySelector('input[name="message"]').value;
-            var groupchatname = document.querySelector('input[name="groupchatname"]').value;
-            xhr.send("messagesend=true&message=" + encodeURIComponent(message) + "&groupchatname=" + encodeURIComponent(groupchatname));
+            xhr.send("messagesend=true&message=" + encodeURIComponent(message));
         }
     </script>
 </head>
 <body class="boda">
     <?php
         // このチャットの名前と所属人数を取り出す
-        $spl=$pdo->prepare('SELECT gc.group_mei,COUNT(gm.member) AS member_count FROM Group_chat gc LEFT JOIN Group_member gm ON gc.group_id = gm.group_id WHERE gm.group_id = ? GROUP BY gc.group_mei');
-        $spl->execute([$_SESSION['group_id']]);
+        $spl=$pdo->prepare('select * from Pair_chat where chat_id = ? and user1 = ?');
+        $spl->execute([$_SESSION['chat_id'],$_SESSION['user']['user_name']]);
         $kekka = $spl->fetch(PDO::FETCH_ASSOC);
         // 上の戻るボタンとグループ名（所属人数）、メニューボタン
+        $ldk=$pdo->prepare('select * from Account where user_name = ?');
+        $ldk->execute([$kekka['user2']]);
+        $sokka=$ldk->fetch(PDO::FETCH_ASSOC);
         echo '<div class="waku">';
-        echo '<a href="group_list.php"><span class="btn-mdr2"></span></a>';
-        echo '<div class="tablename">',$kekka['group_mei'],'(',$kekka['member_count'],')</div>';
-        echo '<form action="group_edit.php" method="post">';
-        echo '<input type="hidden" name="group_id" value="',$kekka['group_mei'],'">';
+        echo '<a href="pair_list.php"><span class="btn-mdr2"></span></a>';
+        echo '<div class="tablename">',$sokka['display_name'],'</div>';
+        echo '<form action="pair_edit.php" method="post">';
         echo '<button class="menuicon" type="submit"><i class="fas fa-bars fa-2x"></i></button>';
         echo '</form>';
         echo '</div>';
         echo '<br>';
-        $sql=$pdo->prepare('select * from Group_Rireki where chat_id = ?');
-        $sql->execute([$_SESSION['group_id']]);
+        $sql=$pdo->prepare('select * from Pair_Rireki where chat_id = ?');
+        $sql->execute([$_SESSION['chat_id']]);
         // 最初の一回だけ日付を表示させるためにboolean型の変数flgにtrueを入れる
         $flg = true;
         echo '<div class="chatcontainer" style="margin-top:60px;">';
@@ -145,7 +146,7 @@
                 $sol->execute([$row['sender']]);
                 $kekka=$sol->fetch(PDO::FETCH_ASSOC);
                 echo '<div class="message other">';
-                echo '<img class="icon" src="img/aikon/',$kekka['aikon'],'" alt="自分のアイコン画像">';
+                echo '<img class="icon" src="img/aikon/',$kekka['aikon'],'" alt="相手のアイコン画像">';
                 echo '<div class="content">',$kekka['display_name'],'<br>',$row['naiyou'],'</div>';
                 echo '<div class="timestamp">',$time_only,'</div>';
                 echo '</div>';
@@ -156,7 +157,6 @@
     <form id="messageForm" onsubmit="sendMessage(event)">
         <div class="sendmessage">
             <input class="messages" inputmode="text" name="message" placeholder="メッセージを入力" required>
-            <input type="hidden" name="groupchatname" value="<?= $_SESSION['group_id'] ?>">
             <button class="sousin" type="submit" name="messagesend"><i class="fab fa-telegram-plane fa-2x"></i></button>
         </div>
     </form>
