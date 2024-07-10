@@ -2,7 +2,6 @@
 <?php
     session_start();
     $pdo = new PDO($connect, USER, PASS);
-    // 趣味タグの追加処理
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['tagmei'])) {
             $num1 = random_int(0,255);
@@ -13,7 +12,7 @@
             $_SESSION['message'] = '趣味タグを追加しました';
         }
     }
-    // 趣味タグの追加完了通知処理
+
     $message = '';
     if (isset($_SESSION['message'])) {
         $message = $_SESSION['message'];
@@ -40,7 +39,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="CSS/checkbox.css">
     <title>趣味タグ編集画面</title>
-    <!-- ここから↓ -->
     <style>
         #notification {
             display: none;
@@ -74,21 +72,58 @@
                 });
             });
         }
+
         window.onload = function() {
-            limitCheckboxSelection();
-            var notification = document.getElementById('notification');
-            if (notification.innerText !== '') {
-                notification.style.display = 'block';
-                setTimeout(function() {
-                    notification.classList.add('hide');
-                }, 1500);
-                setTimeout(function() {
-                    notification.style.display = 'none';
-                }, 2000);
+    limitCheckboxSelection();
+    var notification = document.getElementById('notification');
+    if (notification.innerText !== '') {
+        notification.style.display = 'block';
+        setTimeout(function() {
+            notification.classList.add('hide');
+        }, 1500);
+        setTimeout(function() {
+            notification.style.display = 'none';
+        }, 2000);
+    }
+
+    // Add hover effect using JavaScript
+    var labels = document.querySelectorAll('.selectable');
+    labels.forEach(function(label) {
+        var hoverColor = label.getAttribute('data-hover-color');
+        var checkbox = document.getElementById(label.getAttribute('for'));
+
+        // 初期状態でチェックされているかどうかを確認して適用
+        if (checkbox.checked) {
+            label.style.backgroundColor = hoverColor;
+            label.style.color = 'white';
+        }
+
+        label.addEventListener('mouseover', function() {
+            if (!checkbox.checked) {
+                label.style.backgroundColor = hoverColor;
+                label.style.color = 'white';
             }
-        };
+        });
+        label.addEventListener('mouseout', function() {
+            if (!checkbox.checked) {
+                label.style.backgroundColor = 'transparent';
+                label.style.color = hoverColor;
+            }
+        });
+
+        // チェックボックスの変更イベントを監視してスタイルを更新
+        checkbox.addEventListener('change', function() {
+            if (checkbox.checked) {
+                label.style.backgroundColor = hoverColor;
+                label.style.color = 'white';
+            } else {
+                label.style.backgroundColor = 'transparent';
+                label.style.color = hoverColor;
+            }
+        });
+    });
+};
     </script>
-    <!-- ここまではチャットGPTにしかわかりません -->
 </head>
 <body>
     <h1 class="h1-1">Syumitter</h1>
@@ -100,16 +135,17 @@
         <button class="nizibutton" type="submit">追加</button>
         <p>１０つまで選択可能</p>
     </form><br>
-    <!-- 趣味タグ一覧を表示＆選択ボタン -->
+    <!-- 趣味タグ一覧を表示 -->
     <form action="myprofile-tag.php" method="POST">
         <div>
             <?php
                $sql = $pdo->query('SELECT * FROM Tag');
                $count = 1;
                foreach ($sql as $row) {
+                    $tagColor = 'rgb(' . $row['tag_color1'] . ',' . $row['tag_color2'] . ',' . $row['tag_color3'] . ')';
                     echo '<input type="checkbox" id="option', $count, '" name="selectedOptions[]" value="', $row['tag_id'], '">';
-                    echo '<label for="option', $count, '" style="border:1.2px solid rgb(',$row['tag_color1'],',',$row['tag_color2'],',',$row['tag_color3'],'); color:rgb(',$row['tag_color1'],',',$row['tag_color2'],',',$row['tag_color3'],');" class="selectable">#', $row['tag_mei'], '</label>';
-                    if($count%3 == 0){
+                    echo '<label for="option', $count, '" style="border:1.2px solid ', $tagColor, '; color:', $tagColor, ';" class="selectable" data-hover-color="', $tagColor, '">#', $row['tag_mei'], '</label>';
+                    if($count % 3 == 0){
                         echo '<br>';
                     }
                     $count++;
@@ -129,7 +165,7 @@
                     notification.classList.add('hide');
                 }, 1500);
                 setTimeout(function() {
-                    notification.style.display = 'none';
+                    notification.style.display = 'none');
                 }, 2000);
             };
         </script>

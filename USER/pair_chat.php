@@ -22,8 +22,8 @@
         $sot->execute([$_SESSION['user']['user_name'],$rol['rireki_id']]);
         $result = $sot->fetch(PDO::FETCH_ASSOC);
         if($result === false){// データがないことを確認
-            $sss=$pdo->prepare('insert into Pair_Kidoku values(?,?)');
-            $sss->execute([$_SESSION['user']['user_name'],$rol['rireki_id']]);
+            $sss=$pdo->prepare('insert into Pair_Kidoku values(?,?,?)');
+            $sss->execute([$_SESSION['user']['user_name'],$_SESSION['chat_id'],$rol['rireki_id']]);
         }
         $woo=$pdo->prepare('select count(*) as "count" from Pair_Kidoku where rireki_id=?');
         $woo->execute([$rol['rireki_id']]);
