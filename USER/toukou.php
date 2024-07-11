@@ -5,6 +5,7 @@ require 'db-connect.php';
 session_start();
 // DB接続
 $pdo = new PDO($connect, USER, PASS);
+
 // 投稿処理
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['toukousuru'])) {
@@ -22,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // ファイルを指定のフォルダに移動
                 if (move_uploaded_file($_FILES['fileInput']['tmp_name'], $uploadFile)) {
                     $fileName = basename($_FILES['fileInput']['name']);
+                    $_POST['naiyou'] = $fileName; // ファイル名をPOSTデータに設定
                 } else {
                     echo '<h2>ファイルのアップロードに失敗しました</h2>';
                     exit;
@@ -126,6 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 var reader = new FileReader();
                 reader.onload = function(e) {
                     localStorage.setItem('fileInput', e.target.result);
+                    localStorage.setItem('fileName', fileInput.name); // ファイル名を保存
                 }
                 reader.readAsDataURL(fileInput);
             }
@@ -135,6 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             var title = localStorage.getItem('title');
             var setumei = localStorage.getItem('setumei');
             var fileInput = localStorage.getItem('fileInput');
+            var fileName = localStorage.getItem('fileName'); // ファイル名を取得
 
             if (title) {
                 document.getElementById('title').value = title;
@@ -145,6 +149,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (fileInput) {
                 document.getElementById('toukougazou').style.backgroundImage = 'url(' + fileInput + ')';
             }
+            if (fileName) {
+                document.getElementById('naiyou').value = fileName; // ファイル名をフォームに設定
+            }
         }
 
         document.getElementById('fileInput').addEventListener('change', function() {
@@ -153,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 var reader = new FileReader();
                 reader.onload = function(e) {
                     document.getElementById('toukougazou').style.backgroundImage = 'url(' + e.target.result + ')';
-                    document.getElementById('naiyou').value = e.target.result.split(',')[1]; // Base64データ部分だけを保存
+                    document.getElementById('naiyou').value = file.name; // ファイル名を保存
                 }
                 reader.readAsDataURL(file);
             }
