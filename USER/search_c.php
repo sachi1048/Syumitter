@@ -76,6 +76,21 @@ class MyController {
             // 結果の取得
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
             include('searchToukouList_v.php'); 
+        }else if($nav=="group_chat") {
+            $sql = "SELECT *
+            FROM 
+                tag t 
+            WHERE 
+                t.tag_mei LIKE :tag_mei";        // プリペアドステートメントの準備
+            $stmt = $pdo->prepare($sql);
+            // パラメータのバインド
+            $stmt->bindValue(':tag_mei', $hobby , PDO::PARAM_STR);
+            // クエリの実行     
+            $stmt->execute();
+            // 結果の取得
+            $results = $stmt->fetch(PDO::FETCH_ASSOC);
+            header('Location: group_list.php?tagId='.$results["tag_id"]);
+            // include('group_list.php?tag_id='.$results["tag_id"]); 
         }
 
     }
