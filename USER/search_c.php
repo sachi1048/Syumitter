@@ -11,7 +11,7 @@ class MyController {
         // SQLクエリ
 
         // ユーザーを選択
-        if($nav=="user"){
+        if($nav=="user") {
             $sql = "SELECT DISTINCT 
             a.user_name, a.display_name, a.aikon, a.profile, a.mail, a.pass, a.freeze_code, 
             t.tag_id, t.tag_mei, t.tag_color1, t.tag_color2, t.tag_color3 
@@ -31,8 +31,42 @@ class MyController {
             // 結果の取得
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
             include('searchList_v.php');       
-        }else{
-            
+        }else if($nav=="post") {
+            $sql = "SELECT
+                    t.toukou_id
+                    , t.title
+                    , t.toukou_datetime
+                    , t.contents
+                    , t.setumei
+                    , t.tag_id1
+                    , tag1.tag_mei AS tag_mei1
+                    , t.tag_id2
+                    , tag2.tag_mei AS tag_mei2
+                    , t.tag_id3
+                    , tag3.tag_mei AS tag_mei3
+                    , t.toukou_mei 
+                FROM
+                    toukou t 
+                    LEFT JOIN tag tag1 
+                        ON t.tag_id1 = tag1.tag_id 
+                    LEFT JOIN tag tag2 
+                        ON t.tag_id2 = tag2.tag_id 
+                    LEFT JOIN tag tag3 
+                        ON t.tag_id3 = tag3.tag_id 
+                WHERE
+                    tag1.tag_mei LIKE :hobby1
+                    OR tag2.tag_mei LIKE :hobby2 
+                    OR tag3.tag_mei LIKE :hobby3
+                    ";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':hobby1', '%' . $hobby . '%', PDO::PARAM_STR);
+            $stmt->bindValue(':hobby2', '%' . $hobby . '%', PDO::PARAM_STR);  
+            $stmt->bindValue(':hobby3', '%' . $hobby . '%', PDO::PARAM_STR);
+            $stmt->execute();
+            // 結果の取得
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            var_dump($results);
+            exit;
         }
 
     }
