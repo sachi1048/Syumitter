@@ -69,7 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['commentsend'])) {
     <div class="container">
         <h1 class="h1-2">Syumitter</h1>
         <a href="toukou_disp.php?toukou_id=<?php echo htmlspecialchars($toukou_id, ENT_QUOTES, 'UTF-8'); ?>">
-    <span class="btn-mdr2"></span>
+        <a href="javascript:history.back()" class="btn-mdr2"></a>
+
 </a>
         <?php
         $sql = "SELECT t.title, c.naiyou, a.aikon, a.user_name

@@ -22,8 +22,8 @@
         $sot->execute([$_SESSION['user']['user_name'],$rol['rireki_id']]);
         $result = $sot->fetch(PDO::FETCH_ASSOC);
         if($result === false){// データがないことを確認
-            $sss=$pdo->prepare('insert into Pair_Kidoku values(?,?)');
-            $sss->execute([$_SESSION['user']['user_name'],$rol['rireki_id']]);
+            $sss=$pdo->prepare('insert into Pair_Kidoku values(?,?,?)');
+            $sss->execute([$_SESSION['user']['user_name'],$_SESSION['chat_id'],$rol['rireki_id']]);
         }
         $woo=$pdo->prepare('select count(*) as "count" from Pair_Kidoku where rireki_id=?');
         $woo->execute([$rol['rireki_id']]);
@@ -94,9 +94,12 @@
         $spl->execute([$_SESSION['chat_id'],$_SESSION['user']['user_name']]);
         $kekka = $spl->fetch(PDO::FETCH_ASSOC);
         // 上の戻るボタンとグループ名（所属人数）、メニューボタン
+        $ldk=$pdo->prepare('select * from Account where user_name = ?');
+        $ldk->execute([$kekka['user2']]);
+        $sokka=$ldk->fetch(PDO::FETCH_ASSOC);
         echo '<div class="waku">';
         echo '<a href="pair_list.php"><span class="btn-mdr2"></span></a>';
-        echo '<div class="tablename">',$kekka['user2'],'</div>';
+        echo '<div class="tablename">',$sokka['display_name'],'</div>';
         echo '<form action="pair_edit.php" method="post">';
         echo '<button class="menuicon" type="submit"><i class="fas fa-bars fa-2x"></i></button>';
         echo '</form>';

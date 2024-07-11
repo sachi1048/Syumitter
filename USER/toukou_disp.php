@@ -42,11 +42,18 @@ try {
         // タグ名の取得
         function getTagName($pdo, $tag_id) {
             if ($tag_id) {
-                $tag_stmt = $pdo->prepare("SELECT tag_mei FROM Tag WHERE tag_id = :tag_id");
+                $tag_stmt = $pdo->prepare("SELECT tag_mei, tag_color1, tag_color2, tag_color3 FROM Tag WHERE tag_id = :tag_id");
                 $tag_stmt->bindParam(':tag_id', $tag_id, PDO::PARAM_INT);
                 $tag_stmt->execute();
                 $tag = $tag_stmt->fetch(PDO::FETCH_ASSOC);
-                return $tag ? htmlspecialchars($tag['tag_mei']) : null; // タグが見つからなかった場合はnullを返す
+                if ($tag) {
+                    return [
+                        'tag_mei' => htmlspecialchars($tag['tag_mei']),
+                        'tag_color1' => $tag['tag_color1'],
+                        'tag_color2' => $tag['tag_color2'],
+                        'tag_color3' => $tag['tag_color3']
+                    ];
+                }
             }
             return null;
         }
@@ -57,6 +64,8 @@ try {
             getTagName($pdo, isset($post['tag_id2']) ? $post['tag_id2'] : null),
             getTagName($pdo, isset($post['tag_id3']) ? $post['tag_id3'] : null)
         ];
+
+        
     }
 } catch (PDOException $e) {
     echo "エラー：" . $e->getMessage();
@@ -77,20 +86,65 @@ ob_end_flush();
     <link rel="stylesheet" href="CSS/toukou_disp2.css">
     <link rel="stylesheet" href="CSS/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css"> -->
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
     <title>投稿表示画面</title>
+<script>
+$(document).ready(function(){
+    $(document).on('click', '.follow-button', function(e){
+        e.preventDefault();
+        var button = $(this);
+        var approverName = button.data('approver-name'); // ボタンのデータ属性からフォロー相手のユーザー名を取得
+
+        $.ajax({
+            url: 'api.php',
+            type: 'POST',
+            data: {
+                approver_name: approverName
+                // 必要に応じてデータをここに追加
+            },
+            success: function(response) {
+                console.log('APIコール成功');
+                console.log(response);
+
+                // ボタンのテキストとクラスを切り替える
+                if (button.hasClass('following')) {
+                    button.removeClass('following').text('フォローする');
+                } else {
+                    button.addClass('following').text('フォロー中');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('APIコール失敗');
+                console.error(status, error);
+            }
+        });
+    });
+});
+
+</script>
 
 
 </head>
 <body>
 <footer><?php require 'menu.php'; ?></footer>
 <h1 class="h1-2">Syumitter</h1>  
-<a href="profile.php?user_name=<?php echo htmlspecialchars($current_user_name, ENT_QUOTES, 'UTF-8'); ?>">
-    <span class="btn-mdr2"></span>
-</a>
+<a href="javascript:history.back()" class="btn-mdr2"></a>
+
 
     <?php
+    foreach($stmt as $row){
+        $sql2=$pdo->query('select * from Account where user_name="'.$row['applicant_name'].'"');
+        foreach($sql2 as $row2){
+           
+                        if($row['zyoukyou'] == 1){
+                            echo '<button id="follow" class="btn-follow1">フォロー中</button>';
+                        }else{
+                            echo '<button id="follow" class="btn-follow2">フォローする</button>';
+                        }
 
+        }
+
+    }
     if (!empty($post)) {
         $follow_stmt = $pdo->prepare("
             SELECT COUNT(*) as is_following 
@@ -103,6 +157,18 @@ ob_end_flush();
         $follow_result = $follow_stmt->fetch(PDO::FETCH_ASSOC);
         $is_following = $follow_result ? $follow_result['is_following'] : 0;
     }
+
+      // いいねの状態を取得
+      $check_like_stmt = $pdo->prepare("
+      SELECT COUNT(*) as liked
+      FROM Comment
+      WHERE toukou_id = :toukou_id AND account_mei = :current_user_name AND comment_type = 1
+  ");
+  $check_like_stmt->bindParam(':toukou_id', $toukou_id, PDO::PARAM_INT);
+  $check_like_stmt->bindParam(':current_user_name', $current_user_name, PDO::PARAM_STR);
+  $check_like_stmt->execute();
+  $like_status = $check_like_stmt->fetch(PDO::FETCH_ASSOC);
+  $liked = $like_status['liked'] > 0;
                         ?>
     <?php if (!empty($post)): ?>
     <div class="post-container">
@@ -117,29 +183,11 @@ ob_end_flush();
                     <button type="submit" name="delete_post" class="delete-button">×削除する</button>
                 </form>
             <?php else: ?>
-               
-                <div class="btn-follow0">
-                <?php 
-                    $user_name = $_SESSION['user']['user_name'];
-                    $tt=$pdo->prepare('select toukou_mei from Toukou where toukou_id=?');
-                    $tt->execute([$_GET['toukou_id']]);
-                    foreach($tt as $ttt){
-
-                    $sqlll=$pdo->prepare('select * from Follow where applicant_name=?');
-                    $sqlll->execute([$user_name]);
-                    foreach($sqlll as $ff){
-                        if($ff['applicant_name']==$user_name && $ff['approver_name'] == $ttt['toukou_mei']){
-                            echo '<button id="follow" class="btn-follow1">フォロー中</button>';
-                        }else{
-                            echo '<button id="follow" class="btn-follow2">フォローする</button>';
-                        }
-                    }
-
-                    }
-
-                ?>
-                </div>
-
+                <form action="" method="post" class="user-action-form">
+                    <button type="submit" name="follow" class="follow-button <?php echo $is_following ? 'following' : ''; ?>">
+                        <?php echo $is_following ? 'フォロー中' : 'フォローする'; ?>
+                    </button>
+                </form>
             <?php endif; ?>
         </div>
         <?php endif; ?>
@@ -152,7 +200,6 @@ ob_end_flush();
                 }
                 ?>
 
-           <!-- cc -->
 
             <?php if (!empty($post['contents'])): ?>
                 <div class="post-content">
@@ -164,8 +211,8 @@ ob_end_flush();
                     <div class="interaction-buttons">
                         <form action="touroku_like.php" method="post" class="like-form">
                             <input type="hidden" name="toukou_id" value="<?php echo $post['toukou_id']; ?>">
-                            <button type="submit" name="like" class="like-button">
-                                <i class="far fa-heart"></i><?php echo htmlspecialchars($like_count); ?>
+                            <button type="submit" name="like" class="like-button <?php echo $liked ? 'liked' : ''; ?>">
+                                <i class="fas fa-heart"></i><?php echo htmlspecialchars($like_count); ?>
                                 
         
                             </button>
@@ -190,19 +237,15 @@ ob_end_flush();
                     <h2><?php echo htmlspecialchars($post['title']); ?></h2>
                 </div>
                 <div class="post-tags">
-                <?php
-                $sql4=$pdo->prepare('select * from User_tag where user_name=?');
-    $sql4->execute([$current_user_name]);
-    foreach($sql4 as $row4){
-        $sqltag=$pdo->prepare('select * from Tag where tag_id=?');
-        $sqltag->execute([$row4['tag_id']]);
-        foreach($sqltag as $tag){
-            echo '<div class="s-tag" style="background: rgb(', $tag['tag_color1'], ',', $tag['tag_color2'], ',', $tag['tag_color3'], '">', $tag['tag_mei'], '</div>';
-        }
-        
-    }
-    ?>
-                </div>
+    <?php foreach ($tags as $tag): ?>
+        <?php if ($tag): ?>
+            <div class="s-tag" style="background: rgb(<?php echo $tag['tag_color1']; ?>, <?php echo $tag['tag_color2']; ?>, <?php echo $tag['tag_color3']; ?>);">
+                <?php echo $tag['tag_mei']; ?>
+            </div>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</div>
+
             </div>
 
             <div class="post-date-right">
@@ -223,46 +266,11 @@ ob_end_flush();
     <?php else: ?>
         <p>投稿が見つかりませんでした</p>
     <?php endif; ?>
-<div>    <?php var_dump($tt); ?>
-    </div>
-    <div>
-    <?php var_dump($ttt); ?>
-    </div>
+
+    </br>
+    </br>
+    </br>
+    </br>
+    
 </body>
-
-<script>
-$(document).ready(function(){
-        $('#follow').on('click', function(){
-             // PHP変数をJavaScript変数に変換
-             var approverName = "<?php echo $ttt['toukou_mei']; ?>";
-            $.ajax({
-                url: 'api.php',
-                type: 'POST',
-                data: {
-                    approver_name: approverName
-                    // 必要に応じてデータをここに追加
-                },
-                success: function(response) {
-                    // 成功時の処理
-                    console.log('API call successful.');
-                    console.log(response);
-                    
-                    // ボタンのテキストとクラスを切り替える
-                    $('#follow').toggleClass('btn-follow1 btn-follow2');
-                    if($('#follow').hasClass('btn-follow1')) {
-                        $('#follow').text('フォロー中');
-                    } else {
-                        $('#follow').text('フォローする');
-                    }
-                },
-                error: function(xhr, status, error) {
-                    // エラー時の処理
-                    console.error('API call failed.');
-                    console.error(status, error);
-                }
-            });
-        });
-    });
-
-</script>
 </html>
