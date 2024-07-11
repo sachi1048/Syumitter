@@ -30,7 +30,8 @@ class MyController {
             $stmt->execute();
             // 結果の取得
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            include('searchList_v.php');       
+            include('searchList_v.php');
+
         }else if($nav=="post") {
             $sql = "SELECT
                     t.toukou_id
@@ -45,6 +46,15 @@ class MyController {
                     , t.tag_id3
                     , tag3.tag_mei AS tag_mei3
                     , t.toukou_mei 
+                    , tag1.tag_color1 AS tag1_color1
+                    , tag1.tag_color2 AS tag1_color2
+                    , tag1.tag_color3 AS tag1_color3
+                    , tag2.tag_color1 AS tag2_color1
+                    , tag2.tag_color2 AS tag2_color2
+                    , tag2.tag_color3 AS tag2_color3
+                    , tag3.tag_color1 AS tag3_color1
+                    , tag3.tag_color2 AS tag3_color2
+                    , tag3.tag_color3 AS tag3_color3
                 FROM
                     toukou t 
                     LEFT JOIN tag tag1 
@@ -65,8 +75,7 @@ class MyController {
             $stmt->execute();
             // 結果の取得
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            var_dump($results);
-            exit;
+            include('searchToukouList_v.php'); 
         }
 
     }
