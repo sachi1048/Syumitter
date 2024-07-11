@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="CSS/menu.css">
     <link rel="stylesheet" href="CSS/main.css">
     <link rel="stylesheet" href="CSS/search_v.css">
+    <link rel="stylesheet" href="CSS/checkbox.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
@@ -37,10 +38,24 @@
             </button>
         </form>
         <div class="trending-tags">
-            <a href="#" data-hobby="占い" class="tag tag-uranai" onclick="navigateToHobby(this)">#占い</a>
+            <!-- <a href="#" data-hobby="占い" class="tag tag-uranai" onclick="navigateToHobby(this)">#占い</a>
             <a href="#" data-hobby="釣り" class="tag tag-tsuri" onclick="navigateToHobby(this)">#釣り</a>
             <a href="#" data-hobby="J-POP" class="tag tag-jpop" onclick="navigateToHobby(this)">#J-POP</a>
-            <a href="#" data-hobby="カフェ巡り" class="tag tag-cafe" onclick="navigateToHobby(this)">#カフェ巡り</a>
+            <a href="#" data-hobby="カフェ巡り♨" class="tag tag-cafe" onclick="navigateToHobby(this)">#カフェ巡り</a> -->
+            <?php
+                require 'db-connect.php';
+               $pdo = new PDO($connect, USER, PASS);
+               $sql = $pdo->query('SELECT * FROM Tag');
+               $count = 1;
+               foreach ($sql as $row) {
+                    $tagColor = 'rgb(' . $row['tag_color1'] . ',' . $row['tag_color2'] . ',' . $row['tag_color3'] . ')';
+                    echo '<label onclick="navigateToHobby(this)" data-hobby="カフェ巡り♨" for="option', $count, '" style="border:1.2px solid ', $tagColor, '; color:', $tagColor, ';" class="selectable" data-hover-color="', $tagColor, '">#', $row['tag_mei'],'</label>';
+                    if($count % 3 == 0){
+                        echo '<br>';
+                    }
+                    $count++;
+                }
+            ?>
         </div>
     </div>
 
