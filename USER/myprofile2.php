@@ -51,7 +51,7 @@
         echo '<div class="left1">';
         echo '<h2>', $user_name, '</h2>';
         echo '<h4>', $display_name, '</h4>';
-        echo '</div><br><br><br><br><br><div>';
+        echo '</div><div>';
 
         $sql4 = $pdo->prepare('SELECT * FROM User_tag WHERE user_name = ?');
         $sql4->execute([$user_name]);
