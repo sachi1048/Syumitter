@@ -66,7 +66,7 @@
             background-color: #f0f0f0;
         }
         .results-container {
-            padding-top: 165px; /* ヘッダーの高さを考慮 */
+            padding-top: 190px; /* ヘッダーの高さを考慮 */
             overflow-y: auto;
             height: calc(100vh - 200px); /* フッターの高さを考慮して調整 */
             background-color: white;
