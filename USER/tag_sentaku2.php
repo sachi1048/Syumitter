@@ -18,19 +18,6 @@
         $message = $_SESSION['message'];
         unset($_SESSION['message']);
     }
-    // ユーザーの趣味タグ変更処理
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if (isset($_POST['selectedOptions']) && is_array($_POST['selectedOptions'])) {
-            $opq=$pdo->prepare('delete from User_tag where user_name = ?');
-            $opq->execute([$_SESSION['user']['user_name']]);
-            foreach($_POST['selectedOptions'] as $pow){
-                $sel=$pdo->prepare('insert into User_tag values(?,?)');
-                $sel->execute([$_SESSION['user']['user_name'],$pow]);
-            }
-            header("Location: myprofile.php");
-            exit();
-        }
-    }
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -38,7 +25,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="CSS/checkbox.css">
-    <title>趣味タグ編集画面</title>
+    <title>趣味タグ選択画面</title>
+    <!-- ここから↓ -->
     <style>
         #notification {
             display: none;
@@ -62,7 +50,7 @@
         // JavaScript function to limit checkbox selection to 3
         function limitCheckboxSelection() {
             const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-            const limit = 10;
+            const limit = 1;
             checkboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', () => {
                     const checkedCount = document.querySelectorAll('input[type="checkbox"]:checked').length;
@@ -72,58 +60,21 @@
                 });
             });
         }
-
         window.onload = function() {
-    limitCheckboxSelection();
-    var notification = document.getElementById('notification');
-    if (notification.innerText !== '') {
-        notification.style.display = 'block';
-        setTimeout(function() {
-            notification.classList.add('hide');
-        }, 1500);
-        setTimeout(function() {
-            notification.style.display = 'none';
-        }, 2000);
-    }
-
-    // Add hover effect using JavaScript
-    var labels = document.querySelectorAll('.selectable');
-    labels.forEach(function(label) {
-        var hoverColor = label.getAttribute('data-hover-color');
-        var checkbox = document.getElementById(label.getAttribute('for'));
-
-        // 初期状態でチェックされているかどうかを確認して適用
-        if (checkbox.checked) {
-            label.style.backgroundColor = hoverColor;
-            label.style.color = 'white';
-        }
-
-        label.addEventListener('mouseover', function() {
-            if (!checkbox.checked) {
-                label.style.backgroundColor = hoverColor;
-                label.style.color = 'white';
+            limitCheckboxSelection();
+            var notification = document.getElementById('notification');
+            if (notification.innerText !== '') {
+                notification.style.display = 'block';
+                setTimeout(function() {
+                    notification.classList.add('hide');
+                }, 1500);
+                setTimeout(function() {
+                    notification.style.display = 'none';
+                }, 2000);
             }
-        });
-        label.addEventListener('mouseout', function() {
-            if (!checkbox.checked) {
-                label.style.backgroundColor = 'transparent';
-                label.style.color = hoverColor;
-            }
-        });
-
-        // チェックボックスの変更イベントを監視してスタイルを更新
-        checkbox.addEventListener('change', function() {
-            if (checkbox.checked) {
-                label.style.backgroundColor = hoverColor;
-                label.style.color = 'white';
-            } else {
-                label.style.backgroundColor = 'transparent';
-                label.style.color = hoverColor;
-            }
-        });
-    });
-};
+        };
     </script>
+    <!-- ここまではチャットGPTにしかわかりません -->
 </head>
 <body>
     <h1 class="h1-1">Syumitter</h1>
@@ -133,19 +84,18 @@
     <form action="" method="post">
         <input class="tag_inp" type="text" name="tagmei" maxlength="13" placeholder="　新規タグ追加" required>　
         <button class="nizibutton" type="submit">追加</button>
-        <p>１０つまで選択可能</p>
+        <p>１つまで選択可能</p>
     </form><br>
     <!-- 趣味タグ一覧を表示 -->
-    <form action="myprofile-tag.php" method="POST">
+    <form action="group_new.php" method="POST">
         <div>
             <?php
                $sql = $pdo->query('SELECT * FROM Tag');
                $count = 1;
                foreach ($sql as $row) {
-                    $tagColor = 'rgb(' . $row['tag_color1'] . ',' . $row['tag_color2'] . ',' . $row['tag_color3'] . ')';
                     echo '<input type="checkbox" id="option', $count, '" name="selectedOptions[]" value="', $row['tag_id'], '">';
-                    echo '<label for="option', $count, '" style="border:1.2px solid ', $tagColor, '; color:', $tagColor, ';" class="selectable" data-hover-color="', $tagColor, '">#', $row['tag_mei'], '</label>';
-                    if($count % 3 == 0){
+                    echo '<label for="option', $count, '" style="border:1.2px solid rgb(',$row['tag_color1'],',',$row['tag_color2'],',',$row['tag_color3'],'); color:rgb(',$row['tag_color1'],',',$row['tag_color2'],',',$row['tag_color3'],');" class="selectable">#', $row['tag_mei'], '</label>';
+                    if($count%3 == 0){
                         echo '<br>';
                     }
                     $count++;
@@ -165,7 +115,7 @@
                     notification.classList.add('hide');
                 }, 1500);
                 setTimeout(function() {
-                    notification.style.display = 'none');
+                    notification.style.display = 'none';
                 }, 2000);
             };
         </script>

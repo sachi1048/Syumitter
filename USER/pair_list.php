@@ -38,11 +38,11 @@
 
     <?php
         //コピペっただけ　相互の人を表示
-        $sql=$pdo->prepare('select * from Follow where zyoukyou=1 and applicant_name=?');
-        $sql->execute([$user_name]);
+        $sql=$pdo->prepare('select * from Pair_chat where user1=?');
+        $sql->execute([$_SESSION['user']['user_name']]);
         foreach($sql as $row){
             $sql2=$pdo->prepare('select * from Account where user_name=?');
-            $sql2->execute([$row['approver_name']]);
+            $sql2->execute([$row['user2']]);
             foreach($sql2 as $row2)
             echo '<tr>
                 <td>
@@ -51,15 +51,26 @@
                     </div>
                 </td>
                 <td>
-                    <a href="#" class="chat-mei">', $row2['user_name'], '</a><br>';
+                    <a href="pair_chat.php?pair_chat="',$row['chat_id'], '" class="chat-mei">', $row2['display_name'], '</a><br>';
             echo '</td>';
             //通知
-            echo '<td>
+            $zzz=$pdo->prepare('select count(*) as con from Pair_Rireki where chat_id = ? and sender <> ?');
+            $zzz->execute([$row['chat_id'],$_SESSION['user']['user_name']]);
+            $kekka=$zzz->fetch(PDO::FETCH_ASSOC);
+            $lol=$pdo->prepare('select count(*) as com from Pair_Kidoku where user_name = ? and chat_id = ?');
+            $lol->execute([$_SESSION['user']['user_name'],$row['chat_id']]);
+            $sa=$lol->fetch(PDO::FETCH_ASSOC);
+            $tuuti=$kekka['con']-$sa['com'];
+            if($tuuti == 0){
+                echo '<td></td>';
+            }else{
+                echo '<td>
                     <div class="chat-action">
-                        99
+                        ',$tuuti,'
                     </div>
-                </td>
-            </tr>';
+                </td>';
+            }
+            echo '</tr>';
         }
 
     ?>
