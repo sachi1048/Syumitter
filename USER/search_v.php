@@ -9,20 +9,23 @@
     <link rel="stylesheet" href="CSS/search_v.css">
     <link rel="stylesheet" href="CSS/checkbox.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+
+    </style>
 </head>
 <body>
     <h1 class="h1-2">Syumitter</h1>
 
     <nav>
-        <label>
+        <label class="nav-label">
             <input type="radio" name="nav" value="user" onclick="setNavValue(this.value);">
             ユーザー
         </label>
-        <label>
+        <label class="nav-label">
             <input type="radio" name="nav" value="post" onclick="setNavValue(this.value);">
             投稿
         </label>
-        <label>
+        <label class="nav-label">
             <input type="radio" name="nav" value="group_chat" onclick="setNavValue(this.value);">
             グループチャット
         </label>
@@ -49,7 +52,7 @@
                $count = 1;
                foreach ($sql as $row) {
                     $tagColor = 'rgb(' . $row['tag_color1'] . ',' . $row['tag_color2'] . ',' . $row['tag_color3'] . ')';
-                    echo '<label onclick="navigateToHobby(this)" data-hobby="カフェ巡り♨" for="option', $count, '" style="border:1.2px solid ', $tagColor, '; color:', $tagColor, ';" class="selectable" data-hover-color="', $tagColor, '">#', $row['tag_mei'],'</label>';
+                    echo '<label onclick="navigateToHobby(this)" data-hobby="', $row['tag_mei'] ,'" for="option', $count, '" style="border:1.2px solid ', $tagColor, '; color:', $tagColor, ';" class="selectable" data-hover-color="', $tagColor, '">#', $row['tag_mei'],'</label>';
                     if($count % 3 == 0){
                         echo '<br>';
                     }
@@ -93,6 +96,16 @@
             document.getElementById('navInput').value = navValue;
             return true; // 検索を実行
         }
+        document.querySelectorAll('input[name="nav"]').forEach((radio) => {
+            radio.addEventListener('change', function() {
+                document.querySelectorAll('.nav-label').forEach((label) => {
+                    label.classList.remove('selected');
+                });
+                if (this.checked) {
+                    this.parentElement.classList.add('selected');
+                }
+            });
+        });
     </script>
 </body>
 </html>
