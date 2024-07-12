@@ -14,15 +14,18 @@
         <button class="search-button">検索</button>
     </div>
     <div class="results-container">
-        <?php foreach ($results as $row) { ?>
+    <?php foreach ($results as $row) { ?>
         <div class="user-card">
             <div class="user-icon">
-                <img src="<?php echo "img/aikon/".$row['aikon']?>" alt="User 1">
+                <img src="<?php echo "img/toukou/".$row['contents']?>" alt="User 1">
             </div>
             <div class="user-info">
-                <h3><?php echo $row['user_name']; ?></h3>
+                <h3><?php echo $row['toukou_mei']; ?></h3>
+                <h4><?php echo $row['setumei']; ?></h4>
                 <p>
-                    <a class="tag-uranai">#<?php echo $row['tag_mei']; ?></a>
+                    <a class="tag-uranai" style="background: rgb(<?php echo $row['tag1_color1']; ?>,<?php echo $row['tag1_color2']; ?>,<?php echo $row['tag1_color3']; ?>);">#<?php echo $row['tag_mei1']; ?></a>
+                    <a class="tag-uranai" style="background: rgb(<?php echo $row['tag2_color1']; ?>,<?php echo $row['tag2_color2']; ?>,<?php echo $row['tag2_color3']; ?>);">#<?php echo $row['tag_mei2']; ?></a>
+                    <a class="tag-uranai" style="background: rgb(<?php echo $row['tag3_color1']; ?>,<?php echo $row['tag3_color2']; ?>,<?php echo $row['tag3_color3']; ?>);">#<?php echo $row['tag_mei3']; ?></a>
                 </p>
             </div>
         </div>
