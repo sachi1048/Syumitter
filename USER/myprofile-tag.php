@@ -133,7 +133,7 @@
     <form action="" method="post">
         <input class="tag_inp" type="text" name="tagmei" maxlength="13" placeholder="　新規タグ追加" required>　
         <button class="nizibutton" type="submit">追加</button>
-        <p>１０つまで選択可能</p>
+        <p>１０個まで選択可能</p>
     </form><br>
     <!-- 趣味タグ一覧を表示 -->
     <form action="myprofile-tag.php" method="POST">
