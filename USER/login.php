@@ -52,7 +52,7 @@ if (isset($_POST['user_name']) && isset($_POST['pass'])) {
         </form>
     </div>
 
-    <p><a href="#">新規作成</a></p>
+    <p><a href="creation_tag.php">新規作成</a></p>
     <p><a href="password.php">パスワードを忘れた</p>
 
 </body>
