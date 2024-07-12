@@ -99,8 +99,7 @@
 <body>
     <h1 class="h1-1">Syumitter</h1>
     <p>気になる<span class="tag_syumi">＃趣味</span>を選択</p><br>
-    <div id="notification"><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div>
-    <p>１０つまで選択可能</p>
+    <p>１０個まで選択可能</p>
     <br>
     <!-- 趣味タグ一覧を表示 -->
     <form action="account_creation.php" method="POST">
@@ -122,20 +121,5 @@
         <button class="lastbutton" type="submit">決定</button>
     </form>
     <button class="backbutton" onclick="history.back()"><span class="aokusitai">◀</span> 戻る</button>
-    <!-- ここから先はチャットGPTに仕様を聞いてください -->
-    <?php if ($message): ?>
-        <script>
-            window.onload = function() {
-                var notification = document.getElementById('notification');
-                notification.style.display = 'block';
-                setTimeout(function() {
-                    notification.classList.add('hide');
-                }, 1500);
-                setTimeout(function() {
-                    notification.style.display = 'none');
-                }, 2000);
-            };
-        </script>
-    <?php endif; ?>
 </body>
 </html>
