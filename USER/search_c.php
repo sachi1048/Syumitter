@@ -4,7 +4,7 @@ class MyController {
 
     public function index() {
 
-        $pdo = new PDO("mysql:host=localhost;dbname=symitter;charset=utf8", USER, PASS);
+        $pdo = new PDO($connect, USER, PASS);
         // GETパラメータの取得とエスケープ
         $hobby = isset($_GET['hobby']) ? $_GET['hobby'] : '';//タグ名
         $nav = isset($_GET['nav']) ? $_GET['nav'] : '';// ユーザーor 登校 or グルチャ
