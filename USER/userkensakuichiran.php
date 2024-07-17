@@ -160,8 +160,8 @@
     </style>
 </head>
 <body>
-    <div class="header-container">
-        <div class="back-button" onclick="history.back()"></div>
+<div class="header-container">
+<div class="back-button" onclick="window.location.href='kensaku.php'"></div>
         <h1>Syumitter</h1>
         <button class="search-button">#検索</button>
     </div>
