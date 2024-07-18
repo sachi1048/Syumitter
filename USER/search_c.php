@@ -1,10 +1,9 @@
-<?php require 'db-connect.php'; ?>
 <?php
 class MyController {
-
-    public function index() {
-
-        $pdo = new PDO("mysql:host=localhost;dbname=symitter;charset=utf8", USER, PASS);
+   
+     public function index() {
+        require 'db-connect.php';
+        $pdo = new PDO($connect, USER, PASS);
         // GETパラメータの取得とエスケープ
         $hobby = isset($_GET['hobby']) ? $_GET['hobby'] : '';//タグ名
         $nav = isset($_GET['nav']) ? $_GET['nav'] : '';// ユーザーor 登校 or グルチャ
@@ -55,12 +54,12 @@ class MyController {
                     , tag3.tag_color2 AS tag3_color2
                     , tag3.tag_color3 AS tag3_color3
                 FROM
-                    toukou t 
-                    LEFT JOIN tag tag1 
+                    Toukou t 
+                    LEFT JOIN Tag tag1 
                         ON t.tag_id1 = tag1.tag_id 
-                    LEFT JOIN tag tag2 
+                    LEFT JOIN Tag tag2 
                         ON t.tag_id2 = tag2.tag_id 
-                    LEFT JOIN tag tag3 
+                    LEFT JOIN Tag tag3 
                         ON t.tag_id3 = tag3.tag_id 
                 WHERE
                     tag1.tag_mei LIKE :hobby1
@@ -78,7 +77,7 @@ class MyController {
         }else if($nav=="group_chat") {
             $sql = "SELECT *
             FROM 
-                tag t 
+                Tag t 
             WHERE 
                 t.tag_mei LIKE :tag_mei";        // プリペアドステートメントの準備
             $stmt = $pdo->prepare($sql);

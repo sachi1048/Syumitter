@@ -54,10 +54,21 @@
                 <td><a href="follow-list.php?user_name=', $user_name, '" class="link">フォロー</a></td>
                 </tr>
             </table></td></tr></table>';
+        echo '<div class="oya">';
         echo '<div class="left1">';
         echo '<h2>', $user_name, '</h2>';
-        echo '<h4>', $display_name, '</h4>';
-        echo '</div><br><br><br><br><br><div>';
+        echo '<h4>', $display_name, '</h4></div>';
+        echo '<div class="right">';
+        //ここにフォローボタンを作ること
+        $ff=$pdo->prepare('select * from Follow where applicant_name=? and approver_name=?');
+        $ff->execute([$user_name, $_SESSION['user']['user_name']]);
+        if($ff){
+            echo '<button id="follow" class="btn-follow1">フォロー中</button>';
+        }else{
+            echo '<button id="follow" class="btn-follow2">フォローする</button>';   
+        }
+
+        echo '</div></div><div>';
 
         $sql4 = $pdo->prepare('SELECT * FROM User_tag WHERE user_name = ?');
         $sql4->execute([$user_name]);
