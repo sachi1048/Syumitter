@@ -1,12 +1,17 @@
 <?php
 class MyController {
    
-     public function index() {
+    public function index() {
         require 'db-connect.php';
         $pdo = new PDO($connect, USER, PASS);
         // GETパラメータの取得とエスケープ
         $hobby = isset($_GET['hobby']) ? $_GET['hobby'] : '';//タグ名
         $nav = isset($_GET['nav']) ? $_GET['nav'] : '';// ユーザーor 登校 or グルチャ
+
+        // 検索キーワードを表示するための変数
+        $searchKeyword = htmlspecialchars($hobby, ENT_QUOTES, 'UTF-8');
+        // 検索キーワード表示部分
+        echo "<h2>#検索: {$searchKeyword}</h2>";
         // SQLクエリ
         // ユーザーを選択
         if($nav=="user") {
