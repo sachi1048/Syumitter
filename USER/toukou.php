@@ -67,11 +67,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="CSS/checkbox.css">
+    <link rel="stylesheet" href="CSS/main.css">
     <link rel="stylesheet" href="CSS/menu.css">
     <title>投稿画面</title>
 </head>
 <body>
-    <h1 class="syumitter1">Syumitter</h1>
+    <h1 class="h1-2">Syumitter</h1>
     <?php
     // ログインしていなければ警告を表示
     if (!isset($_SESSION['user']['user_name'])) {
@@ -111,6 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <br>
         <button class="nextbutton" type="submit" name="toukousuru">投稿</button>
     </form>
+    <br><br><br><br>
     <?php require 'menu.php';?>
     <script>
         function saveFormData() {
