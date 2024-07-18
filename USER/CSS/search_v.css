@@ -11,6 +11,7 @@ nav {
     display: flex;
     justify-content: center;
     padding: 10px 0;
+    border-radius:6px;
 }
 nav a {
     display: block;
@@ -161,4 +162,20 @@ input[type="radio"]:checked + label {
     background-color: #007bff;
     color: #fff;
     border-color: #007bff;
+}
+
+.nav-label {
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 5px;
+    width:100%
+}
+
+.nav-label input[type="radio"] {
+    display: none;
+}
+
+.nav-label.selected {
+    background-color: #d884e4; /* 選択された時の背景色 */
+    color: #fff; /* 選択された時の文字色 */
 }
