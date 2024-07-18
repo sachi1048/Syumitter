@@ -11,7 +11,7 @@ class MyController {
         // 検索キーワードを表示するための変数
         $searchKeyword = htmlspecialchars($hobby, ENT_QUOTES, 'UTF-8');
         // 検索キーワード表示部分
-        echo "<h2># {$searchKeyword}</h2>";
+        "<h2># {$searchKeyword}</h2>";
         // SQLクエリ
         // ユーザーを選択
         if($nav=="user") {
