@@ -17,7 +17,6 @@
     <link rel="stylesheet" href="CSS/menu.css">
     <link rel="stylesheet" href="CSS/group_list.css">
     <title>Syumitter</title>
-    
     <title>ペアチャット一覧画面</title>
 </head>
 <body>
@@ -28,13 +27,8 @@
     </a>
 
     <br>
-    <div class="switch">
-        <a class="link switch-left" href="group_list.php">グループチャット</a>
-        <a class="link switch2" href="pair_list.php">ペアチャット</a>
-    </div>
 
     <table class="table-chat">
-
     <?php
     foreach ($groupedResults as $groupId => $groupData) {
         echo '<tr>
@@ -47,36 +41,34 @@
                 <a href="group_chat.php?group_id=', $groupId, '" class="chat-mei">', $groupData['group_mei'], '</a><br>';
                 echo '<div class="s-tag" style="background: rgb(', $groupData['tag_color1'] , ',', $groupData['tag_color1'] , ',', $groupData['tag_color2'] , '">', $groupData['tag_mei'] , '</div><br>';
                 foreach ($groupData['members'] as $member) {
+                    if($_SESSION['user']['user_name']==$member['member']){
+                        $doJoinGlg=1;
+                        break;
+                    }else{
+                        $doJoinGlg=0;
+                    }
                     echo $member['display_name'], ' ';
                 }
 
-
         echo '</td>';
-        //通知
-        $zzz=$pdo->prepare('select count(*) as con from Group_Rireki where chat_id = ? and sender <> ?');
-        $zzz->execute([$row['group_id'],$_SESSION['user']['user_name']]);
-        $kekka=$zzz->fetch(PDO::FETCH_ASSOC);
-        $lol=$pdo->prepare('select count(*) as com from Group_Kidoku where user_name = ? and group_id = ?');
-        $lol->execute([$_SESSION['user']['user_name'],$row['group_id']]);
-        $sa=$lol->fetch(PDO::FETCH_ASSOC);
-        $tuuti=$kekka['con']-$sa['com'];
-        if($tuuti == 0){
-            echo '<td></td>';
-        }else{
-            echo '<td>
-                <div class="chat-action">
-                    ',$tuuti,'
-                </div>
-            </td>';
-        }
+        echo '<td>';
+            if ($doJoinGlg==1){
+                echo "<form method='get' action='group_chat.php'>";
+                echo "<input type='hidden' name='group_id' value='" . $groupId . "'>";
+                echo "<button type='submit'>参加中</button>";
+                echo "</form>";
+            } else {
+                echo "<form method='post' action='chatGroupApi.php'>";
+                echo "<input type='hidden' name='group_id' value='" . $groupId . "'>";
+                echo "<input type='hidden' name='user_name' value='" . $user_name . "'>";
+                echo "<button type='submit'>参加する</button>";
+                echo "</form>";
+            }
+        echo '</td>';
         echo '</tr>';
-    }
-
+        }
     ?>
     </table>
-
-
-
     <footer><?php include 'menu.php';?></footer>
 </body>
 </html>
