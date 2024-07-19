@@ -86,7 +86,10 @@
     echo '<p>', $profile, '</p>';
     echo '</div>';
     echo '<a href="myprofile-edit" class="btn-profile">プロフィール編集</a>';
-
+    $z=$pdo->prepare('select * from Account where user_name = ?');
+    $z->execute([$_SESSION['user']['user_name']]);
+    $kekaz=$z->fetch(PDO::FETCH_ASSOC);
+    if($kekaz['freeze_code'] == 0){
 ?>
     <form action="myprofile-edit.php" method="POST">
     </form> 
@@ -125,6 +128,14 @@
         ?>
     </table>
     <footer><?php include 'menu.php';?></footer>
+    <?php
+    }elseif($kekaz['freeze_code'] == 1){
+        echo '<div style="width:100%; height:157px; text-align:center; background-color:lightgray; padding:100px 0px;">';
+        echo '<h3>アカウントが凍結されています(*´з`)</h3>';
+        echo '<p>syumitterルールに違反するアカウントは凍結されます。';
+        echo '</div>';
+    }
+    ?>
     <script>
         window.onload = function() {
             localStorage.clear();
