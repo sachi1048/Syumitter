@@ -14,20 +14,6 @@
                 $('.file__none').text(file.name);
             });
         });
-
-        document.getElementById('passwordForm').addEventListener('submit', function(event) {
-            var password1 = document.getElementById('password1').value;
-            var password2 = document.getElementById('password2').value;
-            var errorMessage = document.getElementById('errorMessage');
-
-            if (password1 !== password2) {
-                event.preventDefault(); // フォームの送信を止める
-                errorMessage.textContent = 'パスワードが一致しません。';
-                errorMessage.style.display = 'block'; // エラーメッセージを表示する
-            } else {
-                errorMessage.style.display = 'none'; // エラーメッセージを非表示にする
-            }
-        });
     </script>
     <title>マイプロフィール編集画面</title>
 </head>
@@ -52,9 +38,6 @@
 
     <div class="frame">
         <h2>プロフィール編集</h2>
-        <?php if ($error_message): ?>
-            <p class="error"><?php echo htmlspecialchars($error_message, ENT_QUOTES, 'UTF-8'); ?></p>
-        <?php endif; ?>
         <form id="passwordForm" action="update_profile.php" method="POST" enctype="multipart/form-data">
             <div class="aikon">
                 <label label="file_label">
@@ -92,6 +75,10 @@
             <button class="nextbutton" type="submit">編集</button>
         </form>
     </div>
+    <div style="color: red;">
+        <?php echo $error_message; ?>
+    </div>
+
     <br>
     <a href="myprofile.php" class="btn-mdr">
         <span class="dli-caret-left"></span>
