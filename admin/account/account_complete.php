@@ -1,4 +1,5 @@
 <?php
+// DB接続＆SESSIONの使用を宣言
     session_start();
     const SERVER = 'mysql301.phy.lolipop.lan';
     const DBNAME = 'LAA1517472-syumitta';
@@ -18,7 +19,7 @@
 </head>
 
 <body>
-    <button class="back-button" type="button" onclick="location.href='../main.html'">メインへ戻る</button>
+    <button class="back-button" type="button" onclick="location.href='../main.php'">メインへ戻る</button>
     <div class="center">
         <div class="container">
             <div class="frame">

@@ -34,12 +34,14 @@
                         </thead>
                         <tbody>
                             <?php
+                            // 凍結されているアカウントのみを表示
                             $count=0;
                                 $sql=$pdo->query('select * from Account where freeze_code=1');
                                 foreach($sql as $row){
                                     echo '<tr>';
                                     echo '<td>',$row['user_name'],'</td>';
                                     echo '<td>',$row['mail'],'</td>';
+                                    // チェックボックスを複数選択可にして配列として次の画面に送る
                                     echo '<td><input type="checkbox" name="deleteoption[]" value="',$row['user_name'],'"></td>';
                                     echo '</tr>';
                                 }

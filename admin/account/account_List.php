@@ -1,4 +1,5 @@
 <?php
+// DB接続
     session_start();
     $_SESSION['account']='freeze';
     const SERVER = 'mysql301.phy.lolipop.lan';
@@ -35,11 +36,13 @@
                         </thead>
                         <tbody>
                             <?php
+                            // 凍結されていないアカウントをすべて表示
                                 $sql=$pdo->query('select * from Account where freeze_code <> 1');
                                 foreach($sql as $row){
                                     echo '<tr>';
                                     echo '<td>',$row['user_name'],'</td>';
                                     echo '<td>',$row['mail'],'</td>';
+                                    // チェックボックスを服選択可にして配列として送信
                                     echo '<td><input type="checkbox" name="selectedOptions[]" value="',$row['user_name'],'"></td>';
                                     echo '</tr>';
                                 }
