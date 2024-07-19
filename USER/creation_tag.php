@@ -98,7 +98,7 @@
 </head>
 <body>
     <h1 class="h1-1">Syumitter</h1>
-    <p>気になる<span class="tag_syumi">＃趣味</span>を選択</p><br>
+    <p>気になる<span class="tag_syumi">＃趣味</span>を選択</p>
     <p>１０個まで選択可能</p>
     <br>
     <!-- 趣味タグ一覧を表示 -->
