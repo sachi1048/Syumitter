@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <button class="back-button" type="button" onclick="location.href='../main.html'">メインへ戻る</button>
+    <button class="back-button" type="button" onclick="location.href='../main.php'">メインへ戻る</button>
 
     <div class="center">
         <div class="container">
@@ -24,11 +24,16 @@
                     $toukou=$_POST['toukou'];
                     $toukoucontent=$_POST['toukoucontent'];
                     $counts=0;
-                    foreach ($toukou as $count) {
-                        echo  htmlspecialchars("{$count}　", ENT_QUOTES, 'UTF-8');
-                        echo $toukoucontent[$counts];
-                        echo "　";
-                        $counts++;
+                    $sql=$pdo->prepare('delete from Toukou where toukou_id=?');
+                    foreach ($toukoucontent as $count) {
+                        if($sql->execute([$toukou[$counts]])) {
+                            $counts++;
+                            echo "・";
+                            echo  htmlspecialchars("{$count}　", ENT_QUOTES, 'UTF-8');
+                        }
+                        else{
+                            echo '削除に失敗しました。';
+                        }
                     }
                 } else {
                     echo "該当なし";
