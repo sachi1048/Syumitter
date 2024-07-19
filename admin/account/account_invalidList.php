@@ -40,7 +40,7 @@
                                     echo '<tr>';
                                     echo '<td>',$row['user_name'],'</td>';
                                     echo '<td>',$row['mail'],'</td>';
-                                    echo '<td><input type="checkbox" name="deleteoption[]" value="',$row['user_name'],'"><td>';
+                                    echo '<td><input type="checkbox" name="deleteoption[]" value="',$row['user_name'],'"></td>';
                                     echo '</tr>';
                                 }
                             ?>

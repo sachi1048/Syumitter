@@ -35,7 +35,7 @@
                         </thead>
                         <tbody>
                             <?php
-                                $sql=$pdo->query('select * from Account');
+                                $sql=$pdo->query('select * from Account where freeze_code <> 1');
                                 foreach($sql as $row){
                                     echo '<tr>';
                                     echo '<td>',$row['user_name'],'</td>';
