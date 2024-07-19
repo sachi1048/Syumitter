@@ -75,20 +75,47 @@ class MyController {
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
             include('searchToukouList_v.php'); 
         }else if($nav=="group_chat") {
-            $sql = "SELECT *
-            FROM 
-                Tag t 
-            WHERE 
-                t.tag_mei LIKE :tag_mei";        // プリペアドステートメントの準備
+            $sql='SELECT
+                gc.group_id
+                , gc.group_mei
+                , gc.aikon AS group_aikon
+                , gm.member
+                , a.display_name
+                , t.tag_mei
+                , t.tag_color1
+                , t.tag_color2
+                , t.tag_color3 
+            FROM
+                group_chat gc 
+                LEFT JOIN group_member gm 
+                    ON gc.group_id = gm.group_id 
+                LEFT JOIN account a 
+                    ON gm.member = a.user_name 
+                LEFT JOIN tag t 
+                    ON gc.tag_id = t.tag_id
+                WHERE
+                t.tag_mei LIKE :hobby
+            ';
             $stmt = $pdo->prepare($sql);
-            // パラメータのバインド
-            $stmt->bindValue(':tag_mei', $hobby , PDO::PARAM_STR);
-            // クエリの実行     
+            $stmt->bindValue(':hobby', '%' . $hobby . '%', PDO::PARAM_STR);
             $stmt->execute();
-            // 結果の取得
-            $results = $stmt->fetch(PDO::FETCH_ASSOC);
-            header('Location: group_list.php?tagId='.$results["tag_id"]);
-            // include('group_list.php?tag_id='.$results["tag_id"]); 
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            // データの整形
+            $groupedResults = [];
+            foreach ($results as $row) {
+                $groupedResults[$row['group_id']]['group_mei'] = $row['group_mei'];
+                $groupedResults[$row['group_id']]['group_aikon'] = $row['group_aikon'];
+                $groupedResults[$row['group_id']]['tag_mei'] = $row['tag_mei'];
+                $groupedResults[$row['group_id']]['tag_color1'] = $row['tag_color1'];
+                $groupedResults[$row['group_id']]['tag_color2'] = $row['tag_color2'];
+                $groupedResults[$row['group_id']]['tag_color3'] = $row['tag_color3'];
+                $groupedResults[$row['group_id']]['members'][] = [
+                    'member' => $row['member'],
+                    'display_name' => $row['display_name']
+                ];
+            }
+            include('searchToukouGroupChatList_v.php');
+       
         }
 
     }

@@ -43,8 +43,8 @@ if (isset($_POST['user_name']) && isset($_POST['pass'])) {
     <div class="frame">
         <p style="font-weight: bold;">login</p>
         <form action="login.php" method="POST">
-            <input class="textbox" type="text" name="user_name"  placeholder="ユーザー名"><br>
-            <input class="textbox" type="text" name="pass"  placeholder="パスワード"><br>
+            <input class="textbox" type="text" name="user_name" maxlength="20" placeholder="ユーザー名"><br>
+            <input class="textbox" type="text" name="pass" maxlength="12" placeholder="パスワード"><br>
             <p><input type = "checkbox" name = "login">
                 ログイン状態を保持する</p>
 
