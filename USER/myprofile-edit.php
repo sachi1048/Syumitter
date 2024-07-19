@@ -55,30 +55,30 @@
                 <input type="file" name="aikon">
             </lable>
         </div>
-        <table style="margin:auto;">
+        <table style="margin:auto; font-size:small;">
             <tr>
                 <td>ユーザー名</td>
-                <td><input type="textbox" name="user" value="<?php echo htmlspecialchars($row['user_name']); ?>"></td>
+                <td><input type="textbox" name="user" maxlength="20" value="<?php echo htmlspecialchars($row['user_name']); ?>"></td>
             </tr>
             <tr>
                 <td>名前</td>
-                <td><input type="textbox" name="display" value="<?php echo htmlspecialchars($row['display_name']); ?>"></td>
+                <td><input type="textbox" name="display" maxlength="20" value="<?php echo htmlspecialchars($row['display_name']); ?>"></td>
             </tr>
             <tr>
                 <td>プロフィール</td>
-                <td><textarea class="textbox" type="textbox" name="profile"><?php echo htmlspecialchars($row['profile']); ?></textarea></td>
+                <td><textarea class="textbox" type="textbox" name="profile" maxlength="250"><?php echo htmlspecialchars($row['profile']); ?></textarea></td>
             </tr>
             <tr>
                 <td>アドレス</td>
-                <td><input type="textbox" name="mail" value="<?php echo htmlspecialchars($row['mail']); ?>"></td>
+                <td><input type="textbox" name="mail" maxlength="30" value="<?php echo htmlspecialchars($row['mail']); ?>"></td>
             </tr>
             <tr>
                 <td>パスワード</td>
-                <td><input type="password" id="password1" name="pass1" value="<?php echo htmlspecialchars($row['pass']); ?>" required></td>
+                <td><input type="password" id="password1" name="pass1" maxlength="12" value="<?php echo htmlspecialchars($row['pass']); ?>" required></td>
             </tr>
             <tr>
                 <td>確認パスワード</td>
-                <td><input type="password" id="password2" name="pass2" required></td>
+                <td><input type="password" id="password2" name="pass2" maxlength="12" required></td>
             </tr>
         </table>
         <p id="errorMessage" class="error">パスワードが一致しません。</p>
