@@ -10,8 +10,10 @@
 <body>
     <button class="back-button" type="button" onclick="history.back()">戻る</button>
     <div class="center">
-        <div class="container">
-        <div class="table">
+    <div class="container">
+    <div class="table">
+        <p align="left">チェックボックスまたはタグ名をクリックし、削除するタグを選択してください。</p>
+        <form method="post" action="tug_complete.php">
             <table>
                 <thead>
                     <tr>
@@ -20,28 +22,51 @@
                     </tr>
                 </thead>
         <tbody>
-                    
-            <form method="post" action="tug_complete.php">
             <?php 
-            $tug= array('tug1','tug2','tubA','tugB');
+            require '../../USER/db-connect.php';
+            $pdo=new PDO($connect,USER,PASS);
             $count=0;
-            foreach($tug as $tugs): ?>
-            <tr>
-            <td><label for="<?php echo $count; ?>"><?php echo htmlspecialchars($tugs, ENT_QUOTES, 'UTF-8'); ?></label></td>
-            <td><input type="checkbox" name="tug[]" id="<?php echo $count; ?>" value="<?php echo htmlspecialchars($tugs, ENT_QUOTES, 'UTF-8'); ?>"></td>
-            </tr>
+                foreach($sql=$pdo->query('SELECT tag_id,tag_mei FROM Tag') as $row): ?>
+                <tr>
+                <td><label for="<?php echo $count; ?>"><?php echo htmlspecialchars($row['tag_mei'], ENT_QUOTES, 'UTF-8'); ?></label></t>
+                <td><input type="checkbox" name="tug[]" id="<?php echo $count; ?>" value="<?php echo htmlspecialchars($row['tag_id'], ENT_QUOTES, 'UTF-8'); ?>" onclick="updateHiddenField(this)"></td>
+                </tr>
+                <input type="hidden" name="tugname[]" id="hidden_<?php echo $count; ?>" value="<?php echo htmlspecialchars($row['tag_mei'], ENT_QUOTES, 'UTF-8'); ?>">
             <?php
             $count++;
             endforeach; ?>
         </tbody>
-            </table>
-            <p align="left">チェックボックスまたはタグ名をクリックし、削除するタグを選択してください。</p>
-        </div>
-        </div>
+    </table>
+    
+    <div class="decision2">
+    <p><input type="submit" value="削除"class="decision-button"></p>
     </div>
-    <div class="decision">
-    <input type="submit" value="作成"class="decision-button">
-</div>
+    </form>
+
+    </div>
+    </div>
+    </div>
+    
+
+    <script>
+        function updateHiddenField(checkbox) {
+            const hiddenField = document.getElementById(`hidden_${checkbox.id}`);
+            if (checkbox.checked) {
+                hiddenField.disabled = false;
+            } else {
+                hiddenField.disabled = true;
+            }
+        }
+
+        window.onload = function() {
+            const hiddenFields = document.querySelectorAll('input[type="hidden"]');
+            hiddenFields.forEach(field => field.disabled = true);
+            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = false;
+            });
+        };
+    </script>
 </body>
 </html>
 

@@ -12,35 +12,64 @@
     <div class="center">
         <div class="container">
         <div class="table">
+        <p align="left">チェックボックス・投稿ID・投稿内容をクリックし、削除するチャットを選択してください。</p>
+        <form method="post" action="chat_complete.php">
             <table>
                 <thead>
                     <tr>
-                        <th class="master">チャットID</th>
+                        <th>投稿ID</th>
+                        <th class="master">投稿内容</th>
                         <th>選択</th>
                     </tr>
                 </thead>
                 <tbody>
-                <form method="post" action="chat_complete.php">
                 <?php 
-                $chat= array('1','2','3','4');
+                require '../../USER/db-connect.php';
+                $pdo=new PDO($connect,USER,PASS);
                 $count=0;
-                foreach($chat as $chats): ?>
+                foreach($sql=$pdo->query('SELECT toukou_id,setumei FROM Toukou') as $row): ?>
                 <tr>
-                <td><label for="<?php echo $count; ?>"><?php echo htmlspecialchars($chats, ENT_QUOTES, 'UTF-8'); ?></label></td>
-                <td><input type="checkbox" name="chat[]" id="<?php echo $count; ?>" value="<?php echo htmlspecialchars($chats, ENT_QUOTES, 'UTF-8'); ?>"></td>
+                <td><label for="<?php echo $count; ?>"><?php echo htmlspecialchars($row['toukou_id'], ENT_QUOTES, 'UTF-8'); ?></label></td>
+                <td><label for="<?php echo $count; ?>"><?php echo htmlspecialchars($row['setumei'], ENT_QUOTES, 'UTF-8'); ?></label></td>
+                <td><input type="checkbox" name="toukou[]" id="<?php echo $count; ?>" value="<?php echo htmlspecialchars($row['toukou_id'], ENT_QUOTES, 'UTF-8'); ?>" onclick="updateHiddenField(this)"></td>
                 </tr>
+                <input type="hidden" name="toukoucontent[]" id="hidden_<?php echo $count; ?>" value="<?php echo htmlspecialchars($row['setumei'], ENT_QUOTES, 'UTF-8'); ?>">
                 <?php
                 $count++;
                 endforeach; ?>
 
                 </tbody>
-            </table>
-            <p align="left">チェックボックスまたはチャットIDをクリックし、削除するチャットを選択してください。</p>
-        </div>
-        </div>
+        </table>
+
+    <div class="decision2">
+    <p><input type="submit" value="削除"class="decision-button"></p>
     </div>
-    <div class="decision">
-    <input type="submit" value="作成"class="decision-button">
-</div>
+    </form>
+  
+    </div>
+    </div>
+    </div>
+
+
+
+    <script>
+        function updateHiddenField(checkbox) {
+            const hiddenField = document.getElementById(`hidden_${checkbox.id}`);
+            if (checkbox.checked) {
+                hiddenField.disabled = false;
+            } else {
+                hiddenField.disabled = true;
+            }
+        }
+
+        window.onload = function() {
+            const hiddenFields = document.querySelectorAll('input[type="hidden"]');
+            hiddenFields.forEach(field => field.disabled = true);
+            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = false;
+            });
+        };
+    </script>
 </body>
 </html>

@@ -22,7 +22,7 @@ try {
 
         // 投稿の取得
         $stmt = $pdo->prepare("
-            SELECT t.*, a.aikon as user_aikon, a.display_name
+            SELECT t.*, a.aikon as user_aikon, a.user_name
             FROM Toukou t
             JOIN Account a ON t.toukou_mei = a.user_name
             WHERE t.toukou_id = :toukou_id
@@ -126,7 +126,6 @@ $(document).ready(function(){
 
 </head>
 <body>
-<footer><?php require 'menu.php'; ?></footer>
 <h1 class="h1-2">Syumitter</h1>  
 <a href="javascript:history.back()" class="btn-mdr2"></a>
 
@@ -176,7 +175,11 @@ $(document).ready(function(){
             <div class="aikon">
                 <img src="<?php echo 'img/aikon/' . htmlspecialchars($post['user_aikon']); ?>" alt="アイコン" class="user-icon">
             </div>
-            <span><?php echo htmlspecialchars($post['display_name']); ?></span>
+            <!-- <span><?php echo htmlspecialchars($post['display_name']); ?></span> -->
+            <?php echo '<a href="profile.php?user_name=', $post['user_name'], '" style="Text-decoration:none; color:#000000;">
+                <h2>', $post['user_name'], '</h2>
+                </a>';
+            ?>
             <?php if ($current_user_name === $post['toukou_mei']): ?>
                 <form action="toukou_delete.php" method="post" class="user-action-form">
                     <input type="hidden" name="toukou_id" value="<?php echo htmlspecialchars($post['toukou_id']); ?>">
@@ -271,6 +274,7 @@ $(document).ready(function(){
     </br>
     </br>
     </br>
-    
+    </br>
+    <footer><?php require 'menu.php'; ?></footer>
 </body>
 </html>
