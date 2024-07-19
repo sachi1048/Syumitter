@@ -107,6 +107,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['commentsend'])) {
             </div>
         </form>
     </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
     <footer><?php require 'menu.php'; ?></footer>
 </body>
 </html>
