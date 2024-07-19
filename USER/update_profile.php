@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // パスワードが一致するかチェック
     if ($pass1 !== $pass2) {
-        header('Location: myprofile.php');
+        header('Location: myprofile-edit.php');
         exit();
     }
 
