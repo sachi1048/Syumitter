@@ -18,10 +18,17 @@
                 <<実行結果>><br><!--POSTかGETで取得した値を表示 例.削除:該当なし　追加：a,b,c-->
                 チャット削除：
                 <?php
-                if (!empty($_POST['chat'])) {
-                    $chats=$_POST['chat'];
-                    foreach ($chats as $count) {
+                require '../../USER/db-connect.php';
+                $pdo=new PDO($connect,USER,PASS);
+                if (isset($_POST['toukou'])&&($_POST['toukoucontent'])) {
+                    $toukou=$_POST['toukou'];
+                    $toukoucontent=$_POST['toukoucontent'];
+                    $counts=0;
+                    foreach ($toukou as $count) {
                         echo  htmlspecialchars("{$count}　", ENT_QUOTES, 'UTF-8');
+                        echo $toukoucontent[$counts];
+                        echo "　";
+                        $counts++;
                     }
                 } else {
                     echo "該当なし";

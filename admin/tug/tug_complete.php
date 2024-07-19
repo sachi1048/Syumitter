@@ -18,10 +18,22 @@
                 <<実行結果>><br>
                 削除：
                 <?php
-                if (!empty($_POST['tug'])) {
-                    $tugs=$_POST['tug'];
-                    foreach ($tugs as $count) {
+                require '../../USER/db-connect.php';
+                $pdo=new PDO($connect,USER,PASS);
+                if (isset($_POST['tug'])&&($_POST['tugname'])) {
+                    $tugid=$_POST['tug'];
+                    $tugname=$_POST['tugname'];
+                    $counts=0;
+                    $sql=$pdo->prepare('delete from Tag where tag_id=?');
+                    foreach ($tugname as $count) {
+                    if($sql->execute([$tugid[$counts]])) {
+                        $counts++;
+                        echo "・";
                         echo  htmlspecialchars("{$count}　", ENT_QUOTES, 'UTF-8');
+                    }
+                    else{
+                        echo '削除に失敗しました。';
+                    }
                     }
                 } else {
                     echo "該当なし";
@@ -32,9 +44,14 @@
 
                 <?php
                 if (!empty($_POST['newtugname'])) {
-                    $newtugname=$_POST['newtugname'];
-                    echo $newtugname;
-
+                    $sql=$pdo->prepare('insert into Tag(tag_mei,tag_color1,tag_color2,tag_color3) values (?,?,?,?)');
+                if ($sql->execute([$_POST['newtugname'],$_POST['color1'],$_POST['color2'],$_POST['color3']])){
+                        $newtugname=$_POST['newtugname'];
+                        echo "・";
+                        echo $newtugname;
+                }else{
+                        echo '<font color="red">追加に失敗しました。</font>';
+                }
                 } else {
                     echo "該当なし";
                 }
