@@ -130,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
         <br>
         <!-- グループ名の入力 -->
-        <input type="text" name="group_name" placeholder="チャット名" value="<?php echo isset($_POST['group_name']) ? htmlspecialchars($_POST['group_name'], ENT_QUOTES, 'UTF-8') : ''; ?>" required>
+        <input type="text" name="group_name" placeholder="チャット名" maxlength="15" value="<?php echo isset($_POST['group_name']) ? htmlspecialchars($_POST['group_name'], ENT_QUOTES, 'UTF-8') : ''; ?>" required>
         <br>
 
         <!-- 趣味タグ選択 -->
