@@ -1,73 +1,100 @@
 <?php
+session_start();
+require 'db-connect.php';
+
+$pdo = new PDO($connect, USER, PASS);
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $server = 'mysql301.phy.lolipop.lan';
-    $dbname = 'LAA1517472-syumitta';
-    $user = 'LAA1517472';
-    $pass = 'kitagawa';
+    $username = $_POST['username'];
+    $name = $_POST['name'];
+    $profile = $_POST['profile'];
+    $email = $_POST['email'];
+    $password1 = $_POST['password1'];
+    $password2 = $_POST['password2'];
+    $aikon = $_FILES['aikon'];
+    $selectedOptions = isset($_POST['selectedOptions']) ? explode(',', $_POST['selectedOptions']) : [];
 
-    try {
-        $pdo = new PDO("mysql:host=$server;dbname=$dbname;charset=utf8", $user, $pass);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        // フォームからのデータを取得
-        $user_name = $_POST['username'];
-        $display_name = $_POST['name'];
-        $profile = $_POST['profile'];
-        $mail = $_POST['email'];
-        $password = $_POST['password'];
-        $confirm_password = $_POST['confirm_password'];
-
-        if ($password !== $confirm_password) {
-            echo "パスワードが一致しません。";
-        } else {
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
-            // データベースにユーザーを追加
-            $stmt = $pdo->prepare("INSERT INTO Account (user_name, display_name, profile, mail, pass) VALUES (:user_name, :display_name, :profile, :mail, :pass)");
-            $stmt->bindParam(':user_name', $user_name);
-            $stmt->bindParam(':display_name', $display_name);
-            $stmt->bindParam(':profile', $profile);
-            $stmt->bindParam(':mail', $mail);
-            $stmt->bindParam(':pass', $hashed_password);
-            $stmt->execute();
-            echo "";
-        }
-    } catch (PDOException $e) {
-        echo "データベース接続失敗: " . $e->getMessage();
+    // パスワードの一致をチェック
+    if ($password1 !== $password2) {
+        header('Location: acount_creation.php?error=パスワードが一致しません。');
+        exit();
     }
+
+    // メールアドレスの重複チェック
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM Account WHERE mail = :email");
+    $stmt->bindParam(':email', $email);
+    $stmt->execute();
+    $count = $stmt->fetchColumn();
+
+    if ($count > 0) {
+        header('Location: acount_creation.php?error=このメールアドレスは既に使用されています。');
+        exit();
+    }
+
+    // ユーザー名の重複チェック
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM Account WHERE user_name = :username");
+    $stmt->bindParam(':username', $username);
+    $stmt->execute();
+    $count = $stmt->fetchColumn();
+
+    if ($count > 0) {
+        header('Location: acount_creation.php?error=このユーザー名は既に使用されています。');
+        exit();
+    }
+
+    // アイコンのチェック
+    if ($aikon['error'] === UPLOAD_ERR_NO_FILE) {
+        header('Location: acount_creation.php?error=アイコンを選択してください。');
+        exit();
+    }
+
+    // パスワードのハッシュ化
+    $hashed_password = password_hash($password1, PASSWORD_DEFAULT);
+
+    // ファイルアップロードの処理
+    $aikon_path = '';
+    if ($aikon['error'] === UPLOAD_ERR_OK) {
+        $aikon_name = basename($aikon['name']);
+        $upload_dir = 'img/aikon/';
+        $upload_file = $upload_dir . $aikon_name;
+
+        if (move_uploaded_file($aikon['tmp_name'], $upload_file)) {
+            $aikon_path = $aikon_name;
+        } else {
+            $_SESSION['error_message'] = "アイコンのアップロードに失敗しました。";
+            header('Location: acount_creation.php');
+            exit();
+        }
+    }
+
+    // データベースにユーザーを追加
+    $stmt = $pdo->prepare("INSERT INTO Account (user_name, display_name, profile, mail, pass, aikon) VALUES (:username, :name, :profile, :email, :hashed_password, :aikon_path)");
+    $stmt->bindParam(':username', $username);
+    $stmt->bindParam(':name', $name);
+    $stmt->bindParam(':profile', $profile);
+    $stmt->bindParam(':email', $email);
+    $stmt->bindParam(':hashed_password', $hashed_password);
+    $stmt->bindParam(':aikon_path', $aikon_path);
+    $stmt->execute();
+
+    // User_tagに選択したタグを追加
+    foreach ($selectedOptions as $tag_id) {
+        $stmt = $pdo->prepare("INSERT INTO User_tag (user_name, tag_id) VALUES (:username, :tag_id)");
+        $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':tag_id', $tag_id);
+        $stmt->execute();
+    }
+
+    // セッションの更新
+    $_SESSION['user'] = [
+        'user_name' => $username,
+        'display_name' => $name,
+        'profile' => $profile,
+        'mail' => $email,
+        'aikon' => $aikon_path
+    ];
+
+    // アカウント作成成功メッセージ
+    echo "アカウントが作成されました。<a href='login.php'>ログイン画面</a>へ移動してください。";
 }
 ?>
-
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>新規作成完了</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f8f8f8;
-        }
-        .container {
-            text-align: center;
-        }
-        a {
-            color: #00aaff;
-            text-decoration: none;
-            font-size: 18px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <p>アカウントが作成されました</p>
-        <a href="login.php">ログイン画面へ</a>
-    </div>
-</body>
-</html>

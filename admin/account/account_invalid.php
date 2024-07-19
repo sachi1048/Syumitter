@@ -1,4 +1,5 @@
 <?php
+// DB接続＆SESSIONの使用を宣言
     session_start();
     const SERVER = 'mysql301.phy.lolipop.lan';
     const DBNAME = 'LAA1517472-syumitta';
@@ -32,9 +33,12 @@
                 </thead>
                 <tbody>
                     <?php
+                    // 凍結したいアカウントの情報を前画面からuser_nameとして一つずつに分けて受け取り、その都度名前を付けてhiddenで送信
                         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             if (isset($_POST['selectedOptions']) && is_array($_POST['selectedOptions'])) {
+                                // user_nameに１つずつ名前を付けるための変数count
                                 $count=0;
+                                // 一つずつpowに格納＆出力＆送信
                                 foreach($_POST['selectedOptions'] as $pow){
                                     $sel=$pdo->prepare('select * from Account where user_name = ?');
                                     $sel->execute([$pow]);
@@ -44,11 +48,13 @@
                                         echo '<td>',$woe['user_name'],'</td>';
                                         echo '<td>',$woe['mail'],'</td>';
                                         echo '</tr>';
+                                        // 送信
                                         echo '<input type="hidden" name="',$count,'" value="',$woe['user_name'],'">';
                                     }
                                     echo '<input type="hidden" name="',$count,'" value="',$pow,'">';
                                 }
                             }
+                            // 次の画面で、凍結したいアカウントの数をループの上限として送信
                             echo '<input type="hidden" name="zyogen" value="',$count,'">';
                         }
                     ?>

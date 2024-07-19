@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <button class="back-button" type="button" onclick="location.href='../main.html'">メインへ戻る</button>
+    <button class="back-button" type="button" onclick="location.href='../main.php'">メインへ戻る</button>
 
     <div class="center">
         <div class="container">
@@ -18,10 +18,22 @@
                 <<実行結果>><br><!--POSTかGETで取得した値を表示 例.削除:該当なし　追加：a,b,c-->
                 チャット削除：
                 <?php
-                if (!empty($_POST['chat'])) {
-                    $chats=$_POST['chat'];
-                    foreach ($chats as $count) {
-                        echo  htmlspecialchars("{$count}　", ENT_QUOTES, 'UTF-8');
+                require '../../USER/db-connect.php';
+                $pdo=new PDO($connect,USER,PASS);
+                if (isset($_POST['toukou'])&&($_POST['toukoucontent'])) {
+                    $toukou=$_POST['toukou'];
+                    $toukoucontent=$_POST['toukoucontent'];
+                    $counts=0;
+                    $sql=$pdo->prepare('delete from Toukou where toukou_id=?');
+                    foreach ($toukoucontent as $count) {
+                        if($sql->execute([$toukou[$counts]])) {
+                            $counts++;
+                            echo "・";
+                            echo  htmlspecialchars("{$count}　", ENT_QUOTES, 'UTF-8');
+                        }
+                        else{
+                            echo '削除に失敗しました。';
+                        }
                     }
                 } else {
                     echo "該当なし";
