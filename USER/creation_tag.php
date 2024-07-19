@@ -102,7 +102,7 @@
     <p>１０個まで選択可能</p>
     <br>
     <!-- 趣味タグ一覧を表示 -->
-    <form action="account_creation.php" method="POST">
+    <form action="acount_creation.php" method="POST">
         <div>
             <?php
                $sql = $pdo->query('SELECT * FROM Tag');
