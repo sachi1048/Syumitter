@@ -36,16 +36,8 @@
     <table class="table-chat">
 
     <?php
-        $tagId = isset($_GET['tagId']) ? $_GET['tagId'] : '';//タグ名
-        if($tagId==""){
-            $sql=$pdo->query('select * from Group_chat');
-        }else{
-            $sql = "select * from Group_chat where tag_id = :tagId";
-            $stmt = $pdo->prepare($sql);
-            $stmt->bindValue(':tagId', $tagId ,PDO::PARAM_STR);
-            $stmt->execute();
-            $sql = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        }
+        $sql=$pdo->prepare('SELECT gc.group_id, gc.group_mei, gc.creator_mei, gc.aikon, gc.tag_id FROM Group_chat gc LEFT JOIN Group_member gm ON gc.group_id = gm.group_id WHERE gm.member=?');
+        $sql->execute([$user_name]);
         foreach($sql as $row){
             echo '<tr>
                 <td>

@@ -67,11 +67,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="CSS/checkbox.css">
+    <link rel="stylesheet" href="CSS/main.css">
     <link rel="stylesheet" href="CSS/menu.css">
     <title>投稿画面</title>
 </head>
 <body>
-    <h1 class="syumitter1">Syumitter</h1>
+    <h1 class="h1-2">Syumitter</h1>
     <?php
     // ログインしていなければ警告を表示
     if (!isset($_SESSION['user']['user_name'])) {
@@ -86,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <input type="hidden" name="naiyou" id="naiyou">
         <p class="koumoku">タイトル</p>
-        <input class="inp" type="text" name="title" id="title" required>
+        <input class="inp" type="text" name="title" maxlength="100" id="title" required>
         <br>
         <?php
         // もし選択された趣味タグがあれば表示する
@@ -107,10 +108,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ?>
         <button class="tagbutton" type="button" onclick="saveFormData(); location.href='tag_sentaku.php';">＃趣味タグ追加</button>
         <p class="koumoku">キャプション</p>
-        <textarea class="setumeinp" name="setumei" id="setumei" required></textarea>
+        <textarea class="setumeinp" name="setumei" maxlength="400" id="setumei" required></textarea>
         <br>
         <button class="nextbutton" type="submit" name="toukousuru">投稿</button>
     </form>
+    <br><br><br><br>
     <?php require 'menu.php';?>
     <script>
         function saveFormData() {
