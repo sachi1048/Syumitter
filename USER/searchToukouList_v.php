@@ -13,7 +13,7 @@
     <div class="header-container">
         <div class="back-button" onclick="history.back()"></div>
         <h1 class="h1-2">Syumitter</h1>
-        <button class="search-button">検索</button>
+        <button class="search-button"><?php echo $_GET['hobby'];?></button>
     </div>
     <div class="results-container">
     <?php foreach ($results as $row) { ?>

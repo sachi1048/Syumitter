@@ -1,3 +1,13 @@
+<?php
+    session_start();
+    const SERVER = 'mysql301.phy.lolipop.lan';
+    const DBNAME = 'LAA1517472-syumitta';
+    const USER = 'LAA1517472';
+    const PASS = 'kitagawa';
+
+    $connect = 'mysql:host='.SERVER.';dbname='.DBNAME.';charset=utf8';
+    $pdo=new PDO($connect,USER,PASS);
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -7,10 +17,10 @@
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-    <button class="back-button" type="button" onclick="location.href='login.html'">ログアウト</button>
+    <button class="back-button" type="button" onclick="location.href='logout.php'">ログアウト</button>
     <div class="center">
     <div class="container">
-        <button class="mainbutton" type="button" onclick="location.href='account/account_management.html'">アカウント管理</button>
+        <button class="mainbutton" type="button" onclick="location.href='account/account_management.php'">アカウント管理</button>
         <button class="mainbutton" type="button" onclick="location.href='chat/chat_management.html'">チャット管理</button>
         <button class="mainbutton" type="button" onclick="location.href='tug/tug_management.html'">タグ管理</button>
     </div>

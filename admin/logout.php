@@ -1,7 +1,5 @@
 <?php
-// DB接続
     session_start();
-    unset($_SESSION['account']);
     const SERVER = 'mysql301.phy.lolipop.lan';
     const DBNAME = 'LAA1517472-syumitta';
     const USER = 'LAA1517472';
@@ -16,15 +14,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>管理画面</title>
-    <link rel="stylesheet" href="../css/management.css">
+    <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-    <button class="back-button" type="button" onclick="location.href='../main.php'">メインへ戻る</button><!-- PHPになったら適応させてください -->
+    <button class="back-button" type="button" onclick="location.href='main.php'">キャンセル</button>
     <div class="center">
+    ログアウトしますか？
     <div class="container">
-        <button class="button" type="button" onclick="location.href='account_List.php'">アカウント一覧</button>
-        <button class="button" type="button" onclick="location.href='account_invalidList.php'">凍結中のアカウント一覧</button>
+        <button class="mainbutton" type="button" onclick="location.href='login.php'">ログアウト</button>
     </div>
-</div>
+    </div>
 </body>
 </html>
