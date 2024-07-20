@@ -24,7 +24,7 @@
                     $toukou=$_POST['toukou'];
                     $toukoucontent=$_POST['toukoucontent'];
                     $counts=0;
-                    $sql=$pdo->prepare('UPDATE Toukou SET title="削除済みの投稿",contents="NULL.png",setumei="管理者によりこの投稿は削除されました。" where toukou_id=?');
+                    $sql=$pdo->prepare('UPDATE Toukou SET title="削除済みの投稿",contents="delete.png",setumei="管理者によりこの投稿は削除されました。" where toukou_id=?');
                     foreach ($toukoucontent as $count) {
                         if($sql->execute([$toukou[$counts]])) {
                             $counts++;
@@ -42,10 +42,20 @@
                 <br>
                 画像・動画削除：
                 <?php
-                if (!empty($_POST['content'])) {
+                if (isset($_POST['content'])&&($_POST['toukoucontent'])) {
                     $content=$_POST['content'];
-                    foreach ($content as $count) {
+                    $toukoucontent=$_POST['toukoucontent'];
+                    $counts=0;
+                    $sql=$pdo->prepare('UPDATE Toukou SET contents="delete.png" where toukou_id=?');
+                    foreach ($toukoucontent as $count) {
+                    if($sql->execute([$content[$counts]])) {
+                        $counts++;
+                        echo "・";
                         echo  htmlspecialchars("{$count}　", ENT_QUOTES, 'UTF-8');
+                    }
+                    else{
+                        echo '削除に失敗しました。';
+                    }
                     }
                 } else {
                     echo "該当なし";

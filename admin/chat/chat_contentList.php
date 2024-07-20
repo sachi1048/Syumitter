@@ -22,13 +22,11 @@
             require '../../USER/db-connect.php';
             $pdo=new PDO($connect,USER,PASS);
             $count=0;
-                $contents = array('icons.png','icons.jpg','test.jpg','icons.png','test.jpg','icons.png','icons.png','test.jpg','icons.png','icons.jpg','icons.png','icons.jpg','icons.png','imgs.jpg');
-                $count=0;
                 $linecount=0;
                 foreach($sql=$pdo->query('SELECT toukou_id,contents FROM Toukou') as $row): ?>
-                <input type="checkbox" name="content[]" id="<?php echo $count; ?>" value="<?php echo htmlspecialchars($row['$toukou_id'], ENT_QUOTES, 'UTF-8'); ?>">
-                <label for="<?php echo $count; ?>"><img src="../USER/img/toukou/<?php echo htmlspecialchars($row['$contents'], ENT_QUOTES, 'UTF-8'); ?>" width="100" height="100"></label>
-                
+                <input type="checkbox" name="content[]" id="<?php echo $count; ?>" value="<?php echo htmlspecialchars($row['toukou_id'], ENT_QUOTES, 'UTF-8'); ?>" onclick="updateHiddenField(this)">
+                <label for="<?php echo $count; ?>"><img src="../../USER/img/toukou/<?php echo htmlspecialchars($row['contents'], ENT_QUOTES, 'UTF-8'); ?>" width="100" height="100"></label>
+                <input type="hidden" name="toukoucontent[]" id="hidden_<?php echo $count; ?>" value="<?php echo htmlspecialchars($row['contents'], ENT_QUOTES, 'UTF-8'); ?>">
                 <?php
                 $count++; 
                 $linecount++;
@@ -40,18 +38,40 @@
             <?php endforeach; ?>
             </li>
         </ul>
-            
+</div>
 
-    <div class="decision">
+<div class="decisions">
+    <div class="decision2">
     <p><input type="submit" value="削除"class="decision-button"></p>
     </div>
     </form>
-
+</div>
 
 </div>
 </div>
-</div>
 
 
+
+
+
+<script>
+        function updateHiddenField(checkbox) {
+            const hiddenField = document.getElementById(`hidden_${checkbox.id}`);
+            if (checkbox.checked) {
+                hiddenField.disabled = false;
+            } else {
+                hiddenField.disabled = true;
+            }
+        }
+
+        window.onload = function() {
+            const hiddenFields = document.querySelectorAll('input[type="hidden"]');
+            hiddenFields.forEach(field => field.disabled = true);
+            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = false;
+            });
+        };
+</script>
 </body>
 </html>

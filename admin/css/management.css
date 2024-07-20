@@ -88,6 +88,9 @@ body {
 .decision2{
     text-align: center;
 }
+.decisions {
+    margin: auto;
+}
 
 
 .frame {
