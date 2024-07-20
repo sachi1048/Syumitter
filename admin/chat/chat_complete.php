@@ -24,7 +24,7 @@
                     $toukou=$_POST['toukou'];
                     $toukoucontent=$_POST['toukoucontent'];
                     $counts=0;
-                    $sql=$pdo->prepare('delete from Toukou where toukou_id=?');
+                    $sql=$pdo->prepare('UPDATE Toukou SET title="削除済みの投稿",contents="NULL.png",setumei="管理者によりこの投稿は削除されました。" where toukou_id=?');
                     foreach ($toukoucontent as $count) {
                         if($sql->execute([$toukou[$counts]])) {
                             $counts++;
@@ -59,6 +59,6 @@
 
     <div class="decision">
     <button class="decision-button" type="button" onclick="location.href='chat_management.html'">完了</button>
-</div>
+    </div>
 </body>
 </html>
