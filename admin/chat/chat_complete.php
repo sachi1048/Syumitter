@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <button class="back-button" type="button" onclick="location.href='../main.html'">メインへ戻る</button>
+    <button class="back-button" type="button" onclick="location.href='../main.php'">メインへ戻る</button>
 
     <div class="center">
         <div class="container">
@@ -24,11 +24,16 @@
                     $toukou=$_POST['toukou'];
                     $toukoucontent=$_POST['toukoucontent'];
                     $counts=0;
-                    foreach ($toukou as $count) {
-                        echo  htmlspecialchars("{$count}　", ENT_QUOTES, 'UTF-8');
-                        echo $toukoucontent[$counts];
-                        echo "　";
-                        $counts++;
+                    $sql=$pdo->prepare('UPDATE Toukou SET title="削除済みの投稿",contents="delete.png",setumei="管理者によりこの投稿は削除されました。" where toukou_id=?');
+                    foreach ($toukoucontent as $count) {
+                        if($sql->execute([$toukou[$counts]])) {
+                            $counts++;
+                            echo "・";
+                            echo  htmlspecialchars("{$count}　", ENT_QUOTES, 'UTF-8');
+                        }
+                        else{
+                            echo '削除に失敗しました。';
+                        }
                     }
                 } else {
                     echo "該当なし";
@@ -37,10 +42,20 @@
                 <br>
                 画像・動画削除：
                 <?php
-                if (!empty($_POST['content'])) {
+                if (isset($_POST['content'])&&($_POST['toukoucontent'])) {
                     $content=$_POST['content'];
-                    foreach ($content as $count) {
+                    $toukoucontent=$_POST['toukoucontent'];
+                    $counts=0;
+                    $sql=$pdo->prepare('UPDATE Toukou SET contents="delete.png" where toukou_id=?');
+                    foreach ($toukoucontent as $count) {
+                    if($sql->execute([$content[$counts]])) {
+                        $counts++;
+                        echo "・";
                         echo  htmlspecialchars("{$count}　", ENT_QUOTES, 'UTF-8');
+                    }
+                    else{
+                        echo '削除に失敗しました。';
+                    }
                     }
                 } else {
                     echo "該当なし";
@@ -54,6 +69,6 @@
 
     <div class="decision">
     <button class="decision-button" type="button" onclick="location.href='chat_management.html'">完了</button>
-</div>
+    </div>
 </body>
 </html>

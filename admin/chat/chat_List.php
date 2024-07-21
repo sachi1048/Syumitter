@@ -42,7 +42,7 @@
         </table>
 
     <div class="decision2">
-    <p><input type="submit" value="作成"class="decision-button"></p>
+    <p><input type="submit" value="削除"class="decision-button"></p>
     </div>
     </form>
   

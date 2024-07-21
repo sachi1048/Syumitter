@@ -17,12 +17,13 @@
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-    <button class="back-button" type="button" onclick="location.href='logout.php'">ログアウト</button>
+    <button class="back-button" type="button" onclick="location.href='main.php'">キャンセル</button>
     <div class="center">
+    ログアウトしますか？
     <div class="container">
-        <button class="mainbutton" type="button" onclick="location.href='account/account_management.php'">アカウント管理</button>
-        <button class="mainbutton" type="button" onclick="location.href='chat/chat_management.html'">チャット管理</button>
-        <button class="mainbutton" type="button" onclick="location.href='tug/tug_management.html'">タグ管理</button>
+        <button class="mainbutton" type="button" onclick="location.href='login.php'">ログアウト</button>
+        <button class="mainbutton" type="button" onclick="location.href='main.php'">キャンセル</button>
+
     </div>
     </div>
 </body>

@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <button class="back-button" type="button" onclick="location.href='../main.html'">メインへ戻る</button>
+    <button class="back-button" type="button" onclick="location.href='../main.php'">メインへ戻る</button>
 
     <div class="center">
         <div class="container">
