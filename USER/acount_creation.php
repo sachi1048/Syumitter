@@ -1,3 +1,4 @@
+<?php var_dump($_POST); ?>
 <!DOCTYPE html>
 <html lang="jp">
 <head>
@@ -33,6 +34,8 @@
                     selectedOptions.push($(this).val());
                 });
                 $('#selectedOptions').val(selectedOptions.join(','));
+                // フォーム送信前にコンソールログで確認
+console.log('Selected Options:', $('#selectedOptions').val());
             });
         });
     </script>
