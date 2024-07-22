@@ -86,6 +86,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <button class="backbutton" onclick="history.back()">
             <i class="fas fa-caret-left fa-2x"></i>戻る
         </button>
+
     </div>
+    <br>
+    <a href="login.php" class="btn-mdr">
+    <span class="dli-caret-left"></span>
+        戻る
+    </a>
 </body>
 </html>

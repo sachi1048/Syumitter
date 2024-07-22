@@ -68,7 +68,7 @@
             echo '<button id="follow" class="btn-follow2">フォローする</button>';   
         }
 
-        echo '</div></div><div>';
+        echo '</div></div><div style="width: 350px; margin: auto;">';
 
         $sql4 = $pdo->prepare('SELECT * FROM User_tag WHERE user_name = ?');
         $sql4->execute([$user_name]);

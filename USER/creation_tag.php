@@ -9,6 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="CSS/checkbox.css">
+    <link rel="stylesheet" href="CSS/main.css">
     <title>新規趣味タグ選択画面</title>
     <style>
         #notification {
@@ -118,8 +119,12 @@
                 }
             ?>
         </div>
-        <button class="lastbutton" type="submit">決定</button>
+        <button class="nextbutton" type="submit">決定</button>
     </form>
-    <button class="backbutton" onclick="history.back()"><span class="aokusitai">◀</span> 戻る</button>
+    <br>
+    <a href="login.php" class="btn-mdr">
+    <span class="dli-caret-left"></span>
+        戻る
+    </a>
 </body>
 </html>
