@@ -12,6 +12,8 @@ try {
     die("データベース接続失敗: " . $e->getMessage());
 }
 
+$message = ''; // メッセージ用の変数を初期化
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $newPassword = $_POST['new_password'];
@@ -19,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // パスワードの一致を確認
     if ($newPassword !== $confirmPassword) {
-        echo "パスワードが一致しません。";
+        $message = "パスワードが一致しません。";
     } else {
         // メールアドレスが存在するかを確認
         $stmt = $pdo->prepare("SELECT * FROM Account WHERE mail = :mail");
@@ -37,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header('Location: login.php');
             exit;
         } else {
-            echo "そのメールアドレスは存在しません。";
+            $message = "そのメールアドレスは存在しません。";
         }
     }
 }
@@ -49,12 +51,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Syumitter - パスワード再設定</title>
     <link rel="stylesheet" href="CSS/style.css">
+    <style>
+        .message {
+            color: red;
+            font-size: 14px; /* 必要に応じてサイズを調整 */
+            margin-top: 10px; /* メッセージとフォームの間にスペースを追加 */
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <h1>Syumitter</h1>
         <div class="reset-box">
             <h2>パスワード再設定</h2>
+            <?php if ($message): ?>
+                <p class="message"><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></p>
+            <?php endif; ?>
             <form action="" method="post">
                 <div class="form-group">
                     <label for="email">アドレス</label>
