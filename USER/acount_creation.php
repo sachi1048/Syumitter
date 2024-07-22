@@ -19,14 +19,20 @@
                 var errorMessage = $('#errorMessage');
 
                 if (password1 !== password2) {
-                    event.preventDefault(); // フォームの送信を止める
-                    errorMessage.text('パスワードが一致しません。').show(); // エラーメッセージを表示する
+                    event.preventDefault();
+                    errorMessage.text('パスワードが一致しません。').show();
                 } else if (icon === '') {
-                    event.preventDefault(); // フォームの送信を止める
-                    errorMessage.text('アイコンを選択してください。').show(); // エラーメッセージを表示する
+                    event.preventDefault();
+                    errorMessage.text('アイコンを選択してください。').show();
                 } else {
-                    errorMessage.hide(); // エラーメッセージを非表示にする
+                    errorMessage.hide();
                 }
+
+                var selectedOptions = [];
+                $('input[name="selectedOptions[]"]:checked').each(function() {
+                    selectedOptions.push($(this).val());
+                });
+                $('#selectedOptions').val(selectedOptions.join(','));
             });
         });
     </script>
@@ -53,23 +59,23 @@
             <table style="margin:auto;">
                 <tr>
                     <td>ユーザー名</td>
-                    <td><input type="text" name="username"></td>
+                    <td><input type="text" name="username" required></td>
                 </tr>
                 <tr>
                     <td>名前</td>
-                    <td><input type="text" name="name"></td>
+                    <td><input type="text" name="name" required></td>
                 </tr>
                 <tr>
                     <td>プロフィール</td>
-                    <td><textarea class="textbox" name="profile"></textarea></td>
+                    <td><textarea class="textbox" name="profile" required></textarea></td>
                 </tr>
                 <tr>
                     <td>アドレス</td>
-                    <td><input type="text" name="email"></td>
+                    <td><input type="email" name="email" required></td>
                 </tr>
                 <tr>
                     <td>パスワード</td>
-                    <td><input type="password" id="password1" name="password1"></td>
+                    <td><input type="password" id="password1" name="password1" required></td>
                 </tr>
                 <tr>
                     <td>確認パスワード</td>
@@ -77,20 +83,10 @@
                 </tr>
             </table>
             
-            <!-- Add hidden input to capture selected options -->
             <input type="hidden" name="selectedOptions" id="selectedOptions">
             <button class="nextbutton" type="submit">作成</button>
         </form>
-        <button class="back-button"># 趣味を選び直す</button>
+        <button class="back-button" onclick="history.back()"># 趣味を選び直す</button>
     </div>
-    
-    <script>
-        // Update hidden input with selected options
-        var selectedOptions = [];
-        document.querySelectorAll('input[type="checkbox"]:checked').forEach(function(checkbox) {
-            selectedOptions.push(checkbox.value);
-        });
-        document.getElementById('selectedOptions').value = selectedOptions.join(',');
-    </script>
 </body>
 </html>
