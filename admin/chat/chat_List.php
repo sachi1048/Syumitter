@@ -12,7 +12,7 @@
     <div class="center">
         <div class="container">
         <div class="table">
-        <p align="left">チェックボックス・投稿ID・投稿内容をクリックし、削除するチャットを選択してください。</p>
+        <p align="left">チェックボックス・投稿ID・投稿内容をクリックし、削除する投稿を選択してください。</p>
         <form method="post" action="chat_complete.php">
             <table>
                 <thead>
