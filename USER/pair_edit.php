@@ -4,15 +4,7 @@
     $pdo=new PDO($connect,USER,PASS);
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['sakuzyo'])) {
-            $sdl=$pdo->prepare('select * from Rireki where chat_id = ?');
-            $sdl->execute([$_SESSION['chat_id']]);
-            foreach($sdl as $row){
-                $sql=$pdo->prepare('delete from Pair_Kidoku where rireki_id = ?');
-                $sql->execute([$row['rireki_id']]);
-            }
-            $sql=$pdo->prepare('delete from Pair_Rireki where chat_id = ?');
-            $sql->execute([$_SESSION['chat_id']]);
-            $sql=$pdo->prepare('delete from Pair_chat where chat_id = ?');
+            $sql=$pdo->prepare('update Pair_chat set delete_code = 1 where chat_id = ?');
             $sql->execute([$_SESSION['chat_id']]);
             header("Location: pair_chat.php");
             exit;

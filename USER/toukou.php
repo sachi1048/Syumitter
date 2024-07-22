@@ -15,6 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             // 現在の日付と時間を年/月/日 時：分：秒の形で変数に保存
             $currentDateTime = date('Y-m-d H:i:s');
+            
             // ファイルがアップロードされたか確認
             if (isset($_FILES['fileInput']) && $_FILES['fileInput']['error'] === UPLOAD_ERR_OK) {
                 $uploadDir = 'img/toukou/';
@@ -34,8 +35,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     echo '<h2>同じファイル名の画像が既に存在します</h2>';
                     exit;
                 }
+            }else{
+                echo 'if文通ってないよ(´-ω-`)';
             }
-
+            
             // タグ１とタグ2、タグ３すべてにデータがある場合の追加処理
             if (isset($_POST['tag1'], $_POST['tag2'], $_POST['tag3'])) {
                 $ads = $pdo->prepare('INSERT INTO Toukou VALUES(null,?,?,?,?,?,?,?,?)');
@@ -82,10 +85,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ?>
     <form action="toukou.php" method="post" enctype="multipart/form-data">
         <div class="toukougazou" id="toukougazou">
-            <input type="file" id="fileInput" name="fileInput" accept="image/*" style="display: none;">
+            <input type="file" id="fileInput" name="fileInput" accept="image/toukou/*" style="display: none;">
             <button type="button" class="center-button" onclick="document.getElementById('fileInput').click();">写真・動画を選択</button>
         </div>
-        <input type="hidden" name="naiyou" id="naiyou">
+        <input type="hidden" name="naiyou" id="naiyou"> <!-- 画像ファイル名を保存するための隠しフィールド -->
         <p class="koumoku">タイトル</p>
         <input class="inp" type="text" name="title" maxlength="100" id="title" required>
         <br>
@@ -93,14 +96,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // もし選択された趣味タグがあれば表示する
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_POST['selectedOptions']) && is_array($_POST['selectedOptions'])) {
-                $count=0;
-                foreach($_POST['selectedOptions'] as $pow){
-                    $sel=$pdo->prepare('select * from Tag where tag_id = ?');
+                $count = 0;
+                foreach($_POST['selectedOptions'] as $pow) {
+                    $sel = $pdo->prepare('SELECT * FROM Tag WHERE tag_id = ?');
                     $sel->execute([$pow]);
-                    foreach($sel as $woe){
+                    foreach($sel as $woe) {
                         $count++;
-                        echo '<div style="border:1.2px solid rgb(',$woe['tag_color1'],',',$woe['tag_color2'],',',$woe['tag_color3'],'); color:rgb(',$woe['tag_color1'],',',$woe['tag_color2'],',',$woe['tag_color3'],');" class="tag_ln">#',$woe['tag_mei'],'</div>';
-                        echo '<input type="hidden" name="tag',$count,'" value="',$woe['tag_id'],'">';
+                        echo '<div style="border:1.2px solid rgb(' . $woe['tag_color1'] . ',' . $woe['tag_color2'] . ',' . $woe['tag_color3'] . '); color:rgb(' . $woe['tag_color1'] . ',' . $woe['tag_color2'] . ',' . $woe['tag_color3'] . ');" class="tag_ln">#' . $woe['tag_mei'] . '</div>';
+                        echo '<input type="hidden" name="tag' . $count . '" value="' . $woe['tag_id'] . '">';
                     }
                 }
             }
@@ -158,7 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 var reader = new FileReader();
                 reader.onload = function(e) {
                     document.getElementById('toukougazou').style.backgroundImage = 'url(' + e.target.result + ')';
-                    document.getElementById('naiyou').value = file.name;
+                    document.getElementById('naiyou').value = file.name; // 画像の名前をhidden inputに設定
                 }
                 reader.readAsDataURL(file);
             }

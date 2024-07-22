@@ -27,6 +27,7 @@
             <div class="container">
                 <div class="table">
                     <table>
+                    <p align="left">ユーザ名・メールアドレス・チェックボックスをクリックし、凍結したいアカウントを選択してください</p>
                         <thead>
                             <tr>
                                 <th>ユーザ名</th>
@@ -35,26 +36,30 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php
-                            // 凍結されていないアカウントをすべて表示
-                                $sql=$pdo->query('select * from Account where freeze_code <> 1');
-                                foreach($sql as $row){
-                                    echo '<tr>';
-                                    echo '<td>',$row['user_name'],'</td>';
-                                    echo '<td>',$row['mail'],'</td>';
-                                    // チェックボックスを服選択可にして配列として送信
-                                    echo '<td><input type="checkbox" name="selectedOptions[]" value="',$row['user_name'],'"></td>';
-                                    echo '</tr>';
-                                }
-                            ?>
+                        <?php
+                        // 凍結されていないアカウントをすべて表示
+                        $sql = $pdo->query('SELECT * FROM Account WHERE freeze_code <> 1');
+                        $count = 0;
+                        foreach ($sql as $row) {
+                            echo '<tr>';
+                            echo '<td><label for="', $count, '">', htmlspecialchars($row['user_name']), '</label></td>';
+                            echo '<td><label for="', $count, '">', htmlspecialchars($row['mail']), '</label></td>';
+                            echo '<td><input type="checkbox" id="', $count, '" name="selectedOptions[]" value="', htmlspecialchars($row['user_name']), '"></td>';
+                            echo '</tr>';
+                            $count++;
+                        }
+                        ?>
+
                         </tbody>
                     </table>
-                    <p align="left">凍結したいアカウントを選択してください</p>
+        
+        <div class="decision2">
+        <button class="decision-button" type="submit">次へ</button>
+        </div>
+
+        
                 </div>
             </div>
-        </div>
-        <div class="decision">
-            <button class="decision-button" type="submit">次へ</button>
         </div>
     </form>
 </body>

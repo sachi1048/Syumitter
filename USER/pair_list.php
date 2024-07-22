@@ -38,7 +38,7 @@
 
     <?php
         //コピペっただけ　相互の人を表示
-        $sql=$pdo->prepare('select * from Pair_chat where user1=?');
+        $sql=$pdo->prepare('select * from Pair_chat where user1=? and delete_code <> 1');
         $sql->execute([$_SESSION['user']['user_name']]);
         foreach($sql as $row){
             $sql2=$pdo->prepare('select * from Account where user_name=?');

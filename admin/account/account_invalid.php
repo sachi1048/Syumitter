@@ -25,6 +25,7 @@
         <div class="container">
         <div class="table">
             <table>
+            <p align="left">凍結を押下すると上記アカウントすべてに凍結が実行されます</p>
                 <thead>
                     <tr>
                         <th>ユーザ名</th>
@@ -60,13 +61,18 @@
                     ?>
                 </tbody>
             </table>
-            <p align="left">凍結を押下すると上記アカウントすべてに凍結が実行されます</p>
+            
         </div>
-        </div>
-    </div>
-    <div class="decision">
+    
+    <div class="decisions">
+    <div class="decision2">
     <button class="decision-button" type="submit">凍結</button>
-</div>
+    </div>
+    </div>
+
+    
+    </div>
+    </div>
 </form>
 </body>
 </html>

@@ -48,9 +48,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    // パスワードのハッシュ化
-    $hashed_password = password_hash($password1, PASSWORD_DEFAULT);
-
     // ファイルアップロードの処理
     $aikon_path = '';
     if ($aikon['error'] === UPLOAD_ERR_OK) {
@@ -67,22 +64,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // データベースにユーザーを追加
-    $stmt = $pdo->prepare("INSERT INTO Account (user_name, display_name, profile, mail, pass, aikon) VALUES (:username, :name, :profile, :email, :hashed_password, :aikon_path)");
+    // プレーンテキストパスワードを使用してユーザーをデータベースに追加
+    $stmt = $pdo->prepare("INSERT INTO Account (user_name, display_name, profile, mail, pass, aikon) VALUES (:username, :name, :profile, :email, :password, :aikon_path)");
     $stmt->bindParam(':username', $username);
     $stmt->bindParam(':name', $name);
     $stmt->bindParam(':profile', $profile);
     $stmt->bindParam(':email', $email);
-    $stmt->bindParam(':hashed_password', $hashed_password);
+    $stmt->bindParam(':password', $password1); // プレーンテキストパスワードを直接使用
     $stmt->bindParam(':aikon_path', $aikon_path);
     $stmt->execute();
 
     // User_tagに選択したタグを追加
     foreach ($selectedOptions as $tag_id) {
-        $stmt = $pdo->prepare("INSERT INTO User_tag (user_name, tag_id) VALUES (:username, :tag_id)");
-        $stmt->bindParam(':username', $username);
-        $stmt->bindParam(':tag_id', $tag_id);
-        $stmt->execute();
+        if (!empty($tag_id)) { // タグIDが空でないことを確認
+            $stmt = $pdo->prepare("INSERT INTO User_tag (user_name, tag_id) VALUES (:username, :tag_id)");
+            $stmt->bindParam(':username', $username);
+            $stmt->bindParam(':tag_id', $tag_id);
+            $stmt->execute();
+        }
     }
 
     // セッションの更新
@@ -95,6 +94,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ];
 
     // アカウント作成成功メッセージ
-    echo "アカウントが作成されました。<a href='login.php'>ログイン画面</a>へ移動してください。";
+    echo '
+    <!DOCTYPE html>
+    <html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>アカウント作成成功</title>
+        <style>
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+                font-family: Arial, sans-serif; /* フォントの変更 */
+                background-color: #f5f5f5; /* 背景色 */
+            }
+            .message {
+                text-align: center;
+                padding: 20px;
+                border-radius: 8px;
+                background-color: #fff;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                font-size: 18px; /* フォントサイズの調整 */
+            }
+        </style>
+    </head>
+    <body>
+        <div class="message">
+            アカウントが作成されました。<br>
+            <a href="login.php">ログイン画面</a>へ移動してください。
+        </div>
+    </body>
+    </html>
+    ';
 }
 ?>
