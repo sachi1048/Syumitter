@@ -60,33 +60,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Syumitter</h1>
-        <div class="reset-box">
-            <h2>パスワード再設定</h2>
-            <?php if ($message): ?>
+    <h1>Syumitter</h1>
+    <div class="frame">
+        <h2>パスワード再設定</h2>
+        <?php if ($message): ?>
                 <p class="message"><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></p>
             <?php endif; ?>
-            <form action="" method="post">
-                <div class="form-group">
-                    <label for="email">アドレス</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="new_password">新規パスワード</label>
-                    <input type="password" id="new-password" name="new_password" required>
-                </div>
-                <div class="form-group">
-                    <label for="confirm_password">確認パスワード</label>
-                    <input type="password" id="confirm-password" name="confirm_password" required>
-                </div>
-                <button type="submit">設定</button>
-            </form>
-        </div>
-        <button class="backbutton" onclick="history.back()">
-            <i class="fas fa-caret-left fa-2x"></i>戻る
-        </button>
-
+        <form action="" method="post">
+            <table style="margin:auto; font-size:small;">
+                <tr>
+                    <td>アドレス</td>
+                    <td><input type="email" name="email" required></td>
+                </tr>
+                <tr>
+                    <td>新規パスワード</td>
+                    <td><input type="password" name="new_password" required></td>
+                </tr>
+                <tr>
+                    <td>確認パスワード</td>
+                    <td><input type="password" name="confirm_password" required></td>
+                </tr>
+            </table>
+            <button class="nextbutton" type="submit">設定</button>
+        </form>
     </div>
     <br>
     <a href="login.php" class="btn-mdr">
