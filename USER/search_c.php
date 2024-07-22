@@ -86,12 +86,12 @@ class MyController {
                 , t.tag_color2
                 , t.tag_color3 
             FROM
-                group_chat gc 
-                LEFT JOIN group_member gm 
+                Group_chat gc 
+                LEFT JOIN Group_member gm 
                     ON gc.group_id = gm.group_id 
-                LEFT JOIN account a 
+                LEFT JOIN Account a 
                     ON gm.member = a.user_name 
-                LEFT JOIN tag t 
+                LEFT JOIN Tag t 
                     ON gc.tag_id = t.tag_id
                 WHERE
                 t.tag_mei LIKE :hobby
