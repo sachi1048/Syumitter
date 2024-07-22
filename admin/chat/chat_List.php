@@ -27,7 +27,7 @@
                 require '../../USER/db-connect.php';
                 $pdo=new PDO($connect,USER,PASS);
                 $count=0;
-                foreach($sql=$pdo->query('SELECT toukou_id,setumei FROM Toukou') as $row): ?>
+                foreach($sql=$pdo->query('SELECT toukou_id,setumei FROM Toukou WHERE setumei!="管理者によりこの投稿は削除されました。"') as $row): ?>
                 <tr>
                 <td><label for="<?php echo $count; ?>"><?php echo htmlspecialchars($row['toukou_id'], ENT_QUOTES, 'UTF-8'); ?></label></td>
                 <td><label for="<?php echo $count; ?>"><?php echo htmlspecialchars($row['setumei'], ENT_QUOTES, 'UTF-8'); ?></label></td>
