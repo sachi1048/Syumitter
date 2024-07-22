@@ -22,6 +22,8 @@
     ログアウトしますか？
     <div class="container">
         <button class="mainbutton" type="button" onclick="location.href='login.php'">ログアウト</button>
+        <button class="mainbutton" type="button" onclick="location.href='main.php'">キャンセル</button>
+
     </div>
     </div>
 </body>

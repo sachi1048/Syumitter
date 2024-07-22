@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     exit;
                 }
             }
-
+            
             // タグ１とタグ2、タグ３すべてにデータがある場合の追加処理
             if (isset($_POST['tag1'], $_POST['tag2'], $_POST['tag3'])) {
                 $ads = $pdo->prepare('INSERT INTO Toukou VALUES(null,?,?,?,?,?,?,?,?)');

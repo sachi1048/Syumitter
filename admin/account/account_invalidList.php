@@ -25,6 +25,7 @@
             <div class="container">
                 <div class="table">
                     <table>
+                    <p align="left">削除する凍結中アカウントを選択してください</p>
                         <thead>
                             <tr>
                                 <th>ユーザ名</th>
@@ -48,13 +49,14 @@
                             ?>
                             </tbody>
                     </table>
-                    <p align="left">削除する凍結中アカウントを選択してください</p>
-                </div>
+
+        <div class="decision2">
+        <button class="decision-button" type="submit">削除</button>
+        </div>
+        </form>
+        </div>
+        
             </div>
         </div>
-        <div class="decision">
-            <button class="decision-button" type="submit">削除</button>
-        </div>
-    </form>
 </body>
 </html>
