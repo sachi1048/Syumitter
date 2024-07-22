@@ -48,32 +48,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Syumitter - パスワード再設定</title>
-    <link rel="stylesheet" href="CSS/style.css">
+    <!-- <link rel="stylesheet" href="CSS/style.css"> -->
+    <link rel="stylesheet" href="CSS/main.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Syumitter</h1>
-        <div class="reset-box">
-            <h2>パスワード再設定</h2>
-            <form action="" method="post">
-                <div class="form-group">
-                    <label for="email">アドレス</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="new_password">新規パスワード</label>
-                    <input type="password" id="new-password" name="new_password" required>
-                </div>
-                <div class="form-group">
-                    <label for="confirm_password">確認パスワード</label>
-                    <input type="password" id="confirm-password" name="confirm_password" required>
-                </div>
-                <button type="submit">設定</button>
-            </form>
-        </div>
-        <button class="backbutton" onclick="history.back()">
-            <i class="fas fa-caret-left fa-2x"></i>戻る
-        </button>
+    <h1 class="h1-1">Syumitter</h1>
+    <div class="frame">
+        <h2>パスワード再設定</h2>
+        
+        <form action="" method="post">
+            <table style="margin:auto; font-size:small;">
+                <tr>
+                    <td>アドレス</td>
+                    <td><input type="email" name="email" required></td>
+                </tr>
+                <tr>
+                    <td>新規パスワード</td>
+                    <td><input type="password" name="new_password" required></td>
+                </tr>
+                <tr>
+                    <td>確認パスワード</td>
+                    <td><input type="password" name="confirm_password" required></td>
+                </tr>
+            </table>
+            <button class="nextbutton" type="submit">設定</button>
+        </form>
     </div>
+    <br>
+    <a href="login.php" class="btn-mdr">
+    <span class="dli-caret-left"></span>
+        戻る
+    </a>
 </body>
 </html>
