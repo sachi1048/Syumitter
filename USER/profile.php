@@ -101,7 +101,7 @@ ob_end_flush(); // 出力バッファリングを終了し、バッファ内容�
         echo '<button id="follow" class="btn-follow2">フォローする</button>';   
     }
 
-    echo '</div></div><div>';
+    echo '</div></div><div style="width: 350px; margin: auto;">';
     //趣味タグ表示
     $sql4=$pdo->prepare('select * from User_tag where user_name=?');
     $sql4->execute([$user_name]);
