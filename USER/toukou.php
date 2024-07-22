@@ -20,27 +20,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $uploadDir = 'img/toukou/';
                 $fileName = $_POST['naiyou'];
                 $uploadFile = $uploadDir . $fileName;
-                
-echo "<hr>";
-echo "存在確認：" , file_exists($uploadFile);
-echo "判定結果：" , !file_exists($uploadFile);
-echo "<hr>";
-var_dump($uploadFile);
-echo "<hr>";
-var_dump($uploadDir);
-echo "<hr>";
-var_dump($_FILES);
-echo "<hr>";
-var_dump($_FILES['fileInput']['tmp_name']);
-echo "<hr>";
-
                 // 同じファイル名が存在するかチェック
                 if (!file_exists($uploadFile)) {
                     // ファイルを指定のフォルダに移動
                     if (move_uploaded_file($_FILES['fileInput']['tmp_name'], $uploadFile)) {
                         $_POST['naiyou'] = $fileName; // ファイル名をPOSTデータに設定
                     } else {
-                        echo '<h2>ファイルのアップロードに失敗しました</h2>';
+                        header("Location: toukou.php");
                         exit;
                     }
                 } else {
@@ -95,7 +81,10 @@ echo "<hr>";
     ?>
     <form action="toukou.php" method="post" enctype="multipart/form-data">
         <div class="toukougazou" id="toukougazou">
-        <input type="file"  id="fileInput" name="fileInput" accept="image/*">
+        <label for="fileInput" class="file-input-wrapper">写真・動画を選択
+            <input type="file" id="fileInput" name="fileInput" accept="image/*">
+        </label>
+        <!-- <input type="file" class="ga"  id="fileInput" name="fileInput" accept="image/*"> -->
         <!-- <input type="file"  id="fileInput" name="fileInput" accept="image/*" style="display: none;"> -->
         <!-- <button type="button" class="center-button" onclick="document.getElementById('fileInput').click();">写真・動画を選択</button> -->
         </div>
@@ -131,58 +120,58 @@ echo "<hr>";
     <br><br><br><br>
     <?php require 'menu.php';?>
     <script>
-        function saveFormData() {
-            var title = document.getElementById('title').value;
-            var setumei = document.getElementById('setumei').value;
-            var fileInput = document.getElementById('fileInput').files[0];
+    function saveFormData() {
+        var title = document.getElementById('title').value;
+        var setumei = document.getElementById('setumei').value;
+        var fileInput = document.getElementById('fileInput').files[0];
 
-            localStorage.setItem('title', title);
-            localStorage.setItem('setumei', setumei);
-            if (fileInput) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    localStorage.setItem('fileInput', e.target.result);
-                    localStorage.setItem('fileName', fileInput.name);
-                }
-                reader.readAsDataURL(fileInput);
+        localStorage.setItem('title', title);
+        localStorage.setItem('setumei', setumei);
+        if (fileInput) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                localStorage.setItem('fileInput', e.target.result);
+                localStorage.setItem('fileName', fileInput.name);
             }
+            reader.readAsDataURL(fileInput);
         }
+    }
 
-        function loadFormData() {
-            var title = localStorage.getItem('title');
-            var setumei = localStorage.getItem('setumei');
-            var fileInput = localStorage.getItem('fileInput');
-            var fileName = localStorage.getItem('fileName');
+    function loadFormData() {
+        var title = localStorage.getItem('title');
+        var setumei = localStorage.getItem('setumei');
+        var fileInput = localStorage.getItem('fileInput');
+        var fileName = localStorage.getItem('fileName');
 
-            if (title) {
-                document.getElementById('title').value = title;
-            }
-            if (setumei) {
-                document.getElementById('setumei').value = setumei;
-            }
-            if (fileInput) {
-                document.getElementById('toukougazou').style.backgroundImage = 'url(' + fileInput + ')';
-            }
-            if (fileName) {
-                document.getElementById('naiyou').value = fileName;
-            }
+        if (title) {
+            document.getElementById('title').value = title;
         }
+        if (setumei) {
+            document.getElementById('setumei').value = setumei;
+        }
+        if (fileInput) {
+            document.getElementById('toukougazou').style.backgroundImage = 'url(' + fileInput + ')';
+        }
+        if (fileName) {
+            document.getElementById('naiyou').value = fileName;
+        }
+    }
 
-        document.getElementById('fileInput').addEventListener('change', function() {
-            var file = this.files[0];
-            if (file) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('toukougazou').style.backgroundImage = 'url(' + e.target.result + ')';
-                    document.getElementById('naiyou').value = file.name;
-                }
-                reader.readAsDataURL(file);
+    document.getElementById('fileInput').addEventListener('change', function() {
+        var file = this.files[0];
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('toukougazou').style.backgroundImage = 'url(' + e.target.result + ')';
+                document.getElementById('naiyou').value = file.name;
             }
-        });
+            reader.readAsDataURL(file);
+        }
+    });
 
-        window.onload = function() {
-            loadFormData();
-        };
-    </script>
+    window.onload = function() {
+        loadFormData();
+    };
+</script>
 </body>
 </html>
