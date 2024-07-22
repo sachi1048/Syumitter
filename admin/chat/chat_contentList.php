@@ -23,7 +23,7 @@
             $pdo=new PDO($connect,USER,PASS);
             $count=0;
                 $linecount=0;
-                foreach($sql=$pdo->query('SELECT toukou_id,contents FROM Toukou') as $row): ?>
+                foreach($sql=$pdo->query('SELECT toukou_id,contents FROM Toukou WHERE contents!="delete.png"') as $row): ?>
                 <input type="checkbox" name="content[]" id="<?php echo $count; ?>" value="<?php echo htmlspecialchars($row['toukou_id'], ENT_QUOTES, 'UTF-8'); ?>" onclick="updateHiddenField(this)">
                 <label for="<?php echo $count; ?>"><img src="../../USER/img/toukou/<?php echo htmlspecialchars($row['contents'], ENT_QUOTES, 'UTF-8'); ?>" width="100" height="100"></label>
                 <input type="hidden" name="toukoucontent[]" id="hidden_<?php echo $count; ?>" value="<?php echo htmlspecialchars($row['contents'], ENT_QUOTES, 'UTF-8'); ?>">

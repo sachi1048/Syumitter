@@ -25,7 +25,7 @@
             <div class="container">
                 <div class="table">
                     <table>
-                    <p align="left">削除する凍結中アカウントを選択してください</p>
+                    <p align="left">ユーザ名・メールアドレス・チェックボックスをクリックし、削除する凍結中アカウントを選択してください</p>
                         <thead>
                             <tr>
                                 <th>ユーザ名</th>
@@ -40,11 +40,12 @@
                                 $sql=$pdo->query('select * from Account where freeze_code=1');
                                 foreach($sql as $row){
                                     echo '<tr>';
-                                    echo '<td>',$row['user_name'],'</td>';
-                                    echo '<td>',$row['mail'],'</td>';
+                                    echo '<td><label for="', $count, '">', $row['user_name'],'</td>';
+                                    echo '<td><label for="', $count, '">', $row['mail'],'</td>';
                                     // チェックボックスを複数選択可にして配列として次の画面に送る
-                                    echo '<td><input type="checkbox" name="deleteoption[]" value="',$row['user_name'],'"></td>';
+                                    echo '<td><input type="checkbox" id="', $count, '" name="deleteoption[]" value="',$row['user_name'],'"></td>';
                                     echo '</tr>';
+                                    $count++;
                                 }
                             ?>
                             </tbody>

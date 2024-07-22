@@ -32,11 +32,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create'])) {
             $newValue = $count / 2;
 
             // 1つ目のペアチャット挿入
-            $stmt = $pdo->prepare('INSERT INTO Pair_chat (chat_id, user1, user2) VALUES (?, ?, ?)');
+            $stmt = $pdo->prepare('INSERT INTO Pair_chat VALUES (?, ?, ?,default)');
             $stmt->execute([$newValue, $user_name, $member]);
 
             // 2つ目のペアチャット挿入
-            $stmt2 = $pdo->prepare('INSERT INTO Pair_chat (chat_id, user1, user2) VALUES (?, ?, ?)');
+            $stmt2 = $pdo->prepare('INSERT INTO Pair_chat (chat_id, user1, user2) VALUES (?, ?, ?,default)');
             $stmt2->execute([$newValue, $member, $user_name]);
 
             // トランザクションのコミット
