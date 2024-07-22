@@ -12,6 +12,8 @@ nav {
     justify-content: center;
     padding: 10px 0;
     border-radius:6px;
+    margin: auto;
+    width: 350px;
 }
 nav a {
     display: block;
@@ -165,10 +167,10 @@ input[type="radio"]:checked + label {
 }
 
 .nav-label {
-    cursor: pointer;
     padding: 10px;
     border-radius: 5px;
-    width:100%
+    /* width: 100%; */
+    margin: auto;
 }
 
 .nav-label input[type="radio"] {
