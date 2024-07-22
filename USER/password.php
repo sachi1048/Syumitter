@@ -50,7 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Syumitter - パスワード再設定</title>
-    <link rel="stylesheet" href="CSS/style.css">
+    <!-- <link rel="stylesheet" href="CSS/style.css"> -->
+     <link rel="stylesheet" href="CSS/main.css">
     <style>
         .message {
             color: red;
@@ -60,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </style>
 </head>
 <body>
-    <h1>Syumitter</h1>
+    <h1 class="h1-1">Syumitter</h1>
     <div class="frame">
         <h2>パスワード再設定</h2>
         <?php if ($message): ?>

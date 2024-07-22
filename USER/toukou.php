@@ -92,6 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <p class="koumoku">タイトル</p>
         <input class="inp" type="text" name="title" maxlength="100" id="title" required>
         <br>
+        <br>
         <?php
         // もし選択された趣味タグがあれば表示する
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -102,8 +103,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $sel->execute([$pow]);
                     foreach($sel as $woe) {
                         $count++;
-                        echo '<div style="border:1.2px solid rgb(' . $woe['tag_color1'] . ',' . $woe['tag_color2'] . ',' . $woe['tag_color3'] . '); color:rgb(' . $woe['tag_color1'] . ',' . $woe['tag_color2'] . ',' . $woe['tag_color3'] . ');" class="tag_ln">#' . $woe['tag_mei'] . '</div>';
-                        echo '<input type="hidden" name="tag' . $count . '" value="' . $woe['tag_id'] . '">';
+                        echo '<div class="s-tag" style="background: rgb(', $woe['tag_color1'], ',', $woe['tag_color2'], ',', $woe['tag_color3'], '">', $woe['tag_mei'], '</div>';
+                        echo '<input type="hidden" name="tag' . $count . '" value="' . $woe['tag_id'] . '"><br>';
                     }
                 }
             }
