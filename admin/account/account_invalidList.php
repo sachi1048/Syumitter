@@ -25,7 +25,7 @@
             <div class="container">
                 <div class="table">
                     <table>
-                    <p align="left">ユーザ名、メールアドレス、チェックボックスをクリックし、削除する凍結中アカウントを選択してください</p>
+                    <p align="left">ユーザ名・メールアドレス・チェックボックスをクリックし、削除する凍結中アカウントを選択してください</p>
                         <thead>
                             <tr>
                                 <th>ユーザ名</th>
