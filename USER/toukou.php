@@ -95,8 +95,9 @@ echo "<hr>";
     ?>
     <form action="toukou.php" method="post" enctype="multipart/form-data">
         <div class="toukougazou" id="toukougazou">
-            <input type="file"  id="fileInput" name="fileInput" accept="image/*" style="display: none;">
-            <button type="button" class="center-button" onclick="document.getElementById('fileInput').click();">写真・動画を選択</button>
+        <input type="file"  id="fileInput" name="fileInput" accept="image/*">
+        <!-- <input type="file"  id="fileInput" name="fileInput" accept="image/*" style="display: none;"> -->
+        <!-- <button type="button" class="center-button" onclick="document.getElementById('fileInput').click();">写真・動画を選択</button> -->
         </div>
         <input type="hidden" name="naiyou" id="naiyou">
         <p class="koumoku">タイトル</p>
