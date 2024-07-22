@@ -25,6 +25,8 @@ if (isset($_POST['user_name']) && isset($_POST['pass'])) {
             setcookie('login_me_cookie', $cookie_value, time() + (86400 * 30), "/", "", false, true); 
         }
 
+        //ハッシュパスワード一致照合
+
         header("Location: myprofile.php");
         exit();
     }
