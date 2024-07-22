@@ -21,7 +21,7 @@
     <div class="center">
     <div class="container">
         <button class="mainbutton" type="button" onclick="location.href='account/account_management.php'">アカウント管理</button>
-        <button class="mainbutton" type="button" onclick="location.href='chat/chat_management.html'">チャット管理</button>
+        <button class="mainbutton" type="button" onclick="location.href='chat/chat_management.html'">投稿管理</button>
         <button class="mainbutton" type="button" onclick="location.href='tug/tug_management.html'">タグ管理</button>
     </div>
     </div>

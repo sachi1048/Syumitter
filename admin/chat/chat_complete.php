@@ -14,9 +14,9 @@
         <div class="container">
             <div class="frame">
                 
-                チャット・画像・動画の削除が完了しました<br>
+                投稿・画像・動画の削除が完了しました<br>
                 <<実行結果>><br><!--POSTかGETで取得した値を表示 例.削除:該当なし　追加：a,b,c-->
-                チャット削除：
+                投稿削除：
                 <?php
                 require '../../USER/db-connect.php';
                 $pdo=new PDO($connect,USER,PASS);
