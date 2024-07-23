@@ -17,17 +17,19 @@
     </div>
     <div class="results-container">
         <?php foreach ($results as $row) { ?>
-        <div class="user-card">
-            <div class="user-icon">
-                <img src="<?php echo "img/aikon/".$row['aikon']?>" alt="User 1">
+        <a href="profile.php?user_name=<?php echo $row['user_name']; ?>">
+            <div class="user-card">
+                <div class="user-icon">
+                    <img src="<?php echo "img/aikon/".$row['aikon']?>" alt="User 1">
+                </div>
+                <div class="user-info">
+                    <h3><?php echo $row['user_name']; ?></h3>
+                    <p>
+                        <a class="tag-uranai">#<?php echo $row['tag_mei']; ?></a>
+                    </p>
+                </div>
             </div>
-            <div class="user-info">
-                <h3><?php echo $row['user_name']; ?></h3>
-                <p>
-                    <a class="tag-uranai">#<?php echo $row['tag_mei']; ?></a>
-                </p>
-            </div>
-        </div>
+        </a>
         <?php } ?>
     </div>
     <br><br><br><br><br><br>
