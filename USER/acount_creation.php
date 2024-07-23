@@ -6,7 +6,17 @@
     <link rel="stylesheet" href="CSS/main.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function() {
+
+            $(document).ready(function() {
+
+            //POSTデータの取得
+            var postData = <?php echo json_encode($_POST); ?>;
+            // 選択されたタグを取得
+            var selectedOptions = postData.selectedOptions || [];
+            // 隠しフィールドに設定
+            $('#selectedOptions').val(selectedOptions.join(','));
+
+
             $('.file__label input[type=file]').on('change', function () {
                 var file = $(this).prop('files')[0];
                 $('.file__none').text(file.name);
@@ -27,12 +37,6 @@
                 } else {
                     errorMessage.hide();
                 }
-
-                var selectedOptions = [];
-                $('input[name="selectedOptions[]"]:checked').each(function() {
-                    selectedOptions.push($(this).val());
-                });
-                $('#selectedOptions').val(selectedOptions.join(','));
             });
         });
     </script>

@@ -20,55 +20,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $uploadDir = 'img/toukou/';
                 $fileName = $_POST['naiyou'];
                 $uploadFile = $uploadDir . $fileName;
-                
-echo "<hr>";
-echo "存在確認：" , file_exists($uploadFile);
-echo "判定結果：" , !file_exists($uploadFile);
-echo "<hr>";
-var_dump($uploadFile);
-echo "<hr>";
-var_dump($uploadDir);
-echo "<hr>";
-var_dump($_FILES);
-echo "<hr>";
-var_dump($_FILES['fileInput']['tmp_name']);
-echo "<hr>";
-
                 // 同じファイル名が存在するかチェック
                 if (!file_exists($uploadFile)) {
                     // ファイルを指定のフォルダに移動
                     if (move_uploaded_file($_FILES['fileInput']['tmp_name'], $uploadFile)) {
                         $_POST['naiyou'] = $fileName; // ファイル名をPOSTデータに設定
+                        // タグ１とタグ2、タグ３すべてにデータがある場合の追加処理
+                        if (isset($_POST['tag1'], $_POST['tag2'], $_POST['tag3'])) {
+                            $ads = $pdo->prepare('INSERT INTO Toukou VALUES(null,?,?,?,?,?,?,?,?)');
+                            $ads->execute([$_POST['title'], $currentDateTime, $_POST['naiyou'], $_POST['setumei'], $_POST['tag1'], $_POST['tag2'], $_POST['tag3'], $_SESSION['user']['user_name']]);
+                            header("Location: myprofile.php");
+                            exit;
+                        } elseif (isset($_POST['tag1'], $_POST['tag2'])) {
+                            // タグ１とタグ２がある場合の追加処理
+                            $ads = $pdo->prepare('INSERT INTO Toukou VALUES(null,?,?,?,?,?,?,null,?)');
+                            $ads->execute([$_POST['title'], $currentDateTime, $_POST['naiyou'], $_POST['setumei'], $_POST['tag1'], $_POST['tag2'], $_SESSION['user']['user_name']]);
+                            header("Location: myprofile.php");
+                            exit;
+                        } elseif (isset($_POST['tag1'])) {
+                            // タグ１のみがある場合の追加処理
+                            $ads = $pdo->prepare('INSERT INTO Toukou VALUES(null,?,?,?,?,?,null,null,?)');
+                            $ads->execute([$_POST['title'], $currentDateTime, $_POST['naiyou'], $_POST['setumei'], $_POST['tag1'], $_SESSION['user']['user_name']]);
+                            header("Location: myprofile.php");
+                            exit;
+                        } else {
+                            echo '<h2>趣味タグを選択してください</h2>';
+                        }
                     } else {
-                        echo '<h2>ファイルのアップロードに失敗しました</h2>';
-                        exit;
+                        echo '<h1>失敗しちゃった(●´ω｀●)</h1>';
                     }
                 } else {
                     echo '<h2>同じファイル名の画像が既に存在します</h2>';
                     exit;
                 }
-            }
-            
-            // タグ１とタグ2、タグ３すべてにデータがある場合の追加処理
-            if (isset($_POST['tag1'], $_POST['tag2'], $_POST['tag3'])) {
-                $ads = $pdo->prepare('INSERT INTO Toukou VALUES(null,?,?,?,?,?,?,?,?)');
-                $ads->execute([$_POST['title'], $currentDateTime, $_POST['naiyou'], $_POST['setumei'], $_POST['tag1'], $_POST['tag2'], $_POST['tag3'], $_SESSION['user']['user_name']]);
-                header("Location: myprofile.php");
-                exit;
-            } elseif (isset($_POST['tag1'], $_POST['tag2'])) {
-                // タグ１とタグ２がある場合の追加処理
-                $ads = $pdo->prepare('INSERT INTO Toukou VALUES(null,?,?,?,?,?,?,null,?)');
-                $ads->execute([$_POST['title'], $currentDateTime, $_POST['naiyou'], $_POST['setumei'], $_POST['tag1'], $_POST['tag2'], $_SESSION['user']['user_name']]);
-                header("Location: myprofile.php");
-                exit;
-            } elseif (isset($_POST['tag1'])) {
-                // タグ１のみがある場合の追加処理
-                $ads = $pdo->prepare('INSERT INTO Toukou VALUES(null,?,?,?,?,?,null,null,?)');
-                $ads->execute([$_POST['title'], $currentDateTime, $_POST['naiyou'], $_POST['setumei'], $_POST['tag1'], $_SESSION['user']['user_name']]);
-                header("Location: myprofile.php");
-                exit;
-            } else {
-                echo '<h2>趣味タグを選択してください</h2>';
             }
         }
     }
@@ -93,27 +77,27 @@ echo "<hr>";
         echo '<h3>このまま投稿すればエラーが出ます！(。-`ω-)</h3>';
     }
     ?>
-    <form action="toukou.php" method="post" enctype="multipart/form-data">
+    <form action="toukou.php" method="post" enctype="multipart/form-data" onsubmit="saveFormData()">
         <div class="toukougazou" id="toukougazou">
-            <input type="file"  id="fileInput" name="fileInput" accept="image/*" style="display: none;">
-            <button type="button" class="center-button" onclick="document.getElementById('fileInput').click();">写真・動画を選択</button>
+        <label for="fileInput" class="file-input-wrapper">写真・動画を選択
+            <input type="file" id="fileInput" name="fileInput" accept="image/*">
+        </label>
         </div>
+        <p style="margin-right:15%; text-align:right; font-size:11px; background:none; border:none; color:red;">他の画面に移動したら表示されていても再度画像を選択してください※5MBまで</p>
         <input type="hidden" name="naiyou" id="naiyou">
         <p class="koumoku">タイトル</p>
         <input class="inp" type="text" name="title" maxlength="100" id="title" required>
-        <br>
-        <br>
+        <br><br>
         <?php
         // もし選択された趣味タグがあれば表示する
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_POST['selectedOptions']) && is_array($_POST['selectedOptions'])) {
                 $count=0;
                 foreach($_POST['selectedOptions'] as $pow){
-                    $sel=$pdo->prepare('select * from Tag where tag_id = ?');
+                    $sel=$pdo->prepare('SELECT * FROM Tag WHERE tag_id = ?');
                     $sel->execute([$pow]);
                     foreach($sel as $woe){
                         $count++;
-
                         echo '<div class="s-tag" style="background: rgb(', $woe['tag_color1'], ',', $woe['tag_color2'], ',', $woe['tag_color3'], '">#', $woe['tag_mei'], '</div>';
                         echo '<input type="hidden" name="tag' . $count . '" value="' . $woe['tag_id'] . '"><br>';
                     }
@@ -130,58 +114,58 @@ echo "<hr>";
     <br><br><br><br>
     <?php require 'menu.php';?>
     <script>
-        function saveFormData() {
-            var title = document.getElementById('title').value;
-            var setumei = document.getElementById('setumei').value;
-            var fileInput = document.getElementById('fileInput').files[0];
-
-            localStorage.setItem('title', title);
-            localStorage.setItem('setumei', setumei);
-            if (fileInput) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    localStorage.setItem('fileInput', e.target.result);
-                    localStorage.setItem('fileName', fileInput.name);
-                }
-                reader.readAsDataURL(fileInput);
+    function saveFormData() {
+        var title = document.getElementById('title').value;
+        var setumei = document.getElementById('setumei').value;
+        var fileInput = document.getElementById('fileInput').files[0];
+        
+        localStorage.setItem('title', title);
+        localStorage.setItem('setumei', setumei);
+        if (fileInput) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                localStorage.setItem('fileInput', e.target.result);
+                localStorage.setItem('fileName', fileInput.name);
             }
+            reader.readAsDataURL(fileInput);
         }
+    }
 
-        function loadFormData() {
-            var title = localStorage.getItem('title');
-            var setumei = localStorage.getItem('setumei');
-            var fileInput = localStorage.getItem('fileInput');
-            var fileName = localStorage.getItem('fileName');
+    function loadFormData() {
+        var title = localStorage.getItem('title');
+        var setumei = localStorage.getItem('setumei');
+        var fileInput = localStorage.getItem('fileInput');
+        var fileName = localStorage.getItem('fileName');
 
-            if (title) {
-                document.getElementById('title').value = title;
-            }
-            if (setumei) {
-                document.getElementById('setumei').value = setumei;
-            }
-            if (fileInput) {
-                document.getElementById('toukougazou').style.backgroundImage = 'url(' + fileInput + ')';
-            }
-            if (fileName) {
-                document.getElementById('naiyou').value = fileName;
-            }
+        if (title) {
+            document.getElementById('title').value = title;
         }
+        if (setumei) {
+            document.getElementById('setumei').value = setumei;
+        }
+        if (fileInput) {
+            document.getElementById('toukougazou').style.backgroundImage = 'url(' + fileInput + ')';
+        }
+        if (fileName) {
+            document.getElementById('naiyou').value = fileName;
+        }
+    }
 
-        document.getElementById('fileInput').addEventListener('change', function() {
-            var file = this.files[0];
-            if (file) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('toukougazou').style.backgroundImage = 'url(' + e.target.result + ')';
-                    document.getElementById('naiyou').value = file.name;
-                }
-                reader.readAsDataURL(file);
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+        var file = event.target.files[0];
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('toukougazou').style.backgroundImage = 'url(' + e.target.result + ')';
+                document.getElementById('naiyou').value = file.name;
             }
-        });
+            reader.readAsDataURL(file);
+        }
+    });
 
-        window.onload = function() {
-            loadFormData();
-        };
+    window.onload = function() {
+        loadFormData();
+    };
     </script>
 </body>
 </html>

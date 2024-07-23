@@ -187,3 +187,28 @@ body {
     color: #A73030;
     font-weight: bold;
 }
+/* .ga{
+    margin-top: 100px;
+    width: 94%;
+    background-color: white;
+    border: 1.5px solid;
+    border-color: orange;
+    border-radius: 8px;
+} */
+.file-input-wrapper {
+    margin-top:93px;
+    width:80%;
+    height:36px;
+    line-height:36px;
+    display: inline-block;
+    border: 2px solid red;
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    color: black;
+    background-color: white;
+  }
+  .file-input-wrapper input[type="file"] {
+    display: none;
+  }
