@@ -33,7 +33,7 @@
         </div>
         <?php } ?>
     </div>
-    <br><br><br><br><br><br>
+    <br><br><br><br><br><br><br><br>
     <footer><?php include 'menu.php';?></footer>
 
     <script>
