@@ -74,9 +74,11 @@
     position: fixed;
     top: 25px;
     right: 15px;
+    color: #d3d3d3;
     vertical-align: middle;
-    color: #0047FF;
     line-height: 1;
     width: 60px;
     height: 60px;
+    border-radius: 5px;
+    border: solid 2px;
 }

@@ -21,12 +21,12 @@
     <title>グループチャット一覧画面</title>
 </head>
 <body>
-    <h1 class="h1-2">Syumitter</h1>
-
-    <a href="group_new.php">
+    <div>
+    <h1 class="h1-2" style="display: inline-block;">Syumitter</h1>
+    <a href="group_new.php" class="invisible-link">
         <img src="img/newchat" class="newchat" alt="新規グループチャット">
     </a>
-
+    </div>
     <br>
     <div class="switch">
         <a class="link switch2" href="group_list.php">グループチャット</a>

@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="CSS/menu.css">
     <link rel="stylesheet" href="CSS/group_list.css">
     <title>Syumitter</title>
-    <title>ペアチャット一覧画面</title>
+    <title>グループチャット検索一覧画面</title>
 </head>
 <body>
     <h1 class="h1-2">Syumitter</h1>

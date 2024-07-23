@@ -304,3 +304,14 @@ input[type="file"]{
   }
 
 
+.logout {
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+    margin: auto;
+    padding: 5px;
+    border-radius: 5px;
+    border: none;
+    background: red;
+    color: #fff;
+}

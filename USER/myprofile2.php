@@ -81,7 +81,7 @@
         </a>
     </div>
     <hr>
-    <table style="padding-bottom: 100px; margin: auto;">
+    <table style="margin: auto;">
         <?php 
         $sql4 = $pdo->prepare('SELECT * FROM Comment WHERE account_mei = ? AND comment_type = 1');
         $sql4->execute([$user_name]);
@@ -104,6 +104,9 @@
         }
         ?>
     </table>
+    <hr>
+    <a href="login.php" class="logout">ログアウト</a>
+    <br><br><br><br><br><br>
     <footer><?php include 'menu.php';?></footer>
 </body>
 </html>
